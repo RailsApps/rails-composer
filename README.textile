@@ -1,4 +1,4 @@
-h1. Rails Composer
+h1. !http://railsapps.github.com/images/rails-36x36.jpg(Rails Composer)! Rails Composer
 
 An application template that creates a Rails 3.2 starter app.
 
@@ -24,7 +24,7 @@ $ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/comp
 
 h2. Your Options
 
-The Rails Composer application template will ask you for various preferences, some of which will be dependent on previous choices. Here's an example:
+The Rails Composer application template will ask you for various preferences, some of which will depend on previous choices. Here's an example:
 
 <pre>
 question  Web server for development?
