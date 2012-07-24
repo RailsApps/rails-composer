@@ -6,8 +6,6 @@ It's like the Rails generator on steroids.
 
 The Rails Composer application template is assembled from recipes supplied by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem.
 
-Please review "issues for the rails_apps_composer gem":https://github.com/RailsApps/rails_apps_composer/issues and submit any issues there.
-
 h2. !http://twitter-badges.s3.amazonaws.com/t_logo-a.png(Follow on Twitter)!:http://www.twitter.com/rails_apps Follow on Twitter
 
 Follow the project on Twitter: "@rails_apps":http://twitter.com/rails_apps. Please tweet some praise if you like what you've found.
@@ -55,7 +53,7 @@ This is the only documentation.
 
 h4. Customizing the Template
 
-If you wish to change the template to generate an app with your own customized options, you can copy and edit the template file. However, it is better to use the "rails_apps_composer ":https://github.com/RailsApps/rails_apps_composer gem to create a new application template. You'll find newer versions of the recipes that make up the application template. You may find issues have been identified and (perhaps) fixed. And it will be easier to maintain your application template if you work from the "rails_apps_composer ":https://github.com/RailsApps/rails_apps_composer gem.
+If you wish to change the template to generate an app with your own customized options, you can copy and edit the template file. However, it is better to use the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem to create a new application template. You'll find newer versions of the recipes that make up the application template. You may find issues have been identified and (perhaps) fixed. And it will be easier to maintain your application template if you work from the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem.
 
 h4. Writing Recipes
 
@@ -71,7 +69,10 @@ h4. About Rails Application Templates
 
 h4. Similar Projects
 
-There are many similar projects. Here's an annotated list of other "Rails application template projects":http://railsapps.github.com/rails-application-templates.html and "Rails examples, tutorials, and starter apps":http://railsapps.github.com/rails-examples-tutorials.html.
+There are many similar projects:
+
+* "Rails application template projects":http://railsapps.github.com/rails-application-templates.html
+* "Rails examples, tutorials, and starter apps":http://railsapps.github.com/rails-examples-tutorials.html.
 
 h4. Issues
 
@@ -85,7 +86,7 @@ You can also try "Rails Hotline":http://www.railshotline.com/, a free telephone 
 
 h2. Contributing
 
-Please make changes to the "rails_apps_composer ":https://github.com/RailsApps/rails_apps_composer gem rather than changing the Rails Composer application template.
+Please make changes to the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem rather than changing the Rails Composer application template.
 
 h2. Credits
 
@@ -97,6 +98,6 @@ and tweet some praise. I'd love to know you were helped out by what I've put tog
 
 h2. License
 
-Copyright 2012 Daniel Kehoe
-
 "MIT License":http://www.opensource.org/licenses/mit-license
+
+Copyright 2012 Daniel Kehoe
