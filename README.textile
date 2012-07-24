@@ -2,15 +2,13 @@ h1. Rails Composer
 
 An application template that creates a Rails 3.2 starter app.
 
-It's like the Rails generator on steroids.
-
-The Rails Composer application template is assembled from recipes supplied by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem.
+It's the Rails generator on steroids.
 
 h2. !http://twitter-badges.s3.amazonaws.com/t_logo-a.png(Follow on Twitter)!:http://www.twitter.com/rails_apps Follow on Twitter
 
 Follow the project on Twitter: "@rails_apps":http://twitter.com/rails_apps. Please tweet some praise if you like what you've found.
 
-h2. How to Use
+h2. Creating a Starter App
 
 To build a Rails application, run the command (where @myapp@ is the name of your application):
 
@@ -24,7 +22,7 @@ You can use the @-T@ flag to skip Test::Unit files or the @-O@ flag to skip Acti
 $ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb -T -O
 </pre>
 
-h2. Template Options
+h2. Your Options
 
 The Rails Composer application template will ask you for various preferences, some of which will be dependent on previous choices. Here's an example:
 
@@ -199,7 +197,7 @@ If you get a "segfault" when you try @rails new@, try removing and reinstalling 
 
 h2. Documentation and Support
 
-This is the only documentation.
+The Rails Composer application template is assembled from recipes supplied by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem. See the rails_apps_composer project to understand how the Rails Composer application works.
 
 h4. Customizing the Template
 
