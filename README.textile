@@ -1,4 +1,102 @@
-rails-composer
-==============
+h1. Rails Composer
 
-The Rails generator on steroids for starter apps.
+An application template that creates a Rails 3.2 starter app.
+
+It's like the Rails generator on steroids.
+
+The Rails Composer application template is assembled from recipes supplied by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem.
+
+Please review "issues for the rails_apps_composer gem":https://github.com/RailsApps/rails_apps_composer/issues and submit any issues there.
+
+h2. !http://twitter-badges.s3.amazonaws.com/t_logo-a.png(Follow on Twitter)!:http://www.twitter.com/rails_apps Follow on Twitter
+
+Follow the project on Twitter: "@rails_apps":http://twitter.com/rails_apps. Please tweet some praise if you like what you've found.
+
+h2. How to Use
+
+To build a Rails application, run the command:
+
+<pre>
+$ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb
+</pre>
+
+You can use the @-T@ flag to skip Test::Unit files or the @-O@ flag to skip Active Record files:
+
+<pre>
+$ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb -T -O
+</pre>
+
+h2. Template Options
+
+The Rails Composer application template will ask you for various preferences.
+
+h2. Application Template Default
+
+The @rails new@ command creates a new Rails application. If you want to use the Rails Composer application template for every Rails application you build, you can set options for the @rails new@ command in a *.railsrc* file in your home directory. Here's how to set up a *.railsrc* file to use the template when you create a new Rails application:
+
+<pre>
+# ~/.railsrc
+-m https://raw.github.com/RailsApps/rails-composer/master/composer.rb
+</pre>
+
+h2. Troubleshooting
+
+Problems? Check the "issues for the rails_apps_composer gem":https://github.com/RailsApps/rails_apps_composer/issues.
+
+You should review the article "Installing Rails":http://railsapps.github.com/installing-rails.html to make sure you've updated all the components that are required to run Rails successfully.
+
+h4. Problems with  "Certificate Verify Failed"
+
+Are you getting an error "OpenSSL certificate verify failed" when you try to generate a new Rails app from an application template? See suggestions to resolve the error "Certificate Verify Failed":http://railsapps.github.com/openssl-certificate-verify-failed.html.
+
+h2. Documentation and Support
+
+This is the only documentation.
+
+h4. Customizing the Template
+
+If you wish to change the template to generate an app with your own customized options, you can copy and edit the template file. However, it is better to use the "rails_apps_composer ":https://github.com/RailsApps/rails_apps_composer gem to create a new application template. You'll find newer versions of the recipes that make up the application template. You may find issues have been identified and (perhaps) fixed. And it will be easier to maintain your application template if you work from the "rails_apps_composer ":https://github.com/RailsApps/rails_apps_composer gem.
+
+h4. Writing Recipes
+
+To understand the code in these templates, take a look at "Thor::Actions":http://rdoc.info/github/wycats/thor/master/Thor/Actions. Your recipes can use any methods provided by "Thor::Actions":http://rdoc.info/github/wycats/thor/master/Thor/Actions or "Rails::Generators::Actions":http://railsapi.com/doc/rails-v3.0.3/classes/Rails/Generators/Actions.html.
+
+h4. About Rails Application Templates
+
+"Cooking Up A Custom Rails 3 Template (11 Oct 2010) by Andrea Singh":http://blog.madebydna.com/all/code/2010/10/11/cooking-up-a-custom-rails3-template.html
+"Rails Application Templates (16 Sept 2010) by Collin Schaafsma":http://quickleft.com/blog/rails-application-templates
+"Application templates in Rails 3 (18 Sept 2009) by Ben Scofield":http://benscofield.com/2009/09/application-templates-in-rails-3/
+"Railscasts: App Templates in Rails 2.3 (9 Feb 2009) by Ryan Bates":http://railscasts.com/episodes/148-app-templates-in-rails-2-3
+"Rails templates (4 Dec 2008) by Pratik Naik":http://m.onkey.org/rails-templates
+
+h4. Similar Projects
+
+There are many similar projects. Here's an annotated list of other "Rails application template projects":http://railsapps.github.com/rails-application-templates.html and "Rails examples, tutorials, and starter apps":http://railsapps.github.com/rails-examples-tutorials.html.
+
+h4. Issues
+
+Please review "issues for the rails_apps_composer gem":https://github.com/RailsApps/rails_apps_composer/issues and submit any issues there.
+
+h4. Where to Get Help
+
+Your best source for help with problems is "Stack Overflow":http://stackoverflow.com/questions/tagged/ruby-on-rails-3. Your issue may have been encountered and addressed by others.
+
+You can also try "Rails Hotline":http://www.railshotline.com/, a free telephone hotline for Rails help staffed by volunteers.
+
+h2. Contributing
+
+Please make changes to the "rails_apps_composer ":https://github.com/RailsApps/rails_apps_composer gem rather than changing the Rails Composer application template.
+
+h2. Credits
+
+Daniel Kehoe initiated the "RailsApps project":https://github.com/RailsApps and created the Rails Composer application template.
+
+Is it useful to you? Follow the project on Twitter:
+"@rails_apps":http://twitter.com/rails_apps
+and tweet some praise. I'd love to know you were helped out by what I've put together.
+
+h2. License
+
+Copyright 2012 Daniel Kehoe
+
+"MIT License":http://www.opensource.org/licenses/mit-license
