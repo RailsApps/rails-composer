@@ -1,0 +1,4 @@
+rails-composer
+==============
+
+The Rails generator on steroids for starter apps.
