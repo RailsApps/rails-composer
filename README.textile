@@ -12,7 +12,7 @@ Follow the project on Twitter: "@rails_apps":http://twitter.com/rails_apps. Plea
 
 h2. How to Use
 
-To build a Rails application, run the command:
+To build a Rails application, run the command (where @myapp@ is the name of your application):
 
 <pre>
 $ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb
@@ -26,7 +26,153 @@ $ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/comp
 
 h2. Template Options
 
-The Rails Composer application template will ask you for various preferences.
+The Rails Composer application template will ask you for various preferences, some of which will be dependent on previous choices. Here's an example:
+
+<pre>
+question  Web server for development?
+      1)  WEBrick (default)
+      2)  Thin
+      3)  Unicorn
+      4)  Puma
+
+question  Web server for production?
+      1)  Same as development
+      2)  Thin
+      3)  Unicorn
+      4)  Puma
+
+question  Database used in development?
+      1)  SQLite
+      2)  PostgreSQL
+      3)  MySQL
+      4)  MongoDB
+
+question  Template engine?
+      1)  ERB
+      2)  Haml
+
+question  Testing framework?
+      1)  Test::Unit
+      2)  RSpec with Capybara and Cucumber
+      3)  RSpec with Capybara and Turnip
+      4)  RSpec with Capybara
+
+question  Fixture replacement?
+      1)  None
+      2)  Factory Girl
+      3)  Machinist
+
+question  Front-end framework?
+      1)  None
+      2)  Twitter Bootstrap (Sass)
+      3)  Twitter Bootstrap (Less)
+      4)  Zurb Foundation
+      5)  Skeleton
+      6)  Just normalize CSS for consistent styling
+
+question  Form builder?
+      1)  None
+      2)  SimpleForm
+
+question  Add support for sending email?
+      1)  None
+      2)  Gmail
+      3)  SMTP
+      4)  SendGrid
+      5)  Mandrill
+
+question  Authentication?
+      1)  None
+      2)  Devise
+      3)  OmniAuth
+
+question  Devise modules?
+      1)  Devise with default modules
+      2)  Devise with Confirmable module
+      3)  Devise with Confirmable and Invitable modules
+
+question  Authorization?
+      1)  None
+      2)  CanCan with Rolify
+
+question  Install a starter app?
+      1)  None
+      2)  Home Page
+      3)  Home Page, User Accounts
+      4)  Home Page, User Accounts, Admin Dashboard
+</pre>
+
+h2. Run the Application
+
+Switch to the application root directory to examine and test what you've built.
+
+<pre>
+$ cd myapp
+</pre>
+
+h4. Quick Test
+
+For a "smoke test" to see if everything runs, display a list of Rake tasks.
+
+<pre>
+$ rake -T
+</pre>
+
+There's no need to run @bundle exec rake@ instead of @rake@ when you are using rvm (see "rvm and bundler integration":https://rvm.io/integration/bundler/).
+
+h4. Start the Web Server
+
+If you've chosen WEBrick or Thin for your web server, can run the app by entering the command:
+
+@$ rails server@
+
+To see your application in action, open a browser window and navigate to "http://localhost:3000/":http://localhost:3000.
+
+For the Unicorn web server:
+
+@$ unicorn@
+
+See the app at "http://localhost:8080/":http://localhost:8080.
+
+For the Puma web server:
+
+@$ rails server puma@
+
+See the app at "http://localhost:3000/":http://localhost:3000.
+
+h4. Login
+
+If you've created a version of the application that sets up a default user, log in with:
+
+* email: user@example.com
+* password: please
+
+You should delete or change any pre-configured logins before you deploy your application.
+
+h2. Testing
+
+Some versions of the starter application will contain a suite of RSpec unit tests or Cucumber scenarios and step definitions.
+
+After installing the application, run @rake -T@ to check that rake tasks for RSpec and Cucumber are available.
+
+Run @rake spec@ to run all RSpec tests.
+
+Run @rake cucumber@ (or more simply, @cucumber@) to run all Cucumber scenarios.
+
+Please send the author a message, create an issue, or submit a pull request if you can contribute improved RSpec or Cucumber files.
+
+h2. Deployment
+
+For easy deployment, use a “platform as a service” provider such as:
+
+* "Heroku":http://www.heroku.com/
+* "CloudFoundry":http://www.cloudfoundry.com/
+* "EngineYard":http://www.engineyard.com/
+* "OpenShift":https://openshift.redhat.com/app/
+
+For deployment on Heroku, see the article:
+
+* "Rails on Heroku":http://railsapps.github.com/rails-heroku-tutorial.html
 
 h2. Application Template Default
 
@@ -46,6 +192,10 @@ You should review the article "Installing Rails":http://railsapps.github.com/ins
 h4. Problems with  "Certificate Verify Failed"
 
 Are you getting an error "OpenSSL certificate verify failed" when you try to generate a new Rails app from an application template? See suggestions to resolve the error "Certificate Verify Failed":http://railsapps.github.com/openssl-certificate-verify-failed.html.
+
+h4. Problems with "Segmentation Fault"
+
+If you get a "segfault" when you try @rails new@, try removing and reinstalling rvm.
 
 h2. Documentation and Support
 
