@@ -2,6 +2,8 @@ h1. !http://railsapps.github.com/images/rails-36x36.jpg(Rails Composer)! Rails C
 
 An application template that creates a Rails 3.2 starter app.
 
+See "the project page":http://railsapps.github.com/rails-composer.
+
 It's the Rails generator on steroids.
 
 h2. !http://twitter-badges.s3.amazonaws.com/t_logo-a.png(Follow on Twitter)!:http://www.twitter.com/rails_apps Follow on Twitter
