@@ -251,3 +251,5 @@ h2. License
 "MIT License":http://www.opensource.org/licenses/mit-license
 
 Copyright 2012 Daniel Kehoe
+
+!https://cruel-carlota.pagodabox.com/9a7ed11e8570e461c585a7afd3722d71(githalytics.com alpha)!
