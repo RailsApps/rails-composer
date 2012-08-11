@@ -2,9 +2,11 @@ h1. !http://railsapps.github.com/images/rails-36x36.jpg(Rails Composer)! Rails C
 
 An application template that creates a Rails 3.2 starter app.
 
-See "the Rails Composer project page":http://railsapps.github.com/rails-composer.
+See the "Rails Composer project page":http://railsapps.github.com/rails-composer.
 
 It's the Rails generator on steroids.
+
+The Rails Composer application template is built from recipes provided by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem.
 
 h2. !http://twitter-badges.s3.amazonaws.com/t_logo-a.png(Follow on Twitter)!:http://www.twitter.com/rails_apps Follow on Twitter
 
@@ -26,7 +28,9 @@ $ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/comp
 
 h2. Your Options
 
-The Rails Composer application template will ask you for various preferences, some of which will depend on previous choices. Here's an example:
+The Rails Composer application template will ask you for various preferences, some of which will depend on previous choices. 
+
+Here's an example:
 
 <pre>
 question  Web server for development?
@@ -50,12 +54,16 @@ question  Database used in development?
 question  Template engine?
       1)  ERB
       2)  Haml
+      3)  Slim
 
-question  Testing framework?
+question  Unit testing?
       1)  Test::Unit
-      2)  RSpec with Capybara and Cucumber
-      3)  RSpec with Capybara and Turnip
-      4)  RSpec with Capybara
+      2)  RSpec
+
+question  Integration testing?
+      1)  RSpec with Capybara
+      2)  Cucumber with Capybara
+      3)  Turnip with Capybara
 
 question  Fixture replacement?
       1)  None
@@ -64,15 +72,14 @@ question  Fixture replacement?
 
 question  Front-end framework?
       1)  None
-      2)  Twitter Bootstrap (Sass)
-      3)  Twitter Bootstrap (Less)
-      4)  Zurb Foundation
-      5)  Skeleton
-      6)  Just normalize CSS for consistent styling
+      2)  Twitter Bootstrap
+      3)  Zurb Foundation
+      4)  Skeleton
+      5)  Just normalize CSS for consistent styling
 
-question  Form builder?
-      1)  None
-      2)  SimpleForm
+question  Twitter Bootstrap version?
+      1)  Twitter Bootstrap (Less)
+      2)  Twitter Bootstrap (Sass)
 
 question  Add support for sending email?
       1)  None
@@ -100,6 +107,14 @@ question  Install a starter app?
       2)  Home Page
       3)  Home Page, User Accounts
       4)  Home Page, User Accounts, Admin Dashboard
+
+question  Use a form builder gem?
+      1)  None
+      2)  SimpleForm
+      
+question  Set a robots.txt file to ban spiders? (y/n)
+question  Add 'therubyracer' JavaScript runtime (for Linux users without node.js)? (y/n)
+question  Create a project-specific rvm gemset and .rvmrc? (y/n)
 </pre>
 
 h2. Run the Application
