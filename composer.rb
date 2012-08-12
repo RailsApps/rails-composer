@@ -22,11 +22,11 @@ Rails.application.config.generators do |g|
 end
 RUBY
 
-@recipes = ["setup", "readme", "gems", "testing", "auth", "email", "models", "controllers", "views", "routes", "frontend", "database", "extras"]
+@recipes = ["git", "railsapps", "setup", "readme", "gems", "testing", "auth", "email", "models", "controllers", "views", "routes", "frontend", "database", "extras"]
 @prefs = {}
 @gems = []
-@diagnostics_recipes = [["example"], ["setup"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"]]
-@diagnostics_prefs = [{:database=>"sqlite", :templates=>"erb"}]
+@diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["auth", "controllers", "database", "email", "extras", "frontend", "gems", "git", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["auth", "controllers", "database", "email", "example", "extras", "frontend", "gems", "git", "models", "railsapps", "readme", "routes", "setup", "testing", "views"]]
+@diagnostics_prefs = [{:railsapps=>"rails3-bootstrap-devise-cancan", :database=>"sqlite", :templates=>"erb", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"none"}, {:railsapps=>"rails3-devise-rspec-cucumber", :database=>"sqlite", :templates=>"erb", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-devise", :database=>"mongodb", :orm=>"mongoid", :templates=>"erb", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-omniauth", :database=>"mongodb", :orm=>"mongoid", :templates=>"erb", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-subdomains", :database=>"mongodb", :orm=>"mongoid", :templates=>"haml", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"subdomains_app", :form_builder=>"none"}]
 diagnostics = {}
 
 def recipes; @recipes end
@@ -165,21 +165,17 @@ end
 # >---------------------------------[ Recipes ]----------------------------------<
 
 
-# >---------------------------------[ setup ]---------------------------------<
+# >----------------------------------[ git ]----------------------------------<
 
-@current_recipe = "setup"
-@before_configs["setup"].call if @before_configs["setup"]
-say_recipe 'setup'
+@current_recipe = "git"
+@before_configs["git"].call if @before_configs["git"]
+say_recipe 'git'
 
 
 @configs[@current_recipe] = config
 
 # Application template recipe for the rails_apps_composer. Change the recipe here:
-# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/setup.rb
-
-## Ruby on Rails
-say_wizard "You are using Ruby version #{RUBY_VERSION}."
-say_wizard "You are using Rails version #{Rails::VERSION::STRING}."
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/git.rb
 
 ## Git
 say_wizard "initialize git"
@@ -196,12 +192,118 @@ if prefer :git, true
   git :commit => "-aqm 'rails_apps_composer: initial commit'"
 end
 
-## Is sqlite3 in the Gemfile?
-f = File.open(destination_root() + '/Gemfile', "r")
-gemfile = ''
-f.each_line do |line|
-  gemfile += line
+
+# >-------------------------------[ railsapps ]-------------------------------<
+
+@current_recipe = "railsapps"
+@before_configs["railsapps"].call if @before_configs["railsapps"]
+say_recipe 'railsapps'
+
+
+@configs[@current_recipe] = config
+
+# Application template recipe for the rails_apps_composer. Change the recipe here:
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/railsapps.rb
+
+prefs[:railsapps] = multiple_choice "Install an example application?", 
+  [["No, let me build my own application", "none"], 
+  ["rails3-devise-rspec-cucumber", "rails3-devise-rspec-cucumber"], 
+  ["rails3-bootstrap-devise-cancan", "rails3-bootstrap-devise-cancan"], 
+  ["rails3-mongoid-devise", "rails3-mongoid-devise"],
+  ["rails3-mongoid-omniauth", "rails3-mongoid-omniauth"],
+  ["rails3-subdomains", "rails3-subdomains"]] unless prefs.has_key? :railsapps
+
+case prefs[:railsapps]
+  when 'rails3-devise-rspec-cucumber'
+    prefs[:database] = 'sqlite'
+    prefs[:templates] = 'erb'
+    prefs[:unit_test] = 'rspec'
+    prefs[:integration] = 'cucumber'
+    prefs[:fixtures] = 'factory_girl'
+    prefs[:frontend] = 'none'
+    prefs[:email] = 'gmail'
+    prefs[:authentication] = 'devise'
+    prefs[:devise_modules] = 'default'
+    prefs[:authorization] = 'none'
+    prefs[:starter_app] = 'users_app'
+    prefs[:form_builder] = 'none'
+  when 'rails3-bootstrap-devise-cancan'
+    prefs[:database] = 'sqlite'
+    prefs[:templates] = 'erb'
+    prefs[:unit_test] = 'rspec'
+    prefs[:integration] = 'cucumber'
+    prefs[:fixtures] = 'factory_girl'
+    prefs[:frontend] = 'bootstrap'
+    prefs[:bootstrap] = 'sass'
+    prefs[:email] = 'gmail'
+    prefs[:authentication] = 'devise'
+    prefs[:devise_modules] = 'default'
+    prefs[:authorization] = 'cancan'
+    prefs[:starter_app] = 'admin_app'
+    prefs[:form_builder] = 'none'
+  when 'rails3-mongoid-devise'
+    prefs[:database] = 'mongodb'
+    prefs[:orm] = 'mongoid'
+    prefs[:templates] = 'erb'
+    prefs[:unit_test] = 'rspec'
+    prefs[:integration] = 'cucumber'
+    prefs[:fixtures] = 'factory_girl'
+    prefs[:frontend] = 'none'
+    prefs[:email] = 'gmail'
+    prefs[:authentication] = 'devise'
+    prefs[:devise_modules] = 'default'
+    prefs[:authorization] = 'none'
+    prefs[:starter_app] = 'users_app'
+    prefs[:form_builder] = 'none'
+  when 'rails3-mongoid-omniauth'
+    prefs[:database] = 'mongodb'
+    prefs[:orm] = 'mongoid'
+    prefs[:templates] = 'erb'
+    prefs[:unit_test] = 'rspec'
+    prefs[:integration] = 'cucumber'
+    prefs[:fixtures] = 'factory_girl'
+    prefs[:frontend] = 'none'
+    prefs[:email] = 'none'
+    prefs[:authentication] = 'omniauth'
+    prefs[:omniauth_provider] = 'twitter'
+    prefs[:authorization] = 'none'
+    prefs[:starter_app] = 'users_app'
+    prefs[:form_builder] = 'none'
+  when 'rails3-subdomains'
+    prefs[:database] = 'mongodb'
+    prefs[:orm] = 'mongoid'
+    prefs[:templates] = 'haml'
+    prefs[:unit_test] = 'rspec'
+    prefs[:integration] = 'cucumber'
+    prefs[:fixtures] = 'factory_girl'
+    prefs[:frontend] = 'none'
+    prefs[:email] = 'gmail'
+    prefs[:authentication] = 'devise'
+    prefs[:devise_modules] = 'default'
+    prefs[:authorization] = 'none'
+    prefs[:starter_app] = 'subdomains_app'
+    prefs[:form_builder] = 'none'
 end
+
+
+# >---------------------------------[ setup ]---------------------------------<
+
+@current_recipe = "setup"
+@before_configs["setup"].call if @before_configs["setup"]
+say_recipe 'setup'
+
+
+@configs[@current_recipe] = config
+
+# Application template recipe for the rails_apps_composer. Change the recipe here:
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/setup.rb
+
+## Ruby on Rails
+say_wizard "You are using Ruby version #{RUBY_VERSION}."
+say_wizard "You are using Rails version #{Rails::VERSION::STRING}."
+
+## Is sqlite3 in the Gemfile?
+gemfile = File.read(destination_root() + '/Gemfile')
 sqlite_detected = gemfile.include? 'sqlite3'
 
 ## Web Server
@@ -350,7 +452,9 @@ after_everything do
   gsub_file "README.textile", /preferences that are known/, "preferences that are NOT known" if diagnostics[:prefs] == 'fail'
   gsub_file "README.textile", /RECIPES/, recipes.sort.inspect
   gsub_file "README.textile", /PREFERENCES/, prefs.inspect
-
+  gsub_file "README", /RECIPES/, recipes.sort.inspect
+  gsub_file "README", /PREFERENCES/, prefs.inspect
+  
   # Ruby on Rails
   gsub_file "README.textile", /\* Ruby/, "* Ruby version #{RUBY_VERSION}"
   gsub_file "README.textile", /\* Rails/, "* Rails version #{Rails::VERSION::STRING}"
@@ -1130,8 +1234,8 @@ after_bundler do
   copy_from_repo 'app/views/layouts/_navigation-omniauth.html.erb', :prefs => 'omniauth'
   copy_from_repo 'app/views/layouts/_navigation-subdomains_app.html.erb', :prefs => 'subdomains_app'  
   ## APPLICATION NAME
-  application_layout_file = 'app/views/layouts/application.html.erb'
-  navigation_partial_file = 'app/views/layouts/_navigation.html.erb'
+  application_layout_file = Dir['app/views/layouts/application.html.*'].first
+  navigation_partial_file = Dir['app/views/layouts/_navigation.html.*'].first
   gsub_file application_layout_file, /App_Name/, "#{app_name.humanize.titleize}"
   gsub_file navigation_partial_file, /App_Name/, "#{app_name.humanize.titleize}"
   ### CSS ###
@@ -1374,7 +1478,7 @@ end
 
 say_wizard "Installing gems. This will take a while."
 if prefs.has_key? :bundle_path
-  run "bundle install --without production #{prefs[:bundle_path]}"
+  run "bundle install --without production --path #{prefs[:bundle_path]}"
 else
   run 'bundle install --without production'
 end
