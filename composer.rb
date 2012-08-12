@@ -81,7 +81,7 @@ def after_everything(&block); @after_everything_blocks << [@current_recipe, bloc
 def before_config(&block); @before_configs[@current_recipe] = block; end
 
 def copy_from_repo(filename, opts = {})
-  repo = 'https://raw.github.com/RailsApps/rails3-application-templates/master/files-v2/'
+  repo = 'https://raw.github.com/RailsApps/rails-composer/master/files/'
   repo = opts[:repo] unless opts[:repo].nil?
   if (!opts[:prefs].nil?) && (!prefs.has_value? opts[:prefs])
     return
@@ -183,7 +183,7 @@ prefs[:git] = true unless prefs.has_key? :git
 if prefer :git, true
   begin
     remove_file '.gitignore'
-    get 'https://raw.github.com/RailsApps/rails3-application-templates/master/files/gitignore.txt', '.gitignore'
+    get 'https://raw.github.com/RailsApps/rails-composer/master/files/gitignore.txt', '.gitignore'
   rescue OpenURI::HTTPError
     say_wizard "Unable to obtain gitignore file from the repo"
   end
@@ -207,26 +207,13 @@ say_recipe 'railsapps'
 
 prefs[:railsapps] = multiple_choice "Install an example application?", 
   [["No, let me build my own application", "none"], 
-  ["rails3-devise-rspec-cucumber", "rails3-devise-rspec-cucumber"], 
   ["rails3-bootstrap-devise-cancan", "rails3-bootstrap-devise-cancan"], 
+  ["rails3-devise-rspec-cucumber", "rails3-devise-rspec-cucumber"], 
   ["rails3-mongoid-devise", "rails3-mongoid-devise"],
   ["rails3-mongoid-omniauth", "rails3-mongoid-omniauth"],
   ["rails3-subdomains", "rails3-subdomains"]] unless prefs.has_key? :railsapps
 
 case prefs[:railsapps]
-  when 'rails3-devise-rspec-cucumber'
-    prefs[:database] = 'sqlite'
-    prefs[:templates] = 'erb'
-    prefs[:unit_test] = 'rspec'
-    prefs[:integration] = 'cucumber'
-    prefs[:fixtures] = 'factory_girl'
-    prefs[:frontend] = 'none'
-    prefs[:email] = 'gmail'
-    prefs[:authentication] = 'devise'
-    prefs[:devise_modules] = 'default'
-    prefs[:authorization] = 'none'
-    prefs[:starter_app] = 'users_app'
-    prefs[:form_builder] = 'none'
   when 'rails3-bootstrap-devise-cancan'
     prefs[:database] = 'sqlite'
     prefs[:templates] = 'erb'
@@ -240,6 +227,19 @@ case prefs[:railsapps]
     prefs[:devise_modules] = 'default'
     prefs[:authorization] = 'cancan'
     prefs[:starter_app] = 'admin_app'
+    prefs[:form_builder] = 'none'
+  when 'rails3-devise-rspec-cucumber'
+    prefs[:database] = 'sqlite'
+    prefs[:templates] = 'erb'
+    prefs[:unit_test] = 'rspec'
+    prefs[:integration] = 'cucumber'
+    prefs[:fixtures] = 'factory_girl'
+    prefs[:frontend] = 'none'
+    prefs[:email] = 'gmail'
+    prefs[:authentication] = 'devise'
+    prefs[:devise_modules] = 'default'
+    prefs[:authorization] = 'none'
+    prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
   when 'rails3-mongoid-devise'
     prefs[:database] = 'mongodb'
@@ -332,7 +332,14 @@ case prefs[:database]
     unless sqlite_detected
       prefs[:orm] = multiple_choice "How will you connect to MongoDB?", [["Mongoid","mongoid"]] unless prefs.has_key? :orm
     else
-      raise StandardError.new "SQLite detected in the Gemfile. Use '-O' or '--skip-activerecord' as in 'rails new foo -O' if you don't want ActiveRecord and SQLite"
+      say_wizard "WARNING! SQLite gem detected in the Gemfile"
+      say_wizard "If you wish to use MongoDB you must skip Active Record."
+      say_wizard "When launching rails_apps_composer, choose 'skip Active Record'."
+      say_wizard "If using an application template, use the '-O' flag as in 'rails new foo -O'."
+      prefs[:fail] = multiple_choice "Abort or continue?", [["abort", "abort"], ["continue", "continue"]]
+      if prefer :fail, 'abort'
+        raise StandardError.new "SQLite detected in the Gemfile. Use '-O' or '--skip-activerecord' as in 'rails new foo -O' if you don't want ActiveRecord and SQLite"
+      end
     end
 end
 
@@ -527,7 +534,7 @@ gem 'unicorn', '>= 4.3.1', :group => [:development, :test] if prefer :dev_webser
 gem 'puma', '>= 1.5.0', :group => [:development, :test] if prefer :dev_webserver, 'puma'
 gem 'thin', '>= 1.4.1', :group => :production if prefer :prod_webserver, 'thin'
 gem 'unicorn', '>= 4.3.1', :group => :production if prefer :prod_webserver, 'unicorn'
-gem 'puma', '>= 1.5.0', :group => :production if prefer :prod_webserver, 'puma'
+gem 'puma', '>= 1.6.1', :group => :production if prefer :prod_webserver, 'puma'
 
 ## Database Adapter
 gem 'mongoid', '>= 3.0.3' if prefer :orm, 'mongoid'
@@ -538,7 +545,7 @@ copy_from_repo 'config/database-mysql.yml', :prefs => 'mysql'
 
 ## Template Engine
 if prefer :templates, 'haml'
-  gem 'haml', '>= 3.1.6'
+  gem 'haml', '>= 3.1.7'
   gem 'haml-rails', '>= 0.3.4', :group => :development
   # hpricot and ruby_parser are needed for conversion of HTML to Haml
   gem 'hpricot', '>= 0.8.6', :group => :development
@@ -889,7 +896,7 @@ RUBY
   ### CANCAN ###
   if prefer :authorization, 'cancan'
     generate 'cancan:ability'
-    if prefer :starter_app, 'admin_dashboard'
+    if prefer :starter_app, 'admin_app'
       # Limit access to the users#index page
       inject_into_file 'app/models/ability.rb', :after => "def initialize(user)\n" do <<-RUBY
     user ||= User.new # guest user (not logged in)
