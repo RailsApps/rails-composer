@@ -1,0 +1,15 @@
+<%= link_to "App_Name", root_path, :class => 'brand' %>
+<ul class="nav">
+  <% if user_signed_in? %>
+    <li>
+    Logged in as <%= current_user.name %>
+    </li>
+    <li>
+    <%= link_to 'Logout', signout_path %>        
+    </li>
+  <% else %>
+    <li>
+    <%= link_to 'Login', signin_path %>  
+    </li>
+  <% end %>
+</ul>

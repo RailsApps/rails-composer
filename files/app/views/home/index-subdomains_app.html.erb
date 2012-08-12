@@ -1,0 +1,4 @@
+<h3>Home</h3>
+<% @users.each do |user| %>
+  <p><%= #{user.name} profile: #{link_to root_url(:subdomain => user.name), root_url(:subdomain => user.name)} %></p>
+<% end %>

@@ -1,0 +1,6 @@
+%h3 Users
+%ul.users
+  - @users.each do |user|
+    %li
+      = link_to user.name, user
+      signed up #{user.created_at.to_date}

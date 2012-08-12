@@ -1,0 +1,6 @@
+%p
+  User: #{@user.name}
+%p
+  Email: #{@user.email if @user.email}
+%p
+  Profile: #{link_to root_url(:subdomain => @user.name), root_url(:subdomain => @user.name)}
