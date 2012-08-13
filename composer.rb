@@ -22,7 +22,7 @@ Rails.application.config.generators do |g|
 end
 RUBY
 
-@recipes = ["all", "git", "railsapps", "setup", "readme", "gems", "testing", "auth", "email", "models", "controllers", "views", "routes", "frontend", "init", "extras"]
+@recipes = ["core", "git", "railsapps", "setup", "readme", "gems", "testing", "auth", "email", "models", "controllers", "views", "routes", "frontend", "init", "extras"]
 @prefs = {}
 @gems = []
 @diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["auth", "controllers", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["all", "auth", "controllers", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["auth", "controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["auth", "controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["all", "auth", "controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"]]
@@ -174,20 +174,20 @@ end
 # >---------------------------------[ Recipes ]----------------------------------<
 
 
-# >----------------------------------[ all ]----------------------------------<
+# >---------------------------------[ core ]----------------------------------<
 
-@current_recipe = "all"
-@before_configs["all"].call if @before_configs["all"]
-say_recipe 'all'
+@current_recipe = "core"
+@before_configs["core"].call if @before_configs["core"]
+say_recipe 'core'
 
 
 @configs[@current_recipe] = config
 
 # Application template recipe for the rails_apps_composer. Change the recipe here:
-# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/all.rb
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/core.rb
 
 ## Git
-say_wizard "selected all recipes"
+say_wizard "selected all core recipes"
 
 
 # >----------------------------------[ git ]----------------------------------<
@@ -570,6 +570,8 @@ gem 'pg', '>= 0.14.0' if prefer :database, 'postgresql'
 gem 'mysql2', '>= 0.3.11' if prefer :database, 'mysql'
 copy_from_repo 'config/database-postgresql.yml', :prefs => 'postgresql'
 copy_from_repo 'config/database-mysql.yml', :prefs => 'mysql'
+gsub_file "config/database.yml", /myapp/, "#{app_name}"
+gsub_file "config/database.yml", /root/, "#{app_name}"
 
 ## Template Engine
 if prefer :templates, 'haml'
