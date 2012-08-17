@@ -226,7 +226,7 @@ say_recipe 'railsapps'
 # https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/railsapps.rb
 
 prefs[:railsapps] = multiple_choice "Install an example application?", 
-  [["No, let me build my own application", "none"], 
+  [["let me build my own application", "none"], 
   ["rails3-bootstrap-devise-cancan", "rails3-bootstrap-devise-cancan"], 
   ["rails3-devise-rspec-cucumber", "rails3-devise-rspec-cucumber"], 
   ["rails3-mongoid-devise", "rails3-mongoid-devise"],
@@ -374,7 +374,7 @@ prefs[:templates] = multiple_choice "Template engine?", [["ERB", "erb"], ["Haml"
 ## Testing Framework
 if recipes.include? 'testing'
   prefs[:unit_test] = multiple_choice "Unit testing?", [["Test::Unit", "test_unit"], ["RSpec", "rspec"]] unless prefs.has_key? :unit_test
-  prefs[:integration] = multiple_choice "Integration testing?", [["RSpec with Capybara", "capybara"], 
+  prefs[:integration] = multiple_choice "Integration testing?", [["None", "none"], ["RSpec with Capybara", "capybara"], 
     ["Cucumber with Capybara", "cucumber"], ["Turnip with Capybara", "turnip"]] unless prefs.has_key? :integration
   prefs[:fixtures] = multiple_choice "Fixture replacement?", [["None","none"], ["Factory Girl","factory_girl"], ["Machinist","machinist"]] unless prefs.has_key? :fixtures
 end
@@ -556,22 +556,24 @@ say_recipe 'gems'
 insert_into_file 'Gemfile', "ruby '1.9.3'\n", :before => "gem 'rails', '3.2.6'" if prefer :deploy, 'heroku'
 
 ## Web Server
-gem 'thin', '>= 1.4.1', :group => [:development, :test] if prefer :dev_webserver, 'thin'
-gem 'unicorn', '>= 4.3.1', :group => [:development, :test] if prefer :dev_webserver, 'unicorn'
-gem 'puma', '>= 1.5.0', :group => [:development, :test] if prefer :dev_webserver, 'puma'
-gem 'thin', '>= 1.4.1', :group => :production if prefer :prod_webserver, 'thin'
-gem 'unicorn', '>= 4.3.1', :group => :production if prefer :prod_webserver, 'unicorn'
-gem 'puma', '>= 1.6.1', :group => :production if prefer :prod_webserver, 'puma'
+if (prefs[:dev_webserver] == prefs[:prod_webserver])
+  gem 'thin', '>= 1.4.1' if prefer :dev_webserver, 'thin'
+  gem 'unicorn', '>= 4.3.1' if prefer :dev_webserver, 'unicorn'
+  gem 'puma', '>= 1.6.1' if prefer :dev_webserver, 'puma'
+else
+  gem 'thin', '>= 1.4.1', :group => [:development, :test] if prefer :dev_webserver, 'thin'
+  gem 'unicorn', '>= 4.3.1', :group => [:development, :test] if prefer :dev_webserver, 'unicorn'
+  gem 'puma', '>= 1.6.1', :group => [:development, :test] if prefer :dev_webserver, 'puma'
+  gem 'thin', '>= 1.4.1', :group => :production if prefer :prod_webserver, 'thin'
+  gem 'unicorn', '>= 4.3.1', :group => :production if prefer :prod_webserver, 'unicorn'
+  gem 'puma', '>= 1.6.1', :group => :production if prefer :prod_webserver, 'puma'
+end
 
 ## Database Adapter
 gsub_file 'Gemfile', /gem 'sqlite3'\n/, '' unless prefer :database, 'sqlite'
 gem 'mongoid', '>= 3.0.3' if prefer :orm, 'mongoid'
 gem 'pg', '>= 0.14.0' if prefer :database, 'postgresql'
 gem 'mysql2', '>= 0.3.11' if prefer :database, 'mysql'
-copy_from_repo 'config/database-postgresql.yml', :prefs => 'postgresql'
-copy_from_repo 'config/database-mysql.yml', :prefs => 'mysql'
-gsub_file "config/database.yml", /myapp/, "#{app_name}"
-gsub_file "config/database.yml", /root/, "#{app_name}"
 
 ## Template Engine
 if prefer :templates, 'haml'
@@ -614,7 +616,8 @@ gem 'machinist', '>= 2.0', :group => :test if prefer :fixtures, 'machinist'
 
 ## Front-end Framework
 gem 'bootstrap-sass', '>= 2.0.4.0' if prefer :bootstrap, 'sass'
-gem 'zurb-foundation', '>= 3.0.8' if prefer :frontend, 'foundation'
+gem 'compass-rails', '>= 1.0.3', :group => :assets if prefer :frontend, 'foundation'
+gem 'zurb-foundation', '>= 3.0.9', :group => :assets if prefer :frontend, 'foundation'
 if prefer :bootstrap, 'less'
   gem 'twitter-bootstrap-rails', '>= 2.1.1', :group => :assets
   # install gem 'therubyracer' to use Less
@@ -659,11 +662,41 @@ end
 git :add => '.' if prefer :git, true
 git :commit => "-aqm 'rails_apps_composer: Gemfile'" if prefer :git, true
 
-### GENERATORS ###
+### CREATE DATABASE ###
 after_bundler do
-  ## Database
+  copy_from_repo 'config/database-postgresql.yml', :prefs => 'postgresql'
+  copy_from_repo 'config/database-mysql.yml', :prefs => 'mysql'
   generate 'mongoid:config' if prefer :orm, 'mongoid'
   remove_file 'config/database.yml' if prefer :orm, 'mongoid'
+  if prefer :database, 'postgresql'
+    begin
+      say_wizard "Creating a user named '#{app_name}' for PostgreSQL"
+      run "createuser #{app_name}" if prefer :database, 'postgresql'
+      gsub_file "config/database.yml", /username: .*/, "username: #{app_name}"
+    rescue StandardError
+      raise "unable to create a user for PostgreSQL"
+    end
+  end
+  unless prefer :database, 'sqlite'
+    affirm = multiple_choice "Drop any existing databases named #{app_name}?", 
+      [["Yes (continue)",true], ["No (abort)",false]]
+    if affirm
+      run 'bundle exec rake db:drop'
+    else
+      raise "aborted at user's request"
+    end
+  end
+  run 'bundle exec rake db:create:all' unless prefer :orm, 'mongoid'
+  run 'bundle exec rake db:create' if prefer :orm, 'mongoid'
+  ## Git
+  git :add => '.' if prefer :git, true
+  git :commit => "-aqm 'rails_apps_composer: create database'" if prefer :git, true
+end # after_bundler
+
+### GENERATORS ###
+after_bundler do
+  ## Front-end Framework
+  generate 'foundation:install' if prefer :frontend, 'foundation'
   ## Git
   git :add => '.' if prefer :git, true
   git :commit => "-aqm 'rails_apps_composer: generators'" if prefer :git, true
@@ -1330,8 +1363,7 @@ body { padding-top: 60px; }
 @import "bootstrap-responsive";
 RUBY
   elsif prefer :frontend, 'foundation'
-    insert_into_file 'app/assets/javascripts/application.js', "//= require foundation\n", :after => "jquery_ujs\n"
-    insert_into_file 'app/assets/stylesheets/application.css.scss', " *= require foundation\n", :after => "require_self\n"
+    insert_into_file 'app/assets/stylesheets/application.css.scss', " *= require foundation_and_overrides\n", :after => "require_self\n"
   elsif prefer :frontend, 'skeleton'
     copy_from 'https://raw.github.com/necolas/normalize.css/master/normalize.css', 'app/assets/stylesheets/normalize.css'
     copy_from 'https://raw.github.com/dhgamache/Skeleton/master/stylesheets/base.css', 'app/assets/stylesheets/base.css'
@@ -1533,7 +1565,7 @@ end
 # >---------------------------------[ Diagnostics ]----------------------------------<
 
 # remove prefs which are diagnostically irrelevant
-redacted_prefs = prefs
+redacted_prefs = prefs.clone
 redacted_prefs.delete(:git)
 redacted_prefs.delete(:dev_webserver)
 redacted_prefs.delete(:prod_webserver)
