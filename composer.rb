@@ -226,7 +226,7 @@ say_recipe 'railsapps'
 # https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/railsapps.rb
 
 prefs[:railsapps] = multiple_choice "Install an example application?", 
-  [["let me build my own application", "none"], 
+  [["I want to build my own application", "none"], 
   ["rails3-bootstrap-devise-cancan", "rails3-bootstrap-devise-cancan"], 
   ["rails3-devise-rspec-cucumber", "rails3-devise-rspec-cucumber"], 
   ["rails3-mongoid-devise", "rails3-mongoid-devise"],
@@ -673,9 +673,17 @@ after_bundler do
       say_wizard "Creating a user named '#{app_name}' for PostgreSQL"
       run "createuser #{app_name}" if prefer :database, 'postgresql'
       gsub_file "config/database.yml", /username: .*/, "username: #{app_name}"
+      gsub_file "config/database.yml", /database: myapp_development/, "database: #{app_name}_development"
+      gsub_file "config/database.yml", /database: myapp_test/,        "database: #{app_name}_test"
+      gsub_file "config/database.yml", /database: myapp_production/,  "database: #{app_name}_production"
     rescue StandardError
       raise "unable to create a user for PostgreSQL"
     end
+  end
+  if prefer :database, 'mysql'
+    gsub_file "config/database.yml", /database: myapp_development/, "database: #{app_name}_development"
+    gsub_file "config/database.yml", /database: myapp_test/,        "database: #{app_name}_test"
+    gsub_file "config/database.yml", /database: myapp_production/,  "database: #{app_name}_production"
   end
   unless prefer :database, 'sqlite'
     affirm = multiple_choice "Drop any existing databases named #{app_name}?", 
@@ -867,13 +875,23 @@ after_everything do
       copy_from_repo 'spec/controllers/users_controller_spec.rb', :repo => repo
       copy_from_repo 'spec/models/user_spec.rb', :repo => repo
     end
+    ## SUBDOMAINS
+    if (prefer :authentication, 'devise') && (prefer :starter_app, 'subdomains_app')
+      say_wizard "copying RSpec files from the rails3-subdomains examples"
+      repo = 'https://raw.github.com/RailsApps/rails3-subdomains/master/'
+      copy_from_repo 'spec/spec_helper.rb', :repo => repo
+      copy_from_repo 'spec/factories/users.rb', :repo => repo
+      copy_from_repo 'spec/controllers/home_controller_spec.rb', :repo => repo
+      copy_from_repo 'spec/controllers/users_controller_spec.rb', :repo => repo
+      copy_from_repo 'spec/models/user_spec.rb', :repo => repo
+    end
     ## GIT
     git :add => '.' if prefer :git, true
     git :commit => "-aqm 'rails_apps_composer: rspec files'" if prefer :git, true
   end
   ### CUCUMBER ###
   if prefer :integration, 'cucumber'
-    ## CUCUMBER AND DEVISE
+    ## CUCUMBER AND DEVISE (USERS APP)
     if (prefer :authentication, 'devise') && (prefer :starter_app, 'users_app')
       say_wizard "copying Cucumber scenarios from the rails3-devise-rspec-cucumber examples"
       repo = 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
@@ -899,6 +917,7 @@ RUBY
         end
       end
     end
+    ## CUCUMBER AND DEVISE (ADMIN APP)
     if (prefer :authentication, 'devise') && (prefer :starter_app, 'admin_app')
       say_wizard "copying Cucumber scenarios from the rails3-bootstrap-devise-cancan examples"
       repo = 'https://raw.github.com/RailsApps/rails3-bootstrap-devise-cancan/master/'
@@ -923,6 +942,18 @@ RUBY
 RUBY
         end
       end
+    end
+    ## CUCUMBER AND DEVISE (SUBDOMAINS APP)
+    if (prefer :authentication, 'devise') && (prefer :starter_app, 'subdomains_app')
+      say_wizard "copying RSpec files from the rails3-subdomains examples"
+      repo = 'https://raw.github.com/RailsApps/rails3-subdomains/master/'
+      copy_from_repo 'features/users/sign_in.feature', :repo => repo
+      copy_from_repo 'features/users/sign_out.feature', :repo => repo
+      copy_from_repo 'features/users/sign_up.feature', :repo => repo
+      copy_from_repo 'features/users/user_edit.feature', :repo => repo
+      copy_from_repo 'features/users/user_show.feature', :repo => repo
+      copy_from_repo 'features/step_definitions/user_steps.rb', :repo => repo
+      copy_from_repo 'features/support/paths.rb', :repo => repo
     end
     ## GIT
     git :add => '.' if prefer :git, true
@@ -1161,7 +1192,7 @@ after_bundler do
     end
   end
   ### SUBDOMAINS ###
-  copy_from_repo 'app/models/user.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains'
+  copy_from_repo 'app/models/user.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
   ### AUTHORIZATION (insert 'rolify' after User model is created) ###
   if prefer :authorization, 'cancan'
     unless prefer :orm, 'mongoid'
@@ -1227,7 +1258,7 @@ RUBY
       inject_into_file 'app/controllers/users_controller.rb', "    authorize! :index, @user, :message => 'Not authorized as an administrator.'\n", :after => "def index\n"
     end
   end
-  gsub_file 'app/controllers/users_controller.rb', /before_filter :authenticate_user!/, '' if prefer :starter_app, 'subdomains'
+  gsub_file 'app/controllers/users_controller.rb', /before_filter :authenticate_user!/, '' if prefer :starter_app, 'subdomains_app'
   ### SESSIONS_CONTROLLER ###
   if prefer :authentication, 'omniauth'
     filename = 'app/controllers/sessions_controller.rb'
@@ -1235,7 +1266,7 @@ RUBY
     gsub_file filename, /twitter/, prefs[:omniauth_provider] unless prefer :omniauth_provider, 'twitter'
   end
   ### PROFILES_CONTROLLER ###
-  copy_from_repo 'app/controllers/profiles_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains'
+  copy_from_repo 'app/controllers/profiles_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
   ### GIT ###
   git :add => '.' if prefer :git, true
   git :commit => "-aqm 'rails_apps_composer: controllers'" if prefer :git, true
@@ -1309,8 +1340,8 @@ after_bundler do
     copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/' if prefer :authentication, 'omniauth'
   end
   ### SUBDOMAINS ###
-  copy_from_repo 'lib/subdomain.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains'
-  copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains'
+  copy_from_repo 'lib/subdomain.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
+  copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
   ### CORRECT APPLICATION NAME ###
   gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
   ### GIT ###
@@ -1415,7 +1446,7 @@ puts 'New user created: ' << user2.name
 FILE
       end
     end
-    if prefer :starter_app, 'subdomains'
+    if prefer :starter_app, 'subdomains_app'
       gsub_file 'db/seeds.rb', /First User/, 'user1'
       gsub_file 'db/seeds.rb', /Second User/, 'user2'
     end
@@ -1461,6 +1492,7 @@ config['form_builder'] = multiple_choice("Use a form builder gem?", [["None", "n
 config['ban_spiders'] = yes_wizard?("Set a robots.txt file to ban spiders?") if true && true unless config.key?('ban_spiders') || prefs.has_key?(:ban_spiders)
 config['jsruntime'] = yes_wizard?("Add 'therubyracer' JavaScript runtime (for Linux users without node.js)?") if true && true unless config.key?('jsruntime') || prefs.has_key?(:jsruntime)
 config['rvmrc'] = yes_wizard?("Create a project-specific rvm gemset and .rvmrc?") if true && true unless config.key?('rvmrc') || prefs.has_key?(:rvmrc)
+config['github'] = yes_wizard?("Create a GitHub repository?") if true && true unless config.key?('github') || prefs.has_key?(:github)
 @configs[@current_recipe] = config
 
 # Application template recipe for the rails_apps_composer. Change the recipe here:
@@ -1490,7 +1522,7 @@ if config['ban_spiders']
   prefs[:ban_spiders] = true
 end
 if prefs[:ban_spiders]
-  say_wizard "Banning spiders by modifying 'public/robots.txt'"
+  say_wizard "recipe banning spiders by modifying 'public/robots.txt'"
   after_bundler do
     gsub_file 'public/robots.txt', /# User-Agent/, 'User-Agent'
     gsub_file 'public/robots.txt', /# Disallow/, 'Disallow'
@@ -1502,7 +1534,7 @@ if config['jsruntime']
   prefs[:jsruntime] = true
 end
 if prefs[:jsruntime]
-  say_wizard "Adding 'therubyracer' JavaScript runtime gem"
+  say_wizard "recipe adding 'therubyracer' JavaScript runtime gem"
   # maybe it was already added for bootstrap-less?
   unless prefer :bootstrap, 'less'
     gem 'therubyracer', :group => :assets, :platform => :ruby
@@ -1514,6 +1546,7 @@ if config['rvmrc']
   prefs[:rvmrc] = true
 end
 if prefs[:rvmrc]
+  say_wizard "recipe creating project-specific rvm gemset and .rvmrc"
   # using the rvm Ruby API, see:
   # http://blog.thefrontiergroup.com.au/2010/12/a-brief-introduction-to-the-rvm-ruby-api/
   if ENV['MY_RUBY_HOME'] && ENV['MY_RUBY_HOME'].include?('rvm')
@@ -1558,6 +1591,22 @@ after_everything do
   # GIT
   git :add => '.' if prefer :git, true
   git :commit => "-aqm 'rails_apps_composer: extras'" if prefer :git, true
+end
+
+## GITHUB
+if config['github']
+  gem 'hub', '>= 1.10.2', :require => nil, :group => [:development]
+  after_everything do
+    say_wizard "recipe creating GitHub repository"
+    git_uri = `git config remote.origin.url`.strip
+    unless git_uri.size == 0
+      say_wizard "Repository already exists:"
+      say_wizard "#{git_uri}"
+    else
+      run "hub create #{app_name}"
+      run "hub push -u origin master"
+    end
+  end
 end
 
 
