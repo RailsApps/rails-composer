@@ -376,8 +376,8 @@ case prefs[:database]
     else
       say_wizard "WARNING! SQLite gem detected in the Gemfile"
       say_wizard "If you wish to use MongoDB you must skip Active Record."
-      say_wizard "When launching rails_apps_composer, choose 'skip Active Record'."
-      say_wizard "If using an application template, use the '-O' flag as in 'rails new foo -O'."
+      say_wizard "If using rails_apps_composer, choose 'skip Active Record'."
+      say_wizard "If using Rails Composer or an application template, use the '-O' flag as in 'rails new foo -O'."
       prefs[:fail] = multiple_choice "Abort or continue?", [["abort", "abort"], ["continue", "continue"]]
       if prefer :fail, 'abort'
         raise StandardError.new "SQLite detected in the Gemfile. Use '-O' or '--skip-activerecord' as in 'rails new foo -O' if you don't want ActiveRecord and SQLite"
@@ -1516,6 +1516,7 @@ if prefer :railsapps, 'rails-prelaunch-signup'
     copy_from_repo 'features/admin/send_invitations.feature', :repo => repo    
     copy_from_repo 'features/admin/view_progress.feature', :repo => repo
     copy_from_repo 'features/visitors/request_invitation.feature', :repo => repo
+    copy_from_repo 'features/users/sign_in.feature', :repo => repo
     copy_from_repo 'features/users/sign_up.feature', :repo => repo
     copy_from_repo 'features/users/user_show.feature', :repo => repo
     copy_from_repo 'features/step_definitions/admin_steps.rb', :repo => repo
