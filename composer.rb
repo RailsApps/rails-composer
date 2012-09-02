@@ -760,6 +760,7 @@ after_bundler do
   if prefer :unit_test, 'rspec'
     say_wizard "recipe installing RSpec"
     generate 'rspec:install'
+    copy_from_repo 'spec/spec_helper.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
     unless prefer :email, 'none'
       generate 'email_spec:steps'
       inject_into_file 'spec/spec_helper.rb', "require 'email_spec'\n", :after => "require 'rspec/rails'\n"
@@ -786,21 +787,6 @@ RUBY
       # remove ActiveRecord artifacts
       gsub_file 'spec/spec_helper.rb', /config.fixture_path/, '# config.fixture_path'
       gsub_file 'spec/spec_helper.rb', /config.use_transactional_fixtures/, '# config.use_transactional_fixtures'
-      # reset your application database to a pristine state during testing
-      inject_into_file 'spec/spec_helper.rb', :before => "\nend" do
-      <<-RUBY
-  \n
-  require 'database_cleaner'
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :truncation
-    DatabaseCleaner.orm = "mongoid"
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.clean
-  end
-RUBY
-      end
       # remove either possible occurrence of "require rails/test_unit/railtie"
       gsub_file 'config/application.rb', /require 'rails\/test_unit\/railtie'/, '# require "rails/test_unit/railtie"'
       gsub_file 'config/application.rb', /require "rails\/test_unit\/railtie"/, '# require "rails/test_unit/railtie"'
@@ -899,7 +885,6 @@ after_everything do
     if (prefer :authentication, 'omniauth') && (prefer :starter_app, 'users_app')
       say_wizard "copying RSpec files from the rails3-mongoid-omniauth examples"
       repo = 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
-      copy_from_repo 'spec/spec_helper.rb', :repo => repo
       copy_from_repo 'spec/factories/users.rb', :repo => repo
       copy_from_repo 'spec/controllers/sessions_controller_spec.rb', :repo => repo
       copy_from_repo 'spec/controllers/home_controller_spec.rb', :repo => repo
@@ -910,7 +895,6 @@ after_everything do
     if (prefer :authentication, 'devise') && (prefer :starter_app, 'subdomains_app')
       say_wizard "copying RSpec files from the rails3-subdomains examples"
       repo = 'https://raw.github.com/RailsApps/rails3-subdomains/master/'
-      copy_from_repo 'spec/spec_helper.rb', :repo => repo
       copy_from_repo 'spec/factories/users.rb', :repo => repo
       copy_from_repo 'spec/controllers/home_controller_spec.rb', :repo => repo
       copy_from_repo 'spec/controllers/users_controller_spec.rb', :repo => repo
