@@ -17,6 +17,8 @@
 
 # >----------------------------[ Initial Setup ]------------------------------<
 
+run 'bundle update'
+
 initializer 'generators.rb', <<-RUBY
 Rails.application.config.generators do |g|
 end
@@ -577,36 +579,36 @@ insert_into_file 'Gemfile', "ruby '1.9.3'\n", :before => "gem 'rails', '3.2.6'" 
 if (prefs[:dev_webserver] == prefs[:prod_webserver])
   gem 'thin', '>= 1.4.1' if prefer :dev_webserver, 'thin'
   gem 'unicorn', '>= 4.3.1' if prefer :dev_webserver, 'unicorn'
-  gem 'puma', '>= 1.6.2' if prefer :dev_webserver, 'puma'
+  gem 'puma', '>= 1.6.3' if prefer :dev_webserver, 'puma'
 else
   gem 'thin', '>= 1.4.1', :group => [:development, :test] if prefer :dev_webserver, 'thin'
   gem 'unicorn', '>= 4.3.1', :group => [:development, :test] if prefer :dev_webserver, 'unicorn'
-  gem 'puma', '>= 1.6.2', :group => [:development, :test] if prefer :dev_webserver, 'puma'
+  gem 'puma', '>= 1.6.3', :group => [:development, :test] if prefer :dev_webserver, 'puma'
   gem 'thin', '>= 1.4.1', :group => :production if prefer :prod_webserver, 'thin'
   gem 'unicorn', '>= 4.3.1', :group => :production if prefer :prod_webserver, 'unicorn'
-  gem 'puma', '>= 1.6.2', :group => :production if prefer :prod_webserver, 'puma'
+  gem 'puma', '>= 1.6.3', :group => :production if prefer :prod_webserver, 'puma'
 end
 
 ## Database Adapter
 gsub_file 'Gemfile', /gem 'sqlite3'\n/, '' unless prefer :database, 'sqlite'
 gem 'mongoid', '>= 3.0.5' if prefer :orm, 'mongoid'
-gem 'pg', '>= 0.14.0' if prefer :database, 'postgresql'
+gem 'pg', '>= 0.14.1' if prefer :database, 'postgresql'
 gem 'mysql2', '>= 0.3.11' if prefer :database, 'mysql'
 
 ## Template Engine
 if prefer :templates, 'haml'
   gem 'haml', '>= 3.1.7'
-  gem 'haml-rails', '>= 0.3.4', :group => :development
+  gem 'haml-rails', '>= 0.3.5', :group => :development
   # hpricot and ruby_parser are needed for conversion of HTML to Haml
   gem 'hpricot', '>= 0.8.6', :group => :development
   gem 'ruby_parser', '>= 2.3.1', :group => :development
 end
 if prefer :templates, 'slim'
-  gem 'slim', '>= 1.2.2'
+  gem 'slim', '>= 1.3.0'
   gem 'haml2slim', '>= 0.4.6', :group => :development
   # Haml is needed for conversion of HTML to Slim
   gem 'haml', '>= 3.1.6', :group => :development
-  gem 'haml-rails', '>= 0.3.4', :group => :development
+  gem 'haml-rails', '>= 0.3.5', :group => :development
   gem 'hpricot', '>= 0.8.6', :group => :development
   gem 'ruby_parser', '>= 2.3.1', :group => :development
 end
@@ -633,7 +635,7 @@ gem 'factory_girl_rails', '>= 4.0.0', :group => [:development, :test] if prefer 
 gem 'machinist', '>= 2.0', :group => :test if prefer :fixtures, 'machinist'
 
 ## Front-end Framework
-gem 'bootstrap-sass', '>= 2.0.4.0' if prefer :bootstrap, 'sass'
+gem 'bootstrap-sass', '>= 2.1.0.0' if prefer :bootstrap, 'sass'
 gem 'compass-rails', '>= 1.0.3', :group => :assets if prefer :frontend, 'foundation'
 gem 'zurb-foundation', '>= 3.0.9', :group => :assets if prefer :frontend, 'foundation'
 if prefer :bootstrap, 'less'
@@ -671,7 +673,7 @@ gem 'simple_form', '>= 2.0.2' if prefer :form_builder, 'simple_form'
 ## Signup App 
 if prefer :railsapps, 'rails-prelaunch-signup'
   gem 'google_visualr', '>= 2.1.2'
-  gem 'jquery-datatables-rails', '>= 1.10.0'
+  gem 'jquery-datatables-rails', '>= 1.11.0'
 end
 
 ## Gems from a defaults file or added interactively
@@ -1634,16 +1636,16 @@ if prefs[:rvmrc]
   say_wizard "recipe creating project-specific rvm gemset and .rvmrc"
   # using the rvm Ruby API, see:
   # http://blog.thefrontiergroup.com.au/2010/12/a-brief-introduction-to-the-rvm-ruby-api/
+  # https://rvm.io/integration/passenger
   if ENV['MY_RUBY_HOME'] && ENV['MY_RUBY_HOME'].include?('rvm')
     begin
-      rvm_path     = File.dirname(File.dirname(ENV['MY_RUBY_HOME']))
-      rvm_lib_path = File.join(rvm_path, 'lib')
+      gems_path = ENV['MY_RUBY_HOME'].split(/@/)[0].sub(/rubies/,'gems')
+      ENV['GEM_PATH'] = "#{gems_path}:#{gems_path}@global"
       require 'rvm'
+      RVM.use_from_path! File.dirname(File.dirname(__FILE__))
     rescue LoadError
-      raise "RVM ruby lib is currently unavailable."
+      raise "RVM gem is currently unavailable."
     end
-  else
-    raise "RVM ruby lib is currently unavailable."
   end
   say_wizard "creating RVM gemset '#{app_name}'"
   RVM.gemset_create app_name
