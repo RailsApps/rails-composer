@@ -209,7 +209,7 @@ Problems? Please check both "issues for the Rails Composer tool":https://github.
 
 You should review the article "Installing Rails":http://railsapps.github.com/installing-rails.html to make sure you've updated all the components that are required to run Rails successfully.
 
-h4. Problems with "You have already activated..."
+h4. Problems with "Could not be loaded... You have already activated..."
 
 If you get an error like this:
 
