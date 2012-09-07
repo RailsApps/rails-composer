@@ -216,7 +216,9 @@ If you get an error like this:
 <pre>
 Your bundle is complete! Use `bundle show [gemname]` to see where a bundled gem is installed.
     composer  Running 'after bundler' callbacks.
-The template [https://raw.github.com/RailsApps/rails-composer/master/composer.rb] could not be loaded. Error: You have already activated ..., but your Gemfile requires .... Using bundle exec may solve this.
+The template [...] could not be loaded.
+Error: You have already activated ..., but your Gemfile requires .... 
+Using bundle exec may solve this.
 </pre>
 
 It's due to conflicting gem versions. Ignore the misleading hint: "using bundle exec" will not solve this. When you use the @rails new@ command, a specific set of gems are available, either in your system environment, or (if you use rvm) in a default rvm gemset. The Rails Composer tool attempts to use the newest available gem versions. Occasionally one of the gems (often a gem required as a dependency for another gem) will have been recently updated (since the time you last ran a @bundle update@ using the default gemset). If that's the case, @rails new@ creates a new application using the default gemset (containing the outdated gem) and then tries to run the Rails Composer application template with the new set of gems (containing an updated gem). The outdated gem has already been activated so the application template cannot be loaded, resulting in the error you see.
