@@ -26,6 +26,10 @@ You can use the @-T@ flag to skip Test::Unit files or the @-O@ flag to skip Acti
 $ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb -T -O
 </pre>
 
+Skip Test::Unit if you plan to use RSpec for unit testing. Skip Active Record if you plan to use a NoSQL datastore with an ORM such as Mongoid.
+
+See the "Troubleshooting" section below if you see errors.
+
 h2. Your Options
 
 The Rails Composer application template will ask you for various preferences, some of which will depend on previous choices. 
@@ -33,6 +37,14 @@ The Rails Composer application template will ask you for various preferences, so
 Here's an example:
 
 <pre>
+question  Install an example application?
+      1)  I want to build my own application
+      2)  rails3-bootstrap-devise-cancan
+      3)  rails3-devise-rspec-cucumber
+      4)  rails3-mongoid-devise
+      5)  rails3-mongoid-omniauth
+      6)  rails3-subdomains
+
 question  Web server for development?
       1)  WEBrick (default)
       2)  Thin
@@ -61,9 +73,10 @@ question  Unit testing?
       2)  RSpec
 
 question  Integration testing?
-      1)  RSpec with Capybara
-      2)  Cucumber with Capybara
-      3)  Turnip with Capybara
+      1)  None
+      2)  RSpec with Capybara
+      3)  Cucumber with Capybara
+      4)  Turnip with Capybara
 
 question  Fixture replacement?
       1)  None
@@ -101,25 +114,26 @@ question  Devise modules?
 question  Authorization?
       1)  None
       2)  CanCan with Rolify
-
+      
+question  Use a form builder gem?
+      1)  None
+      2)  SimpleForm
+            
 question  Install a starter app?
       1)  None
       2)  Home Page
       3)  Home Page, User Accounts
       4)  Home Page, User Accounts, Admin Dashboard
 
-question  Use a form builder gem?
-      1)  None
-      2)  SimpleForm
-      
-question  Set a robots.txt file to ban spiders? (y/n)
-question  Add 'therubyracer' JavaScript runtime (for Linux users without node.js)? (y/n)
-question  Create a project-specific rvm gemset and .rvmrc? (y/n)
+extras  Add 'therubyracer' JavaScript runtime (for Linux users without node.js)? (y/n)
+extras  Set a robots.txt file to ban spiders? (y/n) n
+extras  Create a project-specific rvm gemset and .rvmrc? (y/n) n
+extras  Create a GitHub repository? (y/n)
 </pre>
 
 h2. Run the Application
 
-Switch to the application root directory to examine and test what you've built.
+Switch to the application directory to examine and test what you've built.
 
 <pre>
 $ cd myapp
@@ -174,7 +188,7 @@ Run @rake spec@ to run all RSpec tests.
 
 Run @rake cucumber@ (or more simply, @cucumber@) to run all Cucumber scenarios.
 
-Please send the author a message, create an issue, or submit a pull request if you can contribute improved RSpec or Cucumber files.
+Please send the author a message, create an issue, or submit a pull request if you want to contribute improved RSpec or Cucumber files.
 
 h2. Deployment
 
@@ -189,6 +203,36 @@ For deployment on Heroku, see the article:
 
 * "Rails on Heroku":http://railsapps.github.com/rails-heroku-tutorial.html
 
+h2. Troubleshooting
+
+Problems? Please check both "issues for the Rails Composer tool":https://github.com/RailsApps/rails-composer/issues and the "issues for the rails_apps_composer gem":https://github.com/RailsApps/rails_apps_composer/issues.
+
+You should review the article "Installing Rails":http://railsapps.github.com/installing-rails.html to make sure you've updated all the components that are required to run Rails successfully.
+
+h4. Problems with "You have already activated..."
+
+If you get an error like this:
+
+<pre>
+Your bundle is complete! Use `bundle show [gemname]` to see where a bundled gem is installed.
+    composer  Running 'after bundler' callbacks.
+The template [https://raw.github.com/RailsApps/rails-composer/master/composer.rb] could not be loaded. Error: You have already activated ..., but your Gemfile requires .... Using bundle exec may solve this.
+</pre>
+
+It's due to conflicting gem versions. Ignore the misleading hint: "using bundle exec" will not solve this. When you use the @rails new@ command, a specific set of gems are available, either in your system environment, or (if you use rvm) in a default rvm gemset. The Rails Composer tool attempts to use the newest available gem versions. Occasionally one of the gems (often a gem required as a dependency for another gem) will have been recently updated (since the time you last ran a @bundle update@ using the default gemset). If that's the case, @rails new@ creates a new application using the default gemset (containing the outdated gem) and then tries to run the Rails Composer application template with the new set of gems (containing an updated gem). The outdated gem has already been activated so the application template cannot be loaded, resulting in the error you see.
+
+Sometimes the problem is resolved by simply running the @rails new@ command again (after you delete the partially built application folder).
+
+To fully resolve the problem, use rvm and create and use a new gemset before you run the @rails new@ command again. Installing Rails into a new gemset before running @rails new@  will populate the gemset with the most current available gems (including any gems required by a gem dependency).
+
+h4. Problems with "Certificate Verify Failed"
+
+Are you getting an error "OpenSSL certificate verify failed" when you try to generate a new Rails app from an application template? See suggestions to resolve the error "Certificate Verify Failed":http://railsapps.github.com/openssl-certificate-verify-failed.html.
+
+h4. Problems with "Segmentation Fault"
+
+If you get a "segfault" when you try @rails new@, try removing and reinstalling rvm.
+
 h2. Application Template Default
 
 The @rails new@ command creates a new Rails application. If you want to use the Rails Composer application template for every Rails application you build, you can set options for the @rails new@ command in a *.railsrc* file in your home directory. Here's how to set up a *.railsrc* file to use the template when you create a new Rails application:
@@ -197,20 +241,6 @@ The @rails new@ command creates a new Rails application. If you want to use the 
 # ~/.railsrc
 -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb
 </pre>
-
-h2. Troubleshooting
-
-Problems? Check the "issues for the rails_apps_composer gem":https://github.com/RailsApps/rails_apps_composer/issues.
-
-You should review the article "Installing Rails":http://railsapps.github.com/installing-rails.html to make sure you've updated all the components that are required to run Rails successfully.
-
-h4. Problems with  "Certificate Verify Failed"
-
-Are you getting an error "OpenSSL certificate verify failed" when you try to generate a new Rails app from an application template? See suggestions to resolve the error "Certificate Verify Failed":http://railsapps.github.com/openssl-certificate-verify-failed.html.
-
-h4. Problems with "Segmentation Fault"
-
-If you get a "segfault" when you try @rails new@, try removing and reinstalling rvm.
 
 h2. Documentation and Support
 
@@ -222,7 +252,7 @@ If you wish to change the template to generate an app with your own customized o
 
 h4. Writing Recipes
 
-To understand the code in these templates, take a look at "Thor::Actions":http://rdoc.info/github/wycats/thor/master/Thor/Actions. Your recipes can use any methods provided by "Thor::Actions":http://rdoc.info/github/wycats/thor/master/Thor/Actions or "Rails::Generators::Actions":http://railsapi.com/doc/rails-v3.0.3/classes/Rails/Generators/Actions.html.
+To understand the code in these templates, take a look at "Thor::Actions":http://rdoc.info/github/wycats/thor/master/Thor/Actions. Your recipes can use any methods provided by "Thor::Actions":http://rdoc.info/github/wycats/thor/master/Thor/Actions or "Rails::Generators::Actions":http://railsapi.com/doc/rails-v3.0.3/classes/Rails/Generators/Actions.html. A big thanks to Yehuda Katz for "creating Thor":http://yehudakatz.com/2008/05/12/by-thors-hammer/.
 
 h4. About Rails Application Templates
 
@@ -241,7 +271,7 @@ There are many similar projects:
 
 h4. Issues
 
-Please review "issues for the rails_apps_composer gem":https://github.com/RailsApps/rails_apps_composer/issues and submit any issues there.
+Problems? Please check both "issues for the Rails Composer tool":https://github.com/RailsApps/rails-composer/issues and the "issues for the rails_apps_composer gem":https://github.com/RailsApps/rails_apps_composer/issues.
 
 h4. Where to Get Help
 
