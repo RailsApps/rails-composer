@@ -25,7 +25,7 @@ Check that appropriate versions of Ruby and Rails are installed in your developm
 
 Be sure to read "Installing Rails":http://railsapps.github.com/installing-rails.html to make sure your development environment is set up properly.
 
-I recommend using "rvm":https://rvm.io/, the Ruby Version Manager to manage your Rails versions. Before you run the Rails Composer tool, create a dedicated gemset for your application.
+I recommend using "rvm":https://rvm.io/, the Ruby Version Manager, to manage your Rails versions. Before you run the Rails Composer tool, create a dedicated gemset for your application.
 
 h2. Creating a Starter App
 
