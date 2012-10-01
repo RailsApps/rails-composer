@@ -215,8 +215,8 @@ prefs[:git] = true unless prefs.has_key? :git
 if prefer :git, true
   copy_from 'https://raw.github.com/RailsApps/rails-composer/master/files/gitignore.txt', '.gitignore'
   git :init
-  git :add => '.'
-  git :commit => "-aqm 'rails_apps_composer: initial commit'"
+  git :add => '-A'
+  git :commit => "-qm 'rails_apps_composer: initial commit'"
 end
 
 
@@ -441,7 +441,7 @@ if recipes.include? 'models'
       end
     when 'omniauth'
       prefs[:omniauth_provider] = multiple_choice "OmniAuth provider?", [["Facebook", "facebook"], ["Twitter", "twitter"], ["GitHub", "github"], 
-        ["LinkedIn", "linkedin"], ["Google-Oauth-2", "google-oauth2"], ["Tumblr", "tumblr"]] unless prefs.has_key? :omniauth_provider
+        ["LinkedIn", "linkedin"], ["Google-Oauth-2", "google_oauth2"], ["Tumblr", "tumblr"]] unless prefs.has_key? :omniauth_provider
   end
   prefs[:authorization] = multiple_choice "Authorization?", [["None", "none"], ["CanCan with Rolify", "cancan"]] unless prefs.has_key? :authorization
 end
@@ -557,8 +557,8 @@ after_everything do
   gsub_file "README.textile", /Authentication: None/, "Authentication: OmniAuth" if prefer :authentication, 'omniauth'
   gsub_file "README.textile", /Authorization: None/, "Authorization: CanCan" if prefer :authorization, 'cancan'
 
-  git :add => '.' if prefer :git, true
-  git :commit => "-aqm 'rails_apps_composer: add README files'" if prefer :git, true
+  git :add => '-A' if prefer :git, true
+  git :commit => "-qm 'rails_apps_composer: add README files'" if prefer :git, true
   
 end # after_everything
 
@@ -582,21 +582,21 @@ insert_into_file 'Gemfile', "ruby '1.9.3'\n", :before => "gem 'rails', '3.2.6'" 
 
 ## Web Server
 if (prefs[:dev_webserver] == prefs[:prod_webserver])
-  gem 'thin', '>= 1.4.1' if prefer :dev_webserver, 'thin'
+  gem 'thin', '>= 1.5.0' if prefer :dev_webserver, 'thin'
   gem 'unicorn', '>= 4.3.1' if prefer :dev_webserver, 'unicorn'
   gem 'puma', '>= 1.6.3' if prefer :dev_webserver, 'puma'
 else
-  gem 'thin', '>= 1.4.1', :group => [:development, :test] if prefer :dev_webserver, 'thin'
+  gem 'thin', '>= 1.5.0', :group => [:development, :test] if prefer :dev_webserver, 'thin'
   gem 'unicorn', '>= 4.3.1', :group => [:development, :test] if prefer :dev_webserver, 'unicorn'
   gem 'puma', '>= 1.6.3', :group => [:development, :test] if prefer :dev_webserver, 'puma'
-  gem 'thin', '>= 1.4.1', :group => :production if prefer :prod_webserver, 'thin'
+  gem 'thin', '>= 1.5.0', :group => :production if prefer :prod_webserver, 'thin'
   gem 'unicorn', '>= 4.3.1', :group => :production if prefer :prod_webserver, 'unicorn'
   gem 'puma', '>= 1.6.3', :group => :production if prefer :prod_webserver, 'puma'
 end
 
 ## Database Adapter
 gsub_file 'Gemfile', /gem 'sqlite3'\n/, '' unless prefer :database, 'sqlite'
-gem 'mongoid', '>= 3.0.5' if prefer :orm, 'mongoid'
+gem 'mongoid', '>= 3.0.6' if prefer :orm, 'mongoid'
 gem 'pg', '>= 0.14.1' if prefer :database, 'postgresql'
 gem 'mysql2', '>= 0.3.11' if prefer :database, 'mysql'
 
@@ -609,7 +609,7 @@ if prefer :templates, 'haml'
   gem 'ruby_parser', '>= 2.3.1', :group => :development
 end
 if prefer :templates, 'slim'
-  gem 'slim', '>= 1.3.0'
+  gem 'slim', '>= 1.3.2'
   gem 'haml2slim', '>= 0.4.6', :group => :development
   # Haml is needed for conversion of HTML to Slim
   gem 'haml', '>= 3.1.6', :group => :development
@@ -628,7 +628,7 @@ if prefer :unit_test, 'rspec'
     # include RSpec matchers from the mongoid-rspec gem
     gem 'mongoid-rspec', '>= 1.4.6', :group => :test
   end
-  gem 'email_spec', '>= 1.2.1', :group => :test unless prefer :email, 'none'
+  gem 'email_spec', '>= 1.2.1', :group => :test
 end
 if prefer :integration, 'cucumber'
   gem 'cucumber-rails', '>= 1.3.0', :group => :test, :require => false
@@ -636,13 +636,13 @@ if prefer :integration, 'cucumber'
   gem 'launchy', '>= 2.1.2', :group => :test
 end
 gem 'turnip', '>= 1.0.0', :group => :test if prefer :integration, 'turnip'
-gem 'factory_girl_rails', '>= 4.0.0', :group => [:development, :test] if prefer :fixtures, 'factory_girl'
+gem 'factory_girl_rails', '>= 4.1.0', :group => [:development, :test] if prefer :fixtures, 'factory_girl'
 gem 'machinist', '>= 2.0', :group => :test if prefer :fixtures, 'machinist'
 
 ## Front-end Framework
 gem 'bootstrap-sass', '>= 2.1.0.0' if prefer :bootstrap, 'sass'
 gem 'compass-rails', '>= 1.0.3', :group => :assets if prefer :frontend, 'foundation'
-gem 'zurb-foundation', '>= 3.0.9', :group => :assets if prefer :frontend, 'foundation'
+gem 'zurb-foundation', '>= 3.1.1', :group => :assets if prefer :frontend, 'foundation'
 if prefer :bootstrap, 'less'
   gem 'twitter-bootstrap-rails', '>= 2.1.3', :group => :assets
   # install gem 'therubyracer' to use Less
@@ -663,7 +663,7 @@ gem 'omniauth-twitter' if prefer :omniauth_provider, 'twitter'
 gem 'omniauth-facebook' if prefer :omniauth_provider, 'facebook'
 gem 'omniauth-github' if prefer :omniauth_provider, 'github'
 gem 'omniauth-linkedin' if prefer :omniauth_provider, 'linkedin'
-gem 'omniauth-google-oauth2' if prefer :omniauth_provider, 'google-oauth2'
+gem 'omniauth-google-oauth2' if prefer :omniauth_provider, 'google_oauth2'
 gem 'omniauth-tumblr' if prefer :omniauth_provider, 'tumblr'
 
 ## Authorization 
@@ -673,12 +673,12 @@ if prefer :authorization, 'cancan'
 end
 
 ## Form Builder
-gem 'simple_form', '>= 2.0.2' if prefer :form_builder, 'simple_form'
+gem 'simple_form', '>= 2.0.3' if prefer :form_builder, 'simple_form'
 
 ## Signup App 
 if prefer :railsapps, 'rails-prelaunch-signup'
   gem 'google_visualr', '>= 2.1.2'
-  gem 'jquery-datatables-rails', '>= 1.11.0'
+  gem 'jquery-datatables-rails', '>= 1.11.1'
 end
 
 ## Gems from a defaults file or added interactively
@@ -687,8 +687,8 @@ gems.each do |g|
 end
 
 ## Git
-git :add => '.' if prefer :git, true
-git :commit => "-aqm 'rails_apps_composer: Gemfile'" if prefer :git, true
+git :add => '-A' if prefer :git, true
+git :commit => "-qm 'rails_apps_composer: Gemfile'" if prefer :git, true
 
 ### CREATE DATABASE ###
 after_bundler do
@@ -698,17 +698,31 @@ after_bundler do
   remove_file 'config/database.yml' if prefer :orm, 'mongoid'
   if prefer :database, 'postgresql'
     begin
-      say_wizard "Creating a user named '#{app_name}' for PostgreSQL"
-      run "createuser #{app_name}" if prefer :database, 'postgresql'
-      gsub_file "config/database.yml", /username: .*/, "username: #{app_name}"
-      gsub_file "config/database.yml", /database: myapp_development/, "database: #{app_name}_development"
-      gsub_file "config/database.yml", /database: myapp_test/,        "database: #{app_name}_test"
-      gsub_file "config/database.yml", /database: myapp_production/,  "database: #{app_name}_production"
+      pg_username = ask_wizard("Username for PostgreSQL? (leave blank to use the app name)")
+      if pg_username.blank?
+        say_wizard "Creating a user named '#{app_name}' for PostgreSQL"
+        run "createuser #{app_name}" if prefer :database, 'postgresql'
+        gsub_file "config/database.yml", /username: .*/, "username: #{app_name}"
+      else
+        gsub_file "config/database.yml", /username: .*/, "username: #{pg_username}"
+        pg_password = ask_wizard("Password for PostgreSQL user #{pg_username}?")
+        gsub_file "config/database.yml", /password:/, "password: #{pg_password}"
+        say_wizard "set config/database.yml for username/password #{pg_username}/#{pg_password}"
+      end
     rescue StandardError => e
       raise "unable to create a user for PostgreSQL, reason: #{e}"
     end
   end
   if prefer :database, 'mysql'
+    mysql_username = ask_wizard("Username for MySQL? (leave blank to use the app name)")
+    if mysql_username.blank?
+      gsub_file "config/database.yml", /username: .*/, "username: #{app_name}"
+    else
+      gsub_file "config/database.yml", /username: .*/, "username: #{mysql_username}"
+      mysql_password = ask_wizard("Password for MySQL user #{mysql_username}?")
+      gsub_file "config/database.yml", /password:/, "password: #{mysql_password}"
+      say_wizard "set config/database.yml for username/password #{mysql_username}/#{mysql_password}"
+    end
     gsub_file "config/database.yml", /database: myapp_development/, "database: #{app_name}_development"
     gsub_file "config/database.yml", /database: myapp_test/,        "database: #{app_name}_test"
     gsub_file "config/database.yml", /database: myapp_production/,  "database: #{app_name}_production"
@@ -725,8 +739,8 @@ after_bundler do
   run 'bundle exec rake db:create:all' unless prefer :orm, 'mongoid'
   run 'bundle exec rake db:create' if prefer :orm, 'mongoid'
   ## Git
-  git :add => '.' if prefer :git, true
-  git :commit => "-aqm 'rails_apps_composer: create database'" if prefer :git, true
+  git :add => '-A' if prefer :git, true
+  git :commit => "-qm 'rails_apps_composer: create database'" if prefer :git, true
 end # after_bundler
 
 ### GENERATORS ###
@@ -744,8 +758,8 @@ after_bundler do
     end
   end
   ## Git
-  git :add => '.' if prefer :git, true
-  git :commit => "-aqm 'rails_apps_composer: generators'" if prefer :git, true
+  git :add => '-A' if prefer :git, true
+  git :commit => "-qm 'rails_apps_composer: generators'" if prefer :git, true
 end # after_bundler
 
 
@@ -768,14 +782,12 @@ after_bundler do
     say_wizard "recipe installing RSpec"
     generate 'rspec:install'
     copy_from_repo 'spec/spec_helper.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
-    unless prefer :email, 'none'
-      generate 'email_spec:steps'
-      inject_into_file 'spec/spec_helper.rb', "require 'email_spec'\n", :after => "require 'rspec/rails'\n"
-      inject_into_file 'spec/spec_helper.rb', :after => "RSpec.configure do |config|\n" do <<-RUBY
+    generate 'email_spec:steps'
+    inject_into_file 'spec/spec_helper.rb', "require 'email_spec'\n", :after => "require 'rspec/rails'\n"
+    inject_into_file 'spec/spec_helper.rb', :after => "RSpec.configure do |config|\n" do <<-RUBY
   config.include(EmailSpec::Helpers)
   config.include(EmailSpec::Matchers)
 RUBY
-      end
     end
     run 'rm -rf test/' # Removing test folder (not needed for RSpec)
     inject_into_file 'config/application.rb', :after => "Rails::Application\n" do <<-RUBY
@@ -824,11 +836,9 @@ RUBY
     generate "cucumber:install --capybara#{' --rspec' if prefer :unit_test, 'rspec'}#{' -D' if prefer :orm, 'mongoid'}"
     # make it easy to run Cucumber for single features without adding "--require features" to the command line
     gsub_file 'config/cucumber.yml', /std_opts = "/, 'std_opts = "-r features/support/ -r features/step_definitions '
-    unless prefer :email, 'none'
-      create_file 'features/support/email_spec.rb' do <<-RUBY
+    create_file 'features/support/email_spec.rb' do <<-RUBY
 require 'email_spec/cucumber'
 RUBY
-      end      
     end
     ## CUCUMBER AND MONGOID
     if prefer :orm, 'mongoid'
@@ -850,8 +860,8 @@ RUBY
     generate 'machinist:install'
   end
   ### GIT ###
-  git :add => '.' if prefer :git, true
-  git :commit => "-aqm 'rails_apps_composer: testing framework'" if prefer :git, true
+  git :add => '-A' if prefer :git, true
+  git :commit => "-qm 'rails_apps_composer: testing framework'" if prefer :git, true
 end # after_bundler
 
 after_everything do
@@ -908,8 +918,8 @@ after_everything do
       copy_from_repo 'spec/models/user_spec.rb', :repo => repo
     end
     ## GIT
-    git :add => '.' if prefer :git, true
-    git :commit => "-aqm 'rails_apps_composer: rspec files'" if prefer :git, true
+    git :add => '-A' if prefer :git, true
+    git :commit => "-qm 'rails_apps_composer: rspec files'" if prefer :git, true
   end
   ### CUCUMBER ###
   if prefer :integration, 'cucumber'
@@ -978,8 +988,8 @@ RUBY
       copy_from_repo 'features/support/paths.rb', :repo => repo
     end
     ## GIT
-    git :add => '.' if prefer :git, true
-    git :commit => "-aqm 'rails_apps_composer: cucumber files'" if prefer :git, true
+    git :add => '-A' if prefer :git, true
+    git :commit => "-qm 'rails_apps_composer: cucumber files'" if prefer :git, true
   end
 end # after_everything
 
@@ -1082,8 +1092,8 @@ TEXT
       inject_into_file 'config/environments/production.rb', mandrill_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
     end
     ### GIT
-    git :add => '.' if prefer :git, true
-    git :commit => "-aqm 'rails_apps_composer: set email accounts'" if prefer :git, true
+    git :add => '-A' if prefer :git, true
+    git :commit => "-qm 'rails_apps_composer: set email accounts'" if prefer :git, true
 end # after_bundler
 
 
@@ -1152,6 +1162,7 @@ RUBY
   if prefer :authentication, 'omniauth'
     repo = 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
     copy_from_repo 'config/initializers/omniauth.rb', :repo => repo
+    gsub_file 'config/initializers/omniauth.rb', /twitter/, prefs[:omniauth_provider] unless prefer :omniauth_provider, 'twitter'
     generate 'model User name:string email:string provider:string uid:string' unless prefer :orm, 'mongoid'
     run 'bundle exec rake db:migrate' unless prefer :orm, 'mongoid' 
     copy_from_repo 'app/models/user.rb', :repo => repo  # copy the User model (Mongoid version)
@@ -1186,8 +1197,8 @@ RUBY
     end
   end
   ### GIT ###
-  git :add => '.' if prefer :git, true
-  git :commit => "-aqm 'rails_apps_composer: models'" if prefer :git, true
+  git :add => '-A' if prefer :git, true
+  git :commit => "-qm 'rails_apps_composer: models'" if prefer :git, true
 end # after_bundler
 
 
@@ -1249,8 +1260,8 @@ RUBY
   ### PROFILES_CONTROLLER ###
   copy_from_repo 'app/controllers/profiles_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
   ### GIT ###
-  git :add => '.' if prefer :git, true
-  git :commit => "-aqm 'rails_apps_composer: controllers'" if prefer :git, true
+  git :add => '-A' if prefer :git, true
+  git :commit => "-qm 'rails_apps_composer: controllers'" if prefer :git, true
 end # after_bundler
 
 
@@ -1289,8 +1300,8 @@ after_bundler do
   ### PROFILES ###
   copy_from_repo 'app/views/profiles/show-subdomains_app.html.erb', :prefs => 'subdomains_app'
   ### GIT ###
-  git :add => '.' if prefer :git, true
-  git :commit => "-aqm 'rails_apps_composer: views'" if prefer :git, true
+  git :add => '-A' if prefer :git, true
+  git :commit => "-qm 'rails_apps_composer: views'" if prefer :git, true
 end # after_bundler
 
 
@@ -1326,8 +1337,8 @@ after_bundler do
   ### CORRECT APPLICATION NAME ###
   gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
   ### GIT ###
-  git :add => '.' if prefer :git, true
-  git :commit => "-aqm 'rails_apps_composer: routes'" if prefer :git, true
+  git :add => '-A' if prefer :git, true
+  git :commit => "-qm 'rails_apps_composer: routes'" if prefer :git, true
 end # after_bundler
 
 
@@ -1393,8 +1404,8 @@ RUBY
   end
   remove_file 'app/assets/stylesheets/application.css'
   ### GIT ###
-  git :add => '.' if prefer :git, true
-  git :commit => "-aqm 'rails_apps_composer: front-end framework'" if prefer :git, true
+  git :add => '-A' if prefer :git, true
+  git :commit => "-qm 'rails_apps_composer: front-end framework'" if prefer :git, true
 end # after_bundler
 
 
@@ -1467,8 +1478,8 @@ FILE
   end
   run 'bundle exec rake db:seed'
   ### GIT ###
-  git :add => '.' if prefer :git, true
-  git :commit => "-aqm 'rails_apps_composer: set up database'" if prefer :git, true
+  git :add => '-A' if prefer :git, true
+  git :commit => "-qm 'rails_apps_composer: set up database'" if prefer :git, true
 end # after_everything
 
 
@@ -1504,8 +1515,8 @@ if prefer :railsapps, 'rails-prelaunch-signup'
     gsub_file 'config/routes.rb', /  #.*\n/, "\n"
     gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
     # GIT
-    git :add => '.' if prefer :git, true
-    git :commit => "-aqm 'rails_apps_composer: clean up starter app'" if prefer :git, true
+    git :add => '-A' if prefer :git, true
+    git :commit => "-qm 'rails_apps_composer: clean up starter app'" if prefer :git, true
 
     # >-------------------------------[ Create a git branch ]--------------------------------<
     if prefer :git, true
@@ -1587,8 +1598,8 @@ if prefer :railsapps, 'rails-prelaunch-signup'
     copy_from_repo 'app/assets/stylesheets/application.css.scss', :repo => repo
     
     ### GIT ###
-    git :add => '.' if prefer :git, true
-    git :commit => "-aqm 'rails_apps_composer: prelaunch app'" if prefer :git, true
+    git :add => '-A' if prefer :git, true
+    git :commit => "-qm 'rails_apps_composer: prelaunch app'" if prefer :git, true
   end # after_bundler
 end # rails-prelaunch-signup
 
@@ -1656,10 +1667,22 @@ if prefs[:rvmrc]
   RVM.gemset_create app_name
   run "rvm rvmrc trust"
   say_wizard "switching to gemset '#{app_name}'"
+  # RVM.gemset_use! requires rvm version 1.11.3.5 or newer
+  rvm_spec =
+    if Gem::Specification.respond_to?(:find_by_name)
+      Gem::Specification.find_by_name("rvm")
+    else
+      Gem.source_index.find_name("rvm").last
+    end
+    unless rvm_spec.version > Gem::Version.create('1.11.3.4')
+      say_wizard "rvm gem version: #{rvm_spec.version}"
+      raise "Please update rvm gem to 1.11.3.5 or newer"
+    end
   begin
     RVM.gemset_use! app_name
-  rescue StandardError => e
-    raise "rvm failure: unable to use gemset #{app_name}, reason: #{e}"
+  rescue => e
+    say_wizard "rvm failure: unable to use gemset #{app_name}, reason: #{e}"
+    raise
   end
   run "rvm gemset list"
   copy_from_repo '.rvmrc'
@@ -1681,8 +1704,8 @@ after_everything do
   gsub_file 'config/routes.rb', /  #.*\n/, "\n"
   gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
   # GIT
-  git :add => '.' if prefer :git, true
-  git :commit => "-aqm 'rails_apps_composer: extras'" if prefer :git, true
+  git :add => '-A' if prefer :git, true
+  git :commit => "-qm 'rails_apps_composer: extras'" if prefer :git, true
 end
 
 ## GITHUB
