@@ -33,7 +33,7 @@ RUBY
 @prefs = {}
 @gems = []
 @diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["controllers", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"]]
-@diagnostics_prefs = [{:railsapps=>"rails-prelaunch-signup", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"mandrill", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails3-bootstrap-devise-cancan", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"none"}, {:railsapps=>"rails3-devise-rspec-cucumber", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-devise", :database=>"mongodb", :orm=>"mongoid", :templates=>"erb", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-omniauth", :database=>"mongodb", :orm=>"mongoid", :templates=>"erb", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-subdomains", :database=>"mongodb", :orm=>"mongoid", :templates=>"haml", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"subdomains_app", :form_builder=>"none"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"capybara", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"invitable", :authorization=>"cancan", :form_builder=>"simple_form", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"test_unit", :integration=>"none", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"less", :email=>"sendgrid", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}]
+@diagnostics_prefs = [{:railsapps=>"rails-prelaunch-signup", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"mandrill", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails3-bootstrap-devise-cancan", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"none"}, {:railsapps=>"rails3-devise-rspec-cucumber", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-devise", :database=>"mongodb", :orm=>"mongoid", :templates=>"erb", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-omniauth", :database=>"mongodb", :orm=>"mongoid", :templates=>"erb", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-subdomains", :database=>"mongodb", :orm=>"mongoid", :templates=>"haml", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"subdomains_app", :form_builder=>"none"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"rspec-capybara", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"invitable", :authorization=>"cancan", :form_builder=>"simple_form", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"test_unit", :integration=>"none", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"less", :email=>"sendgrid", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}]
 diagnostics = {}
 
 def recipes; @recipes end
@@ -399,10 +399,10 @@ prefs[:templates] = multiple_choice "Template engine?", [["ERB", "erb"], ["Haml"
 
 ## Testing Framework
 if recipes.include? 'testing'
-  prefs[:unit_test] = multiple_choice "Unit testing?", [["Test::Unit", "test_unit"], ["RSpec", "rspec"]] unless prefs.has_key? :unit_test
-  prefs[:integration] = multiple_choice "Integration testing?", [["None", "none"], ["RSpec with Capybara", "capybara"], 
-    ["Cucumber with Capybara", "cucumber"], ["Turnip with Capybara", "turnip"]] unless prefs.has_key? :integration
-  prefs[:fixtures] = multiple_choice "Fixture replacement?", [["None","none"], ["Factory Girl","factory_girl"], ["Machinist","machinist"]] unless prefs.has_key? :fixtures
+  prefs[:unit_test] = multiple_choice "Unit testing?", [["Test::Unit", "test_unit"], ["RSpec", "rspec"], ["MiniTest", "minitest"]] unless prefs.has_key? :unit_test
+  prefs[:integration] = multiple_choice "Integration testing?", [["None", "none"], ["RSpec with Capybara", "rspec-capybara"], 
+    ["Cucumber with Capybara", "cucumber"], ["Turnip with Capybara", "turnip"], ["MiniTest with Capybara", "minitest-capybara"]] unless prefs.has_key? :integration
+  prefs[:fixtures] = multiple_choice "Fixture replacement?", [["None","none"], ["Factory Girl","factory_girl"], ["Machinist","machinist"], ["Fabrication","fabrication"]] unless prefs.has_key? :fixtures
 end
 
 ## Front-end Framework
@@ -621,7 +621,7 @@ end
 ## Testing Framework
 if prefer :unit_test, 'rspec'
   gem 'rspec-rails', '>= 2.11.0', :group => [:development, :test]
-  gem 'capybara', '>= 1.1.2', :group => :test
+  gem 'capybara', '>= 1.1.2', :group => :test if prefer :integration, 'rspec-capybara'
   if prefer :orm, 'mongoid'
     # use the database_cleaner gem to reset the test database
     gem 'database_cleaner', '>= 0.8.0', :group => :test
@@ -630,13 +630,20 @@ if prefer :unit_test, 'rspec'
   end
   gem 'email_spec', '>= 1.2.1', :group => :test
 end
+if prefer :unit_test, 'minitest'
+  gem 'minitest-spec-rails', '>= 3.0.7', :group => :test
+  gem 'minitest-wscolor', '>= 0.0.3', :group => :test
+  gem 'capybara', '>= 1.1.2', :group => :test if prefer :integration, 'minitest-capybara'
+end
 if prefer :integration, 'cucumber'
   gem 'cucumber-rails', '>= 1.3.0', :group => :test, :require => false
   gem 'database_cleaner', '>= 0.8.0', :group => :test unless prefer :orm, 'mongoid'
   gem 'launchy', '>= 2.1.2', :group => :test
+  gem 'capybara', '>= 1.1.2', :group => :test
 end
 gem 'turnip', '>= 1.0.0', :group => :test if prefer :integration, 'turnip'
 gem 'factory_girl_rails', '>= 4.1.0', :group => [:development, :test] if prefer :fixtures, 'factory_girl'
+gem 'fabrication', '>= 2.3.0', :group => [:development, :test] if prefer :fixtures, 'fabrication'
 gem 'machinist', '>= 2.0', :group => :test if prefer :fixtures, 'machinist'
 
 ## Front-end Framework
@@ -780,6 +787,18 @@ say_recipe 'testing'
 
 after_bundler do
   say_wizard "recipe running after 'bundle install'"
+  ### TEST/UNIT ###
+  if prefer :unit_test, 'test_unit'
+    inject_into_file 'config/application.rb', :after => "Rails::Application\n" do <<-RUBY
+
+    config.generators do |g|
+      #{"g.test_framework :test_unit, fixture_replacement: :fabrication" if prefer :fixtures, 'fabrication'}
+      #{"g.fixture_replacement :fabrication, dir: 'test/fabricators'" if prefer :fixtures, 'fabrication'}
+    end
+
+RUBY
+    end  
+  end
   ### RSPEC ###
   if prefer :unit_test, 'rspec'
     say_wizard "recipe installing RSpec"
@@ -797,9 +816,13 @@ RUBY
 
     # don't generate RSpec tests for views and helpers
     config.generators do |g|
+      #{"g.test_framework :rspec" if prefer :fixtures, 'none'}
+      #{"g.test_framework :rspec, fixture: true" unless prefer :fixtures, 'none'}
+      #{"g.fixture_replacement :factory_girl" if prefer :fixtures, 'factory_girl'}
+      #{"g.fixture_replacement :machinist" if prefer :fixtures, 'machinist'}
+      #{"g.fixture_replacement :fabrication" if prefer :fixtures, 'fabrication'}
       g.view_specs false
       g.helper_specs false
-      #{"g.fixture_replacement :machinist" if prefer :fixtures, 'machinist'}
     end
 
 RUBY
@@ -850,6 +873,7 @@ RUBY
         "\n  DatabaseCleaner.orm = 'mongoid'"
       end
     end
+    generate 'fabrication:cucumber_steps' if prefer :fixtures, 'fabrication'
   end
   ## TURNIP
   if prefer :integration, 'turnip'
@@ -1614,6 +1638,7 @@ end # rails-prelaunch-signup
 say_recipe 'extras'
 
 config = {}
+config['quiet_assets'] = yes_wizard?("Reduce assets logger noise during development?") if true && true unless config.key?('quiet_assets') || prefs.has_key?(:quiet_assets)
 config['ban_spiders'] = yes_wizard?("Set a robots.txt file to ban spiders?") if true && true unless config.key?('ban_spiders') || prefs.has_key?(:ban_spiders)
 config['rvmrc'] = yes_wizard?("Create a project-specific rvm gemset and .rvmrc?") if true && true unless config.key?('rvmrc') || prefs.has_key?(:rvmrc)
 config['github'] = yes_wizard?("Create a GitHub repository?") if true && true unless config.key?('github') || prefs.has_key?(:github)
@@ -1621,6 +1646,15 @@ config['github'] = yes_wizard?("Create a GitHub repository?") if true && true un
 
 # Application template recipe for the rails_apps_composer. Change the recipe here:
 # https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/extras.rb
+
+## QUIET ASSETS
+if config['quiet_assets']
+  prefs[:quiet_assets] = true
+end
+if prefs[:quiet_assets]
+  say_wizard "recipe setting quiet_assets for reduced asset pipeline logging"
+  gem 'quiet_assets', '>= 1.0.1', :group => :development
+end
 
 ## BAN SPIDERS
 if config['ban_spiders']
