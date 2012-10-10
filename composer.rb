@@ -33,7 +33,7 @@ RUBY
 @prefs = {}
 @gems = []
 @diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["controllers", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"]]
-@diagnostics_prefs = [{:railsapps=>"rails-prelaunch-signup", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"mandrill", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails3-bootstrap-devise-cancan", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"none"}, {:railsapps=>"rails3-devise-rspec-cucumber", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-devise", :database=>"mongodb", :orm=>"mongoid", :templates=>"erb", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-omniauth", :database=>"mongodb", :orm=>"mongoid", :templates=>"erb", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-subdomains", :database=>"mongodb", :orm=>"mongoid", :templates=>"haml", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"subdomains_app", :form_builder=>"none"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"rspec-capybara", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"invitable", :authorization=>"cancan", :form_builder=>"simple_form", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"test_unit", :integration=>"none", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"less", :email=>"sendgrid", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}]
+@diagnostics_prefs = [{:railsapps=>"rails-prelaunch-signup", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"mandrill", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails3-bootstrap-devise-cancan", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails3-devise-rspec-cucumber", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-devise", :database=>"mongodb", :orm=>"mongoid", :templates=>"erb", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-omniauth", :database=>"mongodb", :orm=>"mongoid", :templates=>"erb", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-subdomains", :database=>"mongodb", :orm=>"mongoid", :templates=>"haml", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"subdomains_app", :form_builder=>"none"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"rspec-capybara", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"invitable", :authorization=>"cancan", :form_builder=>"simple_form", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"test_unit", :integration=>"none", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"less", :email=>"sendgrid", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}]
 diagnostics = {}
 
 def recipes; @recipes end
@@ -255,6 +255,7 @@ case prefs[:railsapps]
     prefs[:authorization] = 'cancan'
     prefs[:starter_app] = 'admin_app'
     prefs[:form_builder] = 'simple_form'
+    prefs[:quiet_assets] = true
     if prefer :git, true
       prefs[:prelaunch_branch] = multiple_choice "Git branch for the prelaunch app?", [["wip (work-in-progress)", "wip"], ["master", "master"], ["prelaunch", "prelaunch"], ["staging", "staging"]]
       if prefs[:prelaunch_branch] == 'master'
@@ -276,7 +277,8 @@ case prefs[:railsapps]
     prefs[:devise_modules] = 'default'
     prefs[:authorization] = 'cancan'
     prefs[:starter_app] = 'admin_app'
-    prefs[:form_builder] = 'none'
+    prefs[:form_builder] = 'simple_form'
+    prefs[:quiet_assets] = true
   when 'rails3-devise-rspec-cucumber'
     prefs[:git] = true
     prefs[:database] = 'sqlite'
@@ -290,6 +292,7 @@ case prefs[:railsapps]
     prefs[:authorization] = 'none'
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
+    prefs[:quiet_assets] = true
   when 'rails3-mongoid-devise'
     prefs[:git] = true
     prefs[:database] = 'mongodb'
@@ -304,6 +307,7 @@ case prefs[:railsapps]
     prefs[:authorization] = 'none'
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
+    prefs[:quiet_assets] = true
   when 'rails3-mongoid-omniauth'
     prefs[:git] = true
     prefs[:database] = 'mongodb'
@@ -318,6 +322,7 @@ case prefs[:railsapps]
     prefs[:authorization] = 'none'
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
+    prefs[:quiet_assets] = true
   when 'rails3-subdomains'
     prefs[:git] = true
     prefs[:database] = 'mongodb'
@@ -332,6 +337,7 @@ case prefs[:railsapps]
     prefs[:authorization] = 'none'
     prefs[:starter_app] = 'subdomains_app'
     prefs[:form_builder] = 'none'
+    prefs[:quiet_assets] = true
 end
 
 
@@ -1207,8 +1213,11 @@ RUBY
   ### AUTHORIZATION ###
   if prefer :authorization, 'cancan'
     generate 'cancan:ability'
-    if prefer :starter_app, 'admin_app' # Limit access to the users#index page
+    if prefer :starter_app, 'admin_app' 
+      # Limit access to the users#index page
       copy_from_repo 'app/models/ability.rb', :repo => 'https://raw.github.com/RailsApps/rails3-bootstrap-devise-cancan/master/'
+      # allow an admin to update roles
+      insert_into_file 'app/models/user.rb', "  attr_accessible :role_ids, :as => :admin\n", :before => "  attr_accessible"
     end
     unless prefer :orm, 'mongoid'
       generate 'rolify:role Role User'
@@ -1264,17 +1273,22 @@ RUBY
     gsub_file 'app/controllers/home_controller.rb', /def index/, "def index\n    @users = User.all"
   end
   ### USERS_CONTROLLER ###
-  if ['users_app','admin_app','subdomains_app'].include? prefs[:starter_app]
-    if prefer :authentication, 'devise'
-      copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
-    elsif prefer :authentication, 'omniauth'
-      copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
-    end
-    if prefer :authorization, 'cancan'
-      inject_into_file 'app/controllers/users_controller.rb', "    authorize! :index, @user, :message => 'Not authorized as an administrator.'\n", :after => "def index\n"
-    end
+  case prefs[:starter_app]
+    when 'users_app'
+      if prefer :authentication, 'devise'
+        copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
+      elsif prefer :authentication, 'omniauth'
+        copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+      end
+    when 'admin_app'
+      if prefer :authentication, 'devise'
+        copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-bootstrap-devise-cancan/master/'
+      elsif prefer :authentication, 'omniauth'
+        copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+      end
+    when 'subdomains_app'
+      copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/'
   end
-  gsub_file 'app/controllers/users_controller.rb', /before_filter :authenticate_user!/, '' if prefer :starter_app, 'subdomains_app'
   ### SESSIONS_CONTROLLER ###
   if prefer :authentication, 'omniauth'
     filename = 'app/controllers/sessions_controller.rb'
@@ -1307,9 +1321,17 @@ say_recipe 'views'
 after_bundler do
   say_wizard "recipe running after 'bundle install'"
   ### DEVISE ###
-  copy_from_repo 'app/views/devise/shared/_links.html.erb' if prefer :authentication, 'devise'
-  copy_from_repo 'app/views/devise/registrations/edit.html.erb' if prefer :authentication, 'devise'
-  copy_from_repo 'app/views/devise/registrations/new.html.erb' if prefer :authentication, 'devise'
+  if prefer :authentication, 'devise'
+    copy_from_repo 'app/views/devise/shared/_links.html.erb'
+    unless prefer :form_builder, 'simple_form'
+      copy_from_repo 'app/views/devise/registrations/edit.html.erb'
+      copy_from_repo 'app/views/devise/registrations/new.html.erb'
+    else
+      copy_from_repo 'app/views/devise/registrations/edit-simple_form.html.erb', :prefs => 'simple_form'
+      copy_from_repo 'app/views/devise/registrations/new-simple_form.html.erb', :prefs => 'simple_form'
+      copy_from_repo 'app/views/devise/sessions/new-simple_form.html.erb', :prefs => 'simple_form'
+    end
+  end
   ### HOME ###
   copy_from_repo 'app/views/home/index.html.erb' if prefer :starter_app, 'users_app'
   copy_from_repo 'app/views/home/index.html.erb' if prefer :starter_app, 'admin_app'
@@ -1317,7 +1339,12 @@ after_bundler do
   ### USERS ###
   if ['users_app','admin_app','subdomains_app'].include? prefs[:starter_app]
     ## INDEX
-    copy_from_repo 'app/views/users/index.html.erb'
+    if prefer :starter_app, 'admin_app'
+      copy_from_repo 'app/views/users/index.html.erb', :repo => 'https://raw.github.com/RailsApps/rails3-bootstrap-devise-cancan/master/'
+      copy_from_repo 'app/views/users/_user.html.erb', :repo => 'https://raw.github.com/RailsApps/rails3-bootstrap-devise-cancan/master/'
+    else
+      copy_from_repo 'app/views/users/index.html.erb'
+    end
     ## SHOW
     copy_from_repo 'app/views/users/show.html.erb'
     copy_from_repo 'app/views/users/show-subdomains_app.html.erb', :prefs => 'subdomains_app'
@@ -1452,6 +1479,17 @@ after_everything do
   say_wizard "recipe running after everything"
   ### PREPARE SEED ###
   if prefer :authentication, 'devise'
+    if prefer :authorization, 'cancan'
+      append_file 'db/seeds.rb' do <<-FILE
+puts 'CREATING ROLES'
+Role.create([
+  { :name => 'admin' }, 
+  { :name => 'user' }, 
+  { :name => 'VIP' }
+], :without_protection => true)
+FILE
+      end
+    end    
     if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
       ## DEVISE-CONFIRMABLE
       append_file 'db/seeds.rb' do <<-FILE
@@ -1482,6 +1520,7 @@ FILE
     if prefer :authorization, 'cancan'
       append_file 'db/seeds.rb' do <<-FILE
 user.add_role :admin
+user2.add_role :VIP
 FILE
       end
     end
@@ -1779,9 +1818,11 @@ redacted_prefs.delete(:git)
 redacted_prefs.delete(:dev_webserver)
 redacted_prefs.delete(:prod_webserver)
 redacted_prefs.delete(:templates)
+redacted_prefs.delete(:quiet_assets)
 redacted_prefs.delete(:ban_spiders)
 redacted_prefs.delete(:jsruntime)
 redacted_prefs.delete(:rvmrc)
+redacted_prefs.delete(:github)
 redacted_prefs.delete(:prelaunch_branch)
 redacted_prefs.delete(:main_branch)
 
