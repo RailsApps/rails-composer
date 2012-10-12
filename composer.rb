@@ -293,6 +293,20 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
+  when 'rails3-devise-rspec-cucumber-fabrication'
+    prefs[:git] = true
+    prefs[:database] = 'sqlite'
+    prefs[:unit_test] = 'rspec'
+    prefs[:integration] = 'cucumber'
+    prefs[:fixtures] = 'fabrication'
+    prefs[:frontend] = 'none'
+    prefs[:email] = 'gmail'
+    prefs[:authentication] = 'devise'
+    prefs[:devise_modules] = 'default'
+    prefs[:authorization] = 'none'
+    prefs[:starter_app] = 'users_app'
+    prefs[:form_builder] = 'none'
+    prefs[:quiet_assets] = true
   when 'rails3-mongoid-devise'
     prefs[:git] = true
     prefs[:database] = 'mongodb'
@@ -1022,6 +1036,26 @@ RUBY
     ## GIT
     git :add => '-A' if prefer :git, true
     git :commit => '-qm "rails_apps_composer: cucumber files"' if prefer :git, true
+  end
+  ### FABRICATION ###
+  if prefer :fixtures, 'fabrication'
+    say_wizard "replacing FactoryGirl fixtures with Fabrication"
+    remove_file 'spec/factories/users.rb'
+    remove_file 'spec/fabricators/user_fabricator.rb'
+    create_file 'spec/fabricators/user_fabricator.rb' do
+      <<-RUBY
+Fabricator(:user) do
+  name     'Test User'
+  email    'example@example.com'
+  password 'please'
+  password_confirmation 'please'
+  # required if the Devise Confirmable module is used
+  # confirmed_at Time.now
+end
+RUBY
+    end
+    gsub_file 'features/step_definitions/user_steps.rb', /@user = FactoryGirl.create\(:user, email: @visitor\[:email\]\)/, '@user = Fabricate(:user, email: @visitor[:email])'
+    gsub_file 'spec/controllers/users_controller_spec.rb', /@user = FactoryGirl.create\(:user\)/, '@user = Fabricate(:user)'
   end
 end # after_everything
 
