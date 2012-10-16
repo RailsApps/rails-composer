@@ -4,15 +4,16 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 #
 # The original version of this file is found here:
-# https://github.com/RailsApps/rails3-application-templates/raw/master/files/gitignore.txt
+# https://github.com/RailsApps/rails-composer/raw/master/files/gitignore.txt
 #
 # Corrections? Improvements? Create a GitHub issue: 
-# http://github.com/RailsApps/rails3-application-templates/issues
+# http://github.com/RailsApps/rails-composer/issues
 #----------------------------------------------------------------------------
 
 # bundler state
 /.bundle
 /vendor/bundle/
+/vendor/ruby/
 
 # minimal Rails specific artifacts
 db/*.sqlite3
