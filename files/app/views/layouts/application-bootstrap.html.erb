@@ -9,7 +9,7 @@
     <%= csrf_meta_tags %>
     <%= yield(:head) %>
   </head>
-  <body>
+  <body class="<%= controller_name %> <%= action_name %>">
     <header class="navbar navbar-fixed-top">
       <nav class="navbar-inner">
         <div class="container">
