@@ -686,7 +686,7 @@ gem 'machinist', '>= 2.0', :group => :test if prefer :fixtures, 'machinist'
 ## Front-end Framework
 gem 'bootstrap-sass', '>= 2.1.0.1' if prefer :bootstrap, 'sass'
 gem 'compass-rails', '>= 1.0.3', :group => :assets if prefer :frontend, 'foundation'
-gem 'zurb-foundation', '>= 3.1.1', :group => :assets if prefer :frontend, 'foundation'
+gem 'zurb-foundation', '>= 3.2.0', :group => :assets if prefer :frontend, 'foundation'
 if prefer :bootstrap, 'less'
   gem 'twitter-bootstrap-rails', '>= 2.1.4', :group => :assets
   # install gem 'therubyracer' to use Less
@@ -1077,7 +1077,9 @@ Fabricator(:user) do
 end
 RUBY
     end
-    gsub_file 'features/step_definitions/user_steps.rb', /@user = FactoryGirl.create\(:user, email: @visitor\[:email\]\)/, '@user = Fabricate(:user, email: @visitor[:email])'
+    if prefer :integration, 'cucumber'
+      gsub_file 'features/step_definitions/user_steps.rb', /@user = FactoryGirl.create\(:user, email: @visitor\[:email\]\)/, '@user = Fabricate(:user, email: @visitor[:email])'
+    end
     gsub_file 'spec/controllers/users_controller_spec.rb', /@user = FactoryGirl.create\(:user\)/, '@user = Fabricate(:user)'
   end
 end # after_everything
@@ -1773,7 +1775,7 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     copy_from_repo 'features/users/sign_up.feature', :repo => repo
     copy_from_repo 'features/step_definitions/user_steps.rb', :repo => repo    
     copy_from_repo 'config/locales/devise.en.yml', :repo => repo
-
+    
     # >-------------------------------[ Models ]--------------------------------<
     copy_from_repo 'app/models/ability.rb', :repo => repo
     copy_from_repo 'app/models/user.rb', :repo => repo
@@ -1795,10 +1797,10 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     copy_from_repo 'app/controllers/content_controller.rb', :repo => repo
     copy_from_repo 'app/controllers/registrations_controller.rb', :repo => repo
     copy_from_repo 'app/controllers/application_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/users_controller.rb', :repo => repo
 
     # >-------------------------------[ Mailers ]--------------------------------<
     generate 'mailer UserMailer'
-    copy_from_repo 'spec/mailers/user_mailer_spec.rb', :repo => repo
     copy_from_repo 'app/mailers/user_mailer.rb', :repo => repo
 
     # >-------------------------------[ Views ]--------------------------------<
@@ -1821,7 +1823,13 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     copy_from_repo 'app/assets/javascripts/registrations.js.erb', :repo => repo
     copy_from_repo 'app/assets/stylesheets/application.css.scss', :repo => repo
     copy_from_repo 'app/assets/stylesheets/pricing.css.scss', :repo => repo
-    
+
+    # >-------------------------------[ RSpec ]--------------------------------<
+    say_wizard "copying RSpec tests from the rails-stripe-membership-saas examples"
+    copy_from_repo 'spec/models/user_spec.rb', :repo => repo
+    copy_from_repo 'spec/controllers/content_controller_spec.rb', :repo => repo
+    copy_from_repo 'spec/mailers/user_mailer_spec.rb', :repo => repo
+
     ### GIT ###
     git :add => '-A' if prefer :git, true
     git :commit => '-qm "rails_apps_composer: membership app"' if prefer :git, true
