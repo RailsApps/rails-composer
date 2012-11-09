@@ -1,0 +1,15 @@
+<div id="role-options-<%= user.id %>" class="modal" style="display: none;">
+  <%= form_for user, :url => user_path(user), :html => {:method => :put, :class => 'form-horizontal' } do |f| %>
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">&#215;</a>
+      <h3>Change Role</h3>
+    </div>
+    <div class="modal-body">
+      <%= collection_select :user, :role_ids, Role.all, :id, :name %>
+    </div>
+    <div class="modal-footer">
+      <%= f.submit "Change Role", :class => "btn" %>
+      <a class="btn" data-dismiss="modal" href="#">Close</a>
+    </div>
+  <% end %>
+</div>
