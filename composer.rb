@@ -22,8 +22,6 @@
 
 # >----------------------------[ Initial Setup ]------------------------------<
 
-run 'bundle update'
-
 initializer 'generators.rb', <<-RUBY
 Rails.application.config.generators do |g|
 end
@@ -633,9 +631,13 @@ end
 
 ## Database Adapter
 gsub_file 'Gemfile', /gem 'sqlite3'\n/, '' unless prefer :database, 'sqlite'
-gem 'mongoid', '>= 3.0.11' if prefer :orm, 'mongoid'
-gem 'pg', '>= 0.14.1' if prefer :database, 'postgresql'
-gem 'mysql2', '>= 0.3.11' if prefer :database, 'mysql'
+gem 'mongoid', '>= 3.0.14' if prefer :orm, 'mongoid'
+unless File.open('Gemfile').lines.any?{|line| line.include?('pg')}
+  gem 'pg', '>= 0.14.1' if prefer :database, 'postgresql'
+end
+unless File.open('Gemfile').lines.any?{|line| line.include?('mysql2')}
+  gem 'mysql2', '>= 0.3.11' if prefer :database, 'mysql'
+end
 
 ## Template Engine
 if prefer :templates, 'haml'
@@ -643,7 +645,7 @@ if prefer :templates, 'haml'
   gem 'haml-rails', '>= 0.3.5', :group => :development
   # hpricot and ruby_parser are needed for conversion of HTML to Haml
   gem 'hpricot', '>= 0.8.6', :group => :development
-  gem 'ruby_parser', '>= 3.0.1', :group => :development
+  gem 'ruby_parser', '>= 3.1.0', :group => :development
 end
 if prefer :templates, 'slim'
   gem 'slim', '>= 1.3.3'
@@ -652,31 +654,31 @@ if prefer :templates, 'slim'
   gem 'haml', '>= 3.1.6', :group => :development
   gem 'haml-rails', '>= 0.3.5', :group => :development
   gem 'hpricot', '>= 0.8.6', :group => :development
-  gem 'ruby_parser', '>= 3.0.1', :group => :development
+  gem 'ruby_parser', '>= 3.1.0', :group => :development
 end
 
 ## Testing Framework
 if prefer :unit_test, 'rspec'
   gem 'rspec-rails', '>= 2.11.4', :group => [:development, :test]
-  gem 'capybara', '>= 1.1.3', :group => :test if prefer :integration, 'rspec-capybara'
+  gem 'capybara', '>= 1.1.4', :group => :test if prefer :integration, 'rspec-capybara'
   gem 'database_cleaner', '>= 0.9.1', :group => :test
   if prefer :orm, 'mongoid'
-    gem 'mongoid-rspec', '>= 1.4.6', :group => :test
+    gem 'mongoid-rspec', '>= 1.5.5', :group => :test
   end
   gem 'email_spec', '>= 1.4.0', :group => :test
 end
 if prefer :unit_test, 'minitest'
   gem 'minitest-spec-rails', '>= 3.0.7', :group => :test
   gem 'minitest-wscolor', '>= 0.0.3', :group => :test
-  gem 'capybara', '>= 1.1.3', :group => :test if prefer :integration, 'minitest-capybara'
+  gem 'capybara', '>= 1.1.4', :group => :test if prefer :integration, 'minitest-capybara'
 end
 if prefer :integration, 'cucumber'
   gem 'cucumber-rails', '>= 1.3.0', :group => :test, :require => false
   gem 'database_cleaner', '>= 0.9.1', :group => :test unless prefer :unit_test, 'rspec'
   gem 'launchy', '>= 2.1.2', :group => :test
-  gem 'capybara', '>= 1.1.3', :group => :test
+  gem 'capybara', '>= 1.1.4', :group => :test
 end
-gem 'turnip', '>= 1.0.0', :group => :test if prefer :integration, 'turnip'
+gem 'turnip', '>= 1.1.0', :group => :test if prefer :integration, 'turnip'
 gem 'factory_girl_rails', '>= 4.1.0', :group => [:development, :test] if prefer :fixtures, 'factory_girl'
 gem 'fabrication', '>= 2.3.0', :group => [:development, :test] if prefer :fixtures, 'fabrication'
 gem 'machinist', '>= 2.0', :group => :test if prefer :fixtures, 'machinist'
@@ -684,12 +686,12 @@ gem 'machinist', '>= 2.0', :group => :test if prefer :fixtures, 'machinist'
 ## Front-end Framework
 gem 'bootstrap-sass', '>= 2.1.1.0' if prefer :bootstrap, 'sass'
 gem 'compass-rails', '>= 1.0.3', :group => :assets if prefer :frontend, 'foundation'
-gem 'zurb-foundation', '>= 3.2.0', :group => :assets if prefer :frontend, 'foundation'
+gem 'zurb-foundation', '>= 3.2.3', :group => :assets if prefer :frontend, 'foundation'
 if prefer :bootstrap, 'less'
   gem 'less-rails', '>= 2.2.6', :group => :assets
-  gem 'twitter-bootstrap-rails', '>= 2.1.6', :group => :assets
+  gem 'twitter-bootstrap-rails', '>= 2.1.7', :group => :assets
   # install gem 'therubyracer' to use Less
-  gem 'therubyracer', '>= 0.10.2', :group => :assets, :platform => :ruby
+  gem 'therubyracer', '>= 0.11.0', :group => :assets, :platform => :ruby
 end
 
 ## Email
@@ -698,7 +700,7 @@ gem 'hominid', '>= 3.0.5' if prefer :email, 'mandrill'
 
 ## Authentication (Devise)
 gem 'devise', '>= 2.1.2' if prefer :authentication, 'devise'
-gem 'devise_invitable', '>= 1.1.1' if prefer :devise_modules, 'invitable'
+gem 'devise_invitable', '>= 1.1.4' if prefer :devise_modules, 'invitable'
 
 ## Authentication (OmniAuth)
 gem 'omniauth', '>= 1.1.1' if prefer :authentication, 'omniauth'
@@ -1388,6 +1390,7 @@ after_bundler do
       copy_from_repo 'app/views/devise/registrations/edit-simple_form.html.erb', :prefs => 'simple_form'
       copy_from_repo 'app/views/devise/registrations/new-simple_form.html.erb', :prefs => 'simple_form'
       copy_from_repo 'app/views/devise/sessions/new-simple_form.html.erb', :prefs => 'simple_form'
+      copy_from_repo 'app/helpers/application_helper-simple_form.rb', :prefs => 'simple_form'
     end
   end
   ### HOME ###
@@ -1786,9 +1789,13 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     # >-------------------------------[ Cucumber ]--------------------------------<
     say_wizard "copying Cucumber scenarios from the rails-stripe-membership-saas examples"
     remove_file 'features/users/user_show.feature'
+    copy_from_repo 'features/support/paths.rb', :repo => repo
     copy_from_repo 'features/users/sign_in.feature', :repo => repo
     copy_from_repo 'features/users/sign_up.feature', :repo => repo
-    copy_from_repo 'features/step_definitions/user_steps.rb', :repo => repo    
+    copy_from_repo 'features/users/sign_up_with_stripe.feature', :repo => repo
+    copy_from_repo 'features/users/user_edit.feature', :repo => repo
+    copy_from_repo 'features/step_definitions/user_steps.rb', :repo => repo
+    copy_from_repo 'features/step_definitions/form_helper_steps.rb', :repo => repo 
     copy_from_repo 'config/locales/devise.en.yml', :repo => repo
     
     # >-------------------------------[ Models ]--------------------------------<
@@ -1841,9 +1848,11 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
 
     # >-------------------------------[ RSpec ]--------------------------------<
     say_wizard "copying RSpec tests from the rails-stripe-membership-saas examples"
+    copy_from_repo 'spec/factories/roles.rb', :repo => repo
     copy_from_repo 'spec/models/user_spec.rb', :repo => repo
     copy_from_repo 'spec/controllers/content_controller_spec.rb', :repo => repo
     copy_from_repo 'spec/mailers/user_mailer_spec.rb', :repo => repo
+    copy_from_repo 'spec/stripe/stripe_config_spec.rb', :repo => repo
 
     ### GIT ###
     git :add => '-A' if prefer :git, true
@@ -1897,7 +1906,7 @@ case RbConfig::CONFIG['host_os']
       # was it already added for bootstrap-less?
       unless prefer :bootstrap, 'less'
         say_wizard "recipe adding 'therubyracer' JavaScript runtime gem"
-        gem 'therubyracer', '>= 0.10.2', :group => :assets, :platform => :ruby
+        gem 'therubyracer', '>= 0.11.0', :group => :assets, :platform => :ruby
       end
     end
 end
@@ -2021,10 +2030,12 @@ end
 # >-----------------------------[ Run 'Bundle Install' ]-------------------------------<
 
 say_wizard "Installing gems. This will take a while."
-if prefs.has_key? :bundle_path
-  run "bundle install --without production --path #{prefs[:bundle_path]}"
-else
-  run 'bundle install --without production'
+Bundler.with_clean_env do
+  if prefs.has_key? :bundle_path
+    run "bundle install --without production --path #{prefs[:bundle_path]}"
+  else
+    run 'bundle install --without production'
+  end
 end
 
 # >-----------------------------[ Run 'After Bundler' Callbacks ]-------------------------------<
