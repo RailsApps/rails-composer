@@ -2030,13 +2030,13 @@ end
 # >-----------------------------[ Run 'Bundle Install' ]-------------------------------<
 
 say_wizard "Installing gems. This will take a while."
-Bundler.with_clean_env do
+# Bundler.with_clean_env do
   if prefs.has_key? :bundle_path
     run "bundle install --without production --path #{prefs[:bundle_path]}"
   else
     run 'bundle install --without production'
   end
-end
+# end
 
 # >-----------------------------[ Run 'After Bundler' Callbacks ]-------------------------------<
 
