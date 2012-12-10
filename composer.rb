@@ -256,6 +256,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'admin_app'
     prefs[:form_builder] = 'simple_form'
     prefs[:quiet_assets] = true
+    prefs[:better_errors] = true
   when 'rails-prelaunch-signup'
     prefs[:git] = true
     prefs[:database] = 'sqlite'
@@ -271,6 +272,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'admin_app'
     prefs[:form_builder] = 'simple_form'
     prefs[:quiet_assets] = true
+    prefs[:better_errors] = true
     if prefer :git, true
       prefs[:prelaunch_branch] = multiple_choice "Git branch for the prelaunch app?", [["wip (work-in-progress)", "wip"], ["master", "master"], ["prelaunch", "prelaunch"], ["staging", "staging"]]
       if prefs[:prelaunch_branch] == 'master'
@@ -294,6 +296,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'admin_app'
     prefs[:form_builder] = 'simple_form'
     prefs[:quiet_assets] = true
+    prefs[:better_errors] = true
   when 'rails3-devise-rspec-cucumber'
     prefs[:git] = true
     prefs[:database] = 'sqlite'
@@ -308,6 +311,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
+    prefs[:better_errors] = true
   when 'rails3-devise-rspec-cucumber-fabrication'
     prefs[:git] = true
     prefs[:database] = 'sqlite'
@@ -322,6 +326,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
+    prefs[:better_errors] = true
   when 'rails3-mongoid-devise'
     prefs[:git] = true
     prefs[:database] = 'mongodb'
@@ -337,6 +342,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
+    prefs[:better_errors] = true
   when 'rails3-mongoid-omniauth'
     prefs[:git] = true
     prefs[:database] = 'mongodb'
@@ -352,6 +358,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
+    prefs[:better_errors] = true
   when 'rails3-subdomains'
     prefs[:git] = true
     prefs[:database] = 'mongodb'
@@ -367,6 +374,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'subdomains_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
+    prefs[:better_errors] = true
 end
 
 
@@ -660,7 +668,7 @@ end
 ## Testing Framework
 if prefer :unit_test, 'rspec'
   gem 'rspec-rails', '>= 2.11.4', :group => [:development, :test]
-  gem 'capybara', '>= 1.1.4', :group => :test if prefer :integration, 'rspec-capybara'
+  gem 'capybara', '>= 2.0.1', :group => :test if prefer :integration, 'rspec-capybara'
   gem 'database_cleaner', '>= 0.9.1', :group => :test
   if prefer :orm, 'mongoid'
     gem 'mongoid-rspec', '>= 1.5.5', :group => :test
@@ -670,13 +678,13 @@ end
 if prefer :unit_test, 'minitest'
   gem 'minitest-spec-rails', '>= 3.0.7', :group => :test
   gem 'minitest-wscolor', '>= 0.0.3', :group => :test
-  gem 'capybara', '>= 1.1.4', :group => :test if prefer :integration, 'minitest-capybara'
+  gem 'capybara', '>= 2.0.1', :group => :test if prefer :integration, 'minitest-capybara'
 end
 if prefer :integration, 'cucumber'
   gem 'cucumber-rails', '>= 1.3.0', :group => :test, :require => false
   gem 'database_cleaner', '>= 0.9.1', :group => :test unless prefer :unit_test, 'rspec'
   gem 'launchy', '>= 2.1.2', :group => :test
-  gem 'capybara', '>= 1.1.4', :group => :test
+  gem 'capybara', '>= 2.0.1', :group => :test
 end
 gem 'turnip', '>= 1.1.0', :group => :test if prefer :integration, 'turnip'
 gem 'factory_girl_rails', '>= 4.1.0', :group => [:development, :test] if prefer :fixtures, 'factory_girl'
@@ -1794,6 +1802,7 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     copy_from_repo 'features/users/sign_up.feature', :repo => repo
     copy_from_repo 'features/users/sign_up_with_stripe.feature', :repo => repo
     copy_from_repo 'features/users/user_edit.feature', :repo => repo
+    copy_from_repo 'features/users/user_delete.feature', :repo => repo
     copy_from_repo 'features/step_definitions/user_steps.rb', :repo => repo
     copy_from_repo 'features/step_definitions/form_helper_steps.rb', :repo => repo 
     copy_from_repo 'config/locales/devise.en.yml', :repo => repo
@@ -1869,6 +1878,7 @@ say_recipe 'extras'
 
 config = {}
 config['quiet_assets'] = yes_wizard?("Reduce assets logger noise during development?") if true && true unless config.key?('quiet_assets') || prefs.has_key?(:quiet_assets)
+config['better_errors'] = yes_wizard?("Improve error reporting with 'better_errors' during development?") if true && true unless config.key?('better_errors') || prefs.has_key?(:better_errors)
 config['ban_spiders'] = yes_wizard?("Set a robots.txt file to ban spiders?") if true && true unless config.key?('ban_spiders') || prefs.has_key?(:ban_spiders)
 config['rvmrc'] = yes_wizard?("Create a project-specific rvm gemset and .rvmrc?") if true && true unless config.key?('rvmrc') || prefs.has_key?(:rvmrc)
 config['github'] = yes_wizard?("Create a GitHub repository?") if true && true unless config.key?('github') || prefs.has_key?(:github)
@@ -1884,6 +1894,16 @@ end
 if prefs[:quiet_assets]
   say_wizard "recipe setting quiet_assets for reduced asset pipeline logging"
   gem 'quiet_assets', '>= 1.0.1', :group => :development
+end
+
+## BETTER ERRORS
+if config['better_errors']
+  prefs[:better_errors] = true
+end
+if prefs[:better_errors]
+  say_wizard "recipe adding better_errors gem"
+  gem 'better_errors', '>= 0.0.8', :group => :development
+  gem 'binding_of_caller', '>= 0.6.8', :group => :development
 end
 
 ## BAN SPIDERS
@@ -2010,6 +2030,7 @@ redacted_prefs.delete(:dev_webserver)
 redacted_prefs.delete(:prod_webserver)
 redacted_prefs.delete(:templates)
 redacted_prefs.delete(:quiet_assets)
+redacted_prefs.delete(:better_errors)
 redacted_prefs.delete(:ban_spiders)
 redacted_prefs.delete(:jsruntime)
 redacted_prefs.delete(:rvmrc)
@@ -2030,13 +2051,11 @@ end
 # >-----------------------------[ Run 'Bundle Install' ]-------------------------------<
 
 say_wizard "Installing gems. This will take a while."
-# Bundler.with_clean_env do
-  if prefs.has_key? :bundle_path
-    run "bundle install --without production --path #{prefs[:bundle_path]}"
-  else
-    run 'bundle install --without production'
-  end
-# end
+if prefs.has_key? :bundle_path
+  run "bundle install --without production --path #{prefs[:bundle_path]}"
+else
+  run 'bundle install --without production'
+end
 
 # >-----------------------------[ Run 'After Bundler' Callbacks ]-------------------------------<
 
