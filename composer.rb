@@ -256,6 +256,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'admin_app'
     prefs[:form_builder] = 'simple_form'
     prefs[:quiet_assets] = true
+    prefs[:local_env_file] = true
     prefs[:better_errors] = true
   when 'rails-prelaunch-signup'
     prefs[:git] = true
@@ -272,6 +273,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'admin_app'
     prefs[:form_builder] = 'simple_form'
     prefs[:quiet_assets] = true
+    prefs[:local_env_file] = true
     prefs[:better_errors] = true
     if prefer :git, true
       prefs[:prelaunch_branch] = multiple_choice "Git branch for the prelaunch app?", [["wip (work-in-progress)", "wip"], ["master", "master"], ["prelaunch", "prelaunch"], ["staging", "staging"]]
@@ -296,6 +298,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'admin_app'
     prefs[:form_builder] = 'simple_form'
     prefs[:quiet_assets] = true
+    prefs[:local_env_file] = true
     prefs[:better_errors] = true
   when 'rails3-devise-rspec-cucumber'
     prefs[:git] = true
@@ -311,6 +314,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
+    prefs[:local_env_file] = true
     prefs[:better_errors] = true
   when 'rails3-devise-rspec-cucumber-fabrication'
     prefs[:git] = true
@@ -326,6 +330,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
+    prefs[:local_env_file] = true
     prefs[:better_errors] = true
   when 'rails3-mongoid-devise'
     prefs[:git] = true
@@ -342,6 +347,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
+    prefs[:local_env_file] = true
     prefs[:better_errors] = true
   when 'rails3-mongoid-omniauth'
     prefs[:git] = true
@@ -358,6 +364,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
+    prefs[:local_env_file] = true
     prefs[:better_errors] = true
   when 'rails3-subdomains'
     prefs[:git] = true
@@ -374,6 +381,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'subdomains_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
+    prefs[:local_env_file] = true
     prefs[:better_errors] = true
 end
 
@@ -697,7 +705,7 @@ gem 'compass-rails', '>= 1.0.3', :group => :assets if prefer :frontend, 'foundat
 gem 'zurb-foundation', '>= 3.2.3', :group => :assets if prefer :frontend, 'foundation'
 if prefer :bootstrap, 'less'
   gem 'less-rails', '>= 2.2.6', :group => :assets
-  gem 'twitter-bootstrap-rails', '>= 2.1.7', :group => :assets
+  gem 'twitter-bootstrap-rails', '>= 2.1.8', :group => :assets
   # install gem 'therubyracer' to use Less
   gem 'therubyracer', '>= 0.11.0', :group => :assets, :platform => :ruby
 end
@@ -1160,6 +1168,11 @@ RUBY
 TEXT
     inject_into_file 'config/environments/development.rb', gmail_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
     inject_into_file 'config/environments/production.rb', gmail_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
+    append_file 'config/local_env.example.yml' do <<-FILE
+GMAIL_USERNAME: 'Your_Username'
+GMAIL_PASSWORD: 'Your_Password'
+FILE
+    end
   end
   ### SENDGRID ACCOUNT
   if prefer :email, 'sendgrid'
@@ -1176,10 +1189,15 @@ TEXT
 TEXT
     inject_into_file 'config/environments/development.rb', sendgrid_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
     inject_into_file 'config/environments/production.rb', sendgrid_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
+    append_file 'config/local_env.example.yml' do <<-FILE
+SENDGRID_USERNAME: 'Your_Username'
+SENDGRID_PASSWORD: 'Your_Password'
+  FILE
+    end
   end
-    ### MANDRILL ACCOUNT
-    if prefer :email, 'mandrill'
-      mandrill_configuration_text = <<-TEXT
+  ### MANDRILL ACCOUNT
+  if prefer :email, 'mandrill'
+    mandrill_configuration_text = <<-TEXT
   \n
     config.action_mailer.smtp_settings = {
       :address   => "smtp.mandrillapp.com",
@@ -1188,12 +1206,17 @@ TEXT
       :password  => ENV["MANDRILL_API_KEY"]
     }
   TEXT
-      inject_into_file 'config/environments/development.rb', mandrill_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
-      inject_into_file 'config/environments/production.rb', mandrill_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
+    inject_into_file 'config/environments/development.rb', mandrill_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
+    inject_into_file 'config/environments/production.rb', mandrill_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
+    append_file 'config/local_env.example.yml' do <<-FILE
+MANDRILL_USERNAME: 'Your_Username'
+MANDRILL_API_KEY: 'Your_API_Key'
+FILE
     end
-    ### GIT
-    git :add => '-A' if prefer :git, true
-    git :commit => '-qm "rails_apps_composer: set email accounts"' if prefer :git, true
+  end
+  ### GIT
+  git :add => '-A' if prefer :git, true
+  git :commit => '-qm "rails_apps_composer: set email accounts"' if prefer :git, true
 end # after_bundler
 
 
@@ -1261,6 +1284,11 @@ RUBY
   ### OMNIAUTH ###
   if prefer :authentication, 'omniauth'
     repo = 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+    append_file 'config/local_env.example.yml' do <<-FILE
+OMNIAUTH_PROVIDER_KEY: 'Your_OmniAuth_Provider_Key'
+OMNIAUTH_PROVIDER_SECRET: 'Your_OmniAuth_Provider_Secret'
+FILE
+    end
     copy_from_repo 'config/initializers/omniauth.rb', :repo => repo
     gsub_file 'config/initializers/omniauth.rb', /twitter/, prefs[:omniauth_provider] unless prefer :omniauth_provider, 'twitter'
     generate 'model User name:string email:string provider:string uid:string' unless prefer :orm, 'mongoid'
@@ -1863,6 +1891,13 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     copy_from_repo 'spec/mailers/user_mailer_spec.rb', :repo => repo
     copy_from_repo 'spec/stripe/stripe_config_spec.rb', :repo => repo
 
+    # >-------------------------------[ Extras ]--------------------------------<
+    append_file 'config/local_env.example.yml' do <<-FILE
+STRIPE_API_KEY: 'Your_Stripe_API_key'
+STRIPE_PUBLIC_KEY: 'Your_Stripe_Public_Key'
+FILE
+    end
+    
     ### GIT ###
     git :add => '-A' if prefer :git, true
     git :commit => '-qm "rails_apps_composer: membership app"' if prefer :git, true
@@ -1878,6 +1913,7 @@ say_recipe 'extras'
 
 config = {}
 config['quiet_assets'] = yes_wizard?("Reduce assets logger noise during development?") if true && true unless config.key?('quiet_assets') || prefs.has_key?(:quiet_assets)
+config['local_env_file'] = yes_wizard?("Use a local_env.yml file for environment variables?") if true && true unless config.key?('local_env_file') || prefs.has_key?(:local_env_file)
 config['better_errors'] = yes_wizard?("Improve error reporting with 'better_errors' during development?") if true && true unless config.key?('better_errors') || prefs.has_key?(:better_errors)
 config['ban_spiders'] = yes_wizard?("Set a robots.txt file to ban spiders?") if true && true unless config.key?('ban_spiders') || prefs.has_key?(:ban_spiders)
 config['rvmrc'] = yes_wizard?("Create a project-specific rvm gemset and .rvmrc?") if true && true unless config.key?('rvmrc') || prefs.has_key?(:rvmrc)
@@ -1896,13 +1932,34 @@ if prefs[:quiet_assets]
   gem 'quiet_assets', '>= 1.0.1', :group => :development
 end
 
+## LOCAL_ENV.YML FILE
+if config['local_env_file']
+  prefs[:local_env_file] = true
+end
+if prefs[:local_env_file]
+  say_wizard "recipe creating local_env.yml file for environment variables"
+  copy_from_repo 'config/local_env.example.yml'
+  inject_into_file 'config/application.rb', :after => "config.assets.version = '1.0'\n" do <<-RUBY
+
+    # Set local environment variables from a file /config/local_env.yml
+    # See http://railsapps.github.com/rails-environment-variables.html
+    config.before_configuration do
+      env_file = File.join(Rails.root, 'config', 'local_env.yml')
+      YAML.load(File.open(env_file)).each do |key, value|
+        ENV[key.to_s] = value
+      end if File.exists?(env_file)
+    end
+RUBY
+  end
+end
+
 ## BETTER ERRORS
 if config['better_errors']
   prefs[:better_errors] = true
 end
 if prefs[:better_errors]
   say_wizard "recipe adding better_errors gem"
-  gem 'better_errors', '>= 0.0.8', :group => :development
+  gem 'better_errors', '>= 0.2.0', :group => :development
   gem 'binding_of_caller', '>= 0.6.8', :group => :development
 end
 
@@ -1952,7 +2009,6 @@ if prefs[:rvmrc]
   end
   say_wizard "creating RVM gemset '#{app_name}'"
   RVM.gemset_create app_name
-  run "rvm rvmrc trust"
   say_wizard "switching to gemset '#{app_name}'"
   # RVM.gemset_use! requires rvm version 1.11.3.5 or newer
   rvm_spec =
