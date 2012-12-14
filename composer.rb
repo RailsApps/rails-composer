@@ -826,6 +826,22 @@ after_bundler do
       generate 'simple_form:install'
     end
   end
+  ## Figaro Gem
+  if prefs[:local_env_file]
+    generate 'figaro:install'
+    gsub_file 'config/application.yml', /# PUSHER_.*\n/, ''
+    gsub_file 'config/application.yml', /# STRIPE_.*\n/, ''
+    prepend_to_file 'config/application.yml' do <<-FILE
+# Add account credentials and API keys here.
+# See http://railsapps.github.com/rails-environment-variables.html
+# This file should be listed in .gitignore to keep your settings secret!
+# Each entry sets a local environment variable and overrides ENV variables in the Unix shell.
+# For example, setting:
+# GMAIL_USERNAME: Your_Gmail_Username
+# makes 'Your_Gmail_Username' available as ENV["GMAIL_USERNAME"]
+FILE
+    end
+  end
   ## Git
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: generators"' if prefer :git, true
@@ -1168,9 +1184,9 @@ RUBY
 TEXT
     inject_into_file 'config/environments/development.rb', gmail_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
     inject_into_file 'config/environments/production.rb', gmail_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
-    append_file 'config/local_env.example.yml' do <<-FILE
-GMAIL_USERNAME: 'Your_Username'
-GMAIL_PASSWORD: 'Your_Password'
+    append_file 'config/application.yml' do <<-FILE
+# GMAIL_USERNAME: Your_Username
+# GMAIL_PASSWORD: Your_Password
 FILE
     end
   end
@@ -1189,9 +1205,9 @@ FILE
 TEXT
     inject_into_file 'config/environments/development.rb', sendgrid_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
     inject_into_file 'config/environments/production.rb', sendgrid_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
-    append_file 'config/local_env.example.yml' do <<-FILE
-SENDGRID_USERNAME: 'Your_Username'
-SENDGRID_PASSWORD: 'Your_Password'
+    append_file 'config/application.yml' do <<-FILE
+# SENDGRID_USERNAME: Your_Username
+# SENDGRID_PASSWORD: Your_Password
   FILE
     end
   end
@@ -1208,9 +1224,9 @@ SENDGRID_PASSWORD: 'Your_Password'
   TEXT
     inject_into_file 'config/environments/development.rb', mandrill_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
     inject_into_file 'config/environments/production.rb', mandrill_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
-    append_file 'config/local_env.example.yml' do <<-FILE
-MANDRILL_USERNAME: 'Your_Username'
-MANDRILL_API_KEY: 'Your_API_Key'
+    append_file 'config/application.yml' do <<-FILE
+# MANDRILL_USERNAME: Your_Username
+# MANDRILL_API_KEY: Your_API_Key
 FILE
     end
   end
@@ -1284,9 +1300,9 @@ RUBY
   ### OMNIAUTH ###
   if prefer :authentication, 'omniauth'
     repo = 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
-    append_file 'config/local_env.example.yml' do <<-FILE
-OMNIAUTH_PROVIDER_KEY: 'Your_OmniAuth_Provider_Key'
-OMNIAUTH_PROVIDER_SECRET: 'Your_OmniAuth_Provider_Secret'
+    append_file 'config/application.yml' do <<-FILE
+# OMNIAUTH_PROVIDER_KEY: Your_OmniAuth_Provider_Key
+# OMNIAUTH_PROVIDER_SECRET: Your_OmniAuth_Provider_Secret
 FILE
     end
     copy_from_repo 'config/initializers/omniauth.rb', :repo => repo
@@ -1892,9 +1908,9 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     copy_from_repo 'spec/stripe/stripe_config_spec.rb', :repo => repo
 
     # >-------------------------------[ Extras ]--------------------------------<
-    append_file 'config/local_env.example.yml' do <<-FILE
-STRIPE_API_KEY: 'Your_Stripe_API_key'
-STRIPE_PUBLIC_KEY: 'Your_Stripe_Public_Key'
+    append_file 'config/application.yml' do <<-FILE
+# STRIPE_API_KEY: Your_Stripe_API_key
+# STRIPE_PUBLIC_KEY: Your_Stripe_Public_Key
 FILE
     end
     
@@ -1913,7 +1929,7 @@ say_recipe 'extras'
 
 config = {}
 config['quiet_assets'] = yes_wizard?("Reduce assets logger noise during development?") if true && true unless config.key?('quiet_assets') || prefs.has_key?(:quiet_assets)
-config['local_env_file'] = yes_wizard?("Use a local_env.yml file for environment variables?") if true && true unless config.key?('local_env_file') || prefs.has_key?(:local_env_file)
+config['local_env_file'] = yes_wizard?("Use application.yml file for environment variables?") if true && true unless config.key?('local_env_file') || prefs.has_key?(:local_env_file)
 config['better_errors'] = yes_wizard?("Improve error reporting with 'better_errors' during development?") if true && true unless config.key?('better_errors') || prefs.has_key?(:better_errors)
 config['ban_spiders'] = yes_wizard?("Set a robots.txt file to ban spiders?") if true && true unless config.key?('ban_spiders') || prefs.has_key?(:ban_spiders)
 config['rvmrc'] = yes_wizard?("Create a project-specific rvm gemset and .rvmrc?") if true && true unless config.key?('rvmrc') || prefs.has_key?(:rvmrc)
@@ -1937,20 +1953,8 @@ if config['local_env_file']
   prefs[:local_env_file] = true
 end
 if prefs[:local_env_file]
-  say_wizard "recipe creating local_env.yml file for environment variables"
-  copy_from_repo 'config/local_env.example.yml'
-  inject_into_file 'config/application.rb', :after => "config.assets.version = '1.0'\n" do <<-RUBY
-
-    # Set local environment variables from a file /config/local_env.yml
-    # See http://railsapps.github.com/rails-environment-variables.html
-    config.before_configuration do
-      env_file = File.join(Rails.root, 'config', 'local_env.yml')
-      YAML.load(File.open(env_file)).each do |key, value|
-        ENV[key.to_s] = value
-      end if File.exists?(env_file)
-    end
-RUBY
-  end
+  say_wizard "recipe creating application.yml file for environment variables"
+  gem 'figaro', '>= 0.5.0'
 end
 
 ## BETTER ERRORS
