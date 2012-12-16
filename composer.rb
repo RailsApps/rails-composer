@@ -707,7 +707,8 @@ if prefer :bootstrap, 'less'
   gem 'less-rails', '>= 2.2.6', :group => :assets
   gem 'twitter-bootstrap-rails', '>= 2.1.8', :group => :assets
   # install gem 'therubyracer' to use Less
-  gem 'therubyracer', '>= 0.11.0', :group => :assets, :platform => :ruby
+  gem 'libv8', '>= 3.11.8'
+  gem 'therubyracer', '>= 0.11.0', :group => :assets, :platform => :ruby, :require => 'v8'
 end
 
 ## Email
@@ -1184,11 +1185,6 @@ RUBY
 TEXT
     inject_into_file 'config/environments/development.rb', gmail_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
     inject_into_file 'config/environments/production.rb', gmail_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
-    append_file 'config/application.yml' do <<-FILE
-# GMAIL_USERNAME: Your_Username
-# GMAIL_PASSWORD: Your_Password
-FILE
-    end
   end
   ### SENDGRID ACCOUNT
   if prefer :email, 'sendgrid'
@@ -1205,11 +1201,6 @@ FILE
 TEXT
     inject_into_file 'config/environments/development.rb', sendgrid_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
     inject_into_file 'config/environments/production.rb', sendgrid_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
-    append_file 'config/application.yml' do <<-FILE
-# SENDGRID_USERNAME: Your_Username
-# SENDGRID_PASSWORD: Your_Password
-  FILE
-    end
   end
   ### MANDRILL ACCOUNT
   if prefer :email, 'mandrill'
@@ -1224,11 +1215,6 @@ TEXT
   TEXT
     inject_into_file 'config/environments/development.rb', mandrill_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
     inject_into_file 'config/environments/production.rb', mandrill_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
-    append_file 'config/application.yml' do <<-FILE
-# MANDRILL_USERNAME: Your_Username
-# MANDRILL_API_KEY: Your_API_Key
-FILE
-    end
   end
   ### GIT
   git :add => '-A' if prefer :git, true
@@ -1300,11 +1286,6 @@ RUBY
   ### OMNIAUTH ###
   if prefer :authentication, 'omniauth'
     repo = 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
-    append_file 'config/application.yml' do <<-FILE
-# OMNIAUTH_PROVIDER_KEY: Your_OmniAuth_Provider_Key
-# OMNIAUTH_PROVIDER_SECRET: Your_OmniAuth_Provider_Secret
-FILE
-    end
     copy_from_repo 'config/initializers/omniauth.rb', :repo => repo
     gsub_file 'config/initializers/omniauth.rb', /twitter/, prefs[:omniauth_provider] unless prefer :omniauth_provider, 'twitter'
     generate 'model User name:string email:string provider:string uid:string' unless prefer :orm, 'mongoid'
@@ -1594,75 +1575,93 @@ say_recipe 'init'
 
 after_everything do
   say_wizard "recipe running after everything"
-  ### PREPARE SEED ###
-  if prefer :authentication, 'devise'
-    if (prefer :authorization, 'cancan') && !(prefer :railsapps, 'rails-prelaunch-signup')
-      unless prefer :orm, 'mongoid'
-        append_file 'db/seeds.rb' do <<-FILE
-puts 'CREATING ROLES'
-Role.create([
-  { :name => 'admin' }, 
-  { :name => 'user' }, 
-  { :name => 'VIP' }
-], :without_protection => true)
+  ### CONFIGURATION FILE ###
+  ## EMAIL
+  case prefs[:email]
+    when 'none'
+      credentials = ''
+    when 'smtp'
+      credentials = ''
+    when 'gmail'
+      credentials = "GMAIL_USERNAME: Your_Username\nGMAIL_PASSWORD: Your_Password\n"
+    when 'sendgrid'
+      credentials = "SENDGRID_USERNAME: Your_Username\nSENDGRID_PASSWORD: Your_Password\n"
+    when 'mandrill'
+      credentials = "MANDRILL_USERNAME: Your_Username\nMANDRILL_API_KEY: Your_API_Key\n"
+  end
+  append_file 'config/application.yml', credentials
+  ## DEFAULT USER
+  append_file 'config/application.yml' do <<-FILE
+ADMIN_NAME: First User
+ADMIN_EMAIL: user@example.com
+ADMIN_PASSWORD: please
 FILE
-        end
-      else
-        append_file 'db/seeds.rb' do <<-FILE
-puts 'CREATING ROLES'
-Role.mongo_session['roles'].insert([
-  { :name => 'admin' }, 
-  { :name => 'user' }, 
-  { :name => 'VIP' }
-])
+  end
+  ## AUTHENTICATION
+  if prefer :authentication, 'omniauth'
+    append_file 'config/application.yml' do <<-FILE
+OMNIAUTH_PROVIDER_KEY: Your_OmniAuth_Provider_Key
+OMNIAUTH_PROVIDER_SECRET: Your_OmniAuth_Provider_Secret
 FILE
-        end
-      end
-    end    
-    if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
-      ## DEVISE-CONFIRMABLE
+    end
+  end
+  ## AUTHORIZATION
+  if (prefer :authorization, 'cancan')
+    append_file 'config/application.yml', "ROLES: [admin, user, VIP]\n"
+  end
+  ### SUBDOMAINS ###
+  copy_from_repo 'config/application.yml', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
+  ### APPLICATION.EXAMPLE.YML ###
+  copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
+  ### DATABASE SEED ###
+  append_file 'db/seeds.rb' do <<-FILE
+# Environment variables (ENV['...']) are set in the file config/application.yml.
+# See http://railsapps.github.com/rails-environment-variables.html
+FILE
+  end
+  if (prefer :authorization, 'cancan')
+    unless prefer :orm, 'mongoid'
       append_file 'db/seeds.rb' do <<-FILE
-puts 'SETTING UP DEFAULT USER LOGIN'
-user = User.create! :name => 'First User', :email => 'user@example.com', :password => 'please', :password_confirmation => 'please'
-user.confirm!
-puts 'New user created: ' << user.name
-user2 = User.create! :name => 'Second User', :email => 'user2@example.com', :password => 'please', :password_confirmation => 'please'
-user2.confirm!
-puts 'New user created: ' << user2.name
+puts 'ROLES'
+YAML.load(ENV['ROLES']).each do |role|
+  Role.find_or_create_by_name({ :name => role }, :without_protection => true)
+  puts 'role: ' << role
+end
 FILE
       end
     else
-      ## DEVISE-DEFAULT
       append_file 'db/seeds.rb' do <<-FILE
-puts 'SETTING UP DEFAULT USER LOGIN'
-user = User.create! :name => 'First User', :email => 'user@example.com', :password => 'please', :password_confirmation => 'please'
-puts 'New user created: ' << user.name
-user2 = User.create! :name => 'Second User', :email => 'user2@example.com', :password => 'please', :password_confirmation => 'please'
-puts 'New user created: ' << user2.name
+puts 'ROLES'
+YAML.load(ENV['ROLES']).each do |role|
+  Role.mongo_session['roles'].insert({ :name => role })
+  puts 'role: ' << role
+end
 FILE
       end
     end
-    if prefer :starter_app, 'subdomains_app'
-      gsub_file 'db/seeds.rb', /First User/, 'user1'
-      gsub_file 'db/seeds.rb', /Second User/, 'user2'
-    end
-    if prefer :authorization, 'cancan'
-      append_file 'db/seeds.rb' do <<-FILE
-user.add_role :admin
-user2.add_role :VIP
-FILE
-      end
-    end
-    if prefer :railsapps, 'rails-prelaunch-signup'
-      gsub_file 'db/seeds.rb', /user2.add_role :VIP/, ''
-    end
-    ## DEVISE-INVITABLE
-    if prefer :devise_modules, 'invitable'
-      run 'bundle exec rake db:migrate'
-      generate 'devise_invitable user'
-    end    
   end
-  ### APPLY SEED ###
+  ## DEVISE-DEFAULT
+  unless prefer :authentication, 'omniauth'
+    append_file 'db/seeds.rb' do <<-FILE
+puts 'DEFAULT USERS'
+user = User.find_or_create_by_name :name => ENV['ADMIN_NAME'].dup, :email => ENV['ADMIN_EMAIL'].dup, :password => ENV['ADMIN_PASSWORD'].dup, :password_confirmation => ENV['ADMIN_PASSWORD'].dup
+puts 'user: ' << user.name
+FILE
+    end
+  end
+  ## DEVISE-CONFIRMABLE
+  if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
+    append_file 'db/seeds.rb', 'user.confirm!'
+  end
+  if (prefer :authorization, 'cancan') && !(prefer :authentication, 'omniauth')
+    append_file 'db/seeds.rb', 'user.add_role :admin'
+  end
+  ## DEVISE-INVITABLE
+  if prefer :devise_modules, 'invitable'
+    run 'bundle exec rake db:migrate'
+    generate 'devise_invitable user'
+  end
+  ### APPLY DATABASE SEED ###
   unless prefer :orm, 'mongoid'
     ## ACTIVE_RECORD
     say_wizard "applying migrations and seeding the database"
@@ -1732,31 +1731,23 @@ if prefer :railsapps, 'rails-prelaunch-signup'
       end
     end
 
-    # >-------------------------------[ Cucumber ]--------------------------------<
-    say_wizard "copying Cucumber scenarios from the rails-prelaunch-signup examples"
-    copy_from_repo 'features/admin/send_invitations.feature', :repo => repo    
-    copy_from_repo 'features/admin/view_progress.feature', :repo => repo
-    copy_from_repo 'features/visitors/request_invitation.feature', :repo => repo
-    copy_from_repo 'features/users/sign_in.feature', :repo => repo
-    copy_from_repo 'features/users/sign_up.feature', :repo => repo
-    copy_from_repo 'features/users/user_show.feature', :repo => repo
-    copy_from_repo 'features/step_definitions/admin_steps.rb', :repo => repo
-    copy_from_repo 'features/step_definitions/user_steps.rb', :repo => repo    
-    copy_from_repo 'features/step_definitions/visitor_steps.rb', :repo => repo
-    copy_from_repo 'config/locales/devise.en.yml', :repo => repo
-
     # >-------------------------------[ Migrations ]--------------------------------<
-
     generate 'migration AddOptinToUsers opt_in:boolean'
     run 'bundle exec rake db:drop'
     run 'bundle exec rake db:migrate'
-    run 'bundle exec rake db:test:prepare'
-    run 'bundle exec rake db:seed'
 
     # >-------------------------------[ Models ]--------------------------------<
 
     copy_from_repo 'app/models/user.rb', :repo => repo
 
+    # >-------------------------------[ Init ]--------------------------------<
+    copy_from_repo 'config/application.yml', :repo => repo
+    remove_file 'config/application.example.yml'
+    copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
+    copy_from_repo 'db/seeds.rb', :repo => repo
+    run 'bundle exec rake db:seed'
+    run 'bundle exec rake db:test:prepare'
+    
     # >-------------------------------[ Controllers ]--------------------------------<
 
     copy_from_repo 'app/controllers/confirmations_controller.rb', :repo => repo
@@ -1785,17 +1776,30 @@ if prefer :railsapps, 'rails-prelaunch-signup'
     copy_from_repo 'public/thankyou.html', :repo => repo
 
     # >-------------------------------[ Routes ]--------------------------------<
-    
+
     copy_from_repo 'config/routes.rb', :repo => repo
     ### CORRECT APPLICATION NAME ###
     gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
     
     # >-------------------------------[ Assets ]--------------------------------<
-    
+
     copy_from_repo 'app/assets/javascripts/application.js', :repo => repo
     copy_from_repo 'app/assets/javascripts/users.js.coffee', :repo => repo
     copy_from_repo 'app/assets/stylesheets/application.css.scss', :repo => repo
-    
+
+    # >-------------------------------[ Cucumber ]--------------------------------<
+    say_wizard "copying Cucumber scenarios from the rails-prelaunch-signup examples"
+    copy_from_repo 'features/admin/send_invitations.feature', :repo => repo    
+    copy_from_repo 'features/admin/view_progress.feature', :repo => repo
+    copy_from_repo 'features/visitors/request_invitation.feature', :repo => repo
+    copy_from_repo 'features/users/sign_in.feature', :repo => repo
+    copy_from_repo 'features/users/sign_up.feature', :repo => repo
+    copy_from_repo 'features/users/user_show.feature', :repo => repo
+    copy_from_repo 'features/step_definitions/admin_steps.rb', :repo => repo
+    copy_from_repo 'features/step_definitions/user_steps.rb', :repo => repo    
+    copy_from_repo 'features/step_definitions/visitor_steps.rb', :repo => repo
+    copy_from_repo 'config/locales/devise.en.yml', :repo => repo
+
     ### GIT ###
     git :add => '-A' if prefer :git, true
     git :commit => '-qm "rails_apps_composer: prelaunch app"' if prefer :git, true
@@ -1838,33 +1842,23 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     git :add => '-A' if prefer :git, true
     git :commit => '-qm "rails_apps_composer: clean up starter app"' if prefer :git, true
 
-    # >-------------------------------[ Cucumber ]--------------------------------<
-    say_wizard "copying Cucumber scenarios from the rails-stripe-membership-saas examples"
-    remove_file 'features/users/user_show.feature'
-    copy_from_repo 'features/support/paths.rb', :repo => repo
-    copy_from_repo 'features/users/sign_in.feature', :repo => repo
-    copy_from_repo 'features/users/sign_up.feature', :repo => repo
-    copy_from_repo 'features/users/sign_up_with_stripe.feature', :repo => repo
-    copy_from_repo 'features/users/user_edit.feature', :repo => repo
-    copy_from_repo 'features/users/user_delete.feature', :repo => repo
-    copy_from_repo 'features/step_definitions/user_steps.rb', :repo => repo
-    copy_from_repo 'features/step_definitions/form_helper_steps.rb', :repo => repo 
-    copy_from_repo 'config/locales/devise.en.yml', :repo => repo
-    
+    # >-------------------------------[ Migrations ]--------------------------------<
+    generate 'migration AddStripeToUsers customer_id:string last_4_digits:string'
+    run 'bundle exec rake db:drop'
+    run 'bundle exec rake db:migrate'
+
     # >-------------------------------[ Models ]--------------------------------<
     copy_from_repo 'app/models/ability.rb', :repo => repo
     copy_from_repo 'app/models/user.rb', :repo => repo
 
     # >-------------------------------[ Init ]--------------------------------<
+    copy_from_repo 'config/application.yml', :repo => repo
+    remove_file 'config/application.example.yml'
+    copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
     copy_from_repo 'db/seeds.rb', :repo => repo
     copy_from_repo 'config/initializers/stripe.rb', :repo => repo
-    
-    # >-------------------------------[ Migrations ]--------------------------------<
-    generate 'migration AddStripeToUsers customer_id:string last_4_digits:string'
-    run 'bundle exec rake db:drop'
-    run 'bundle exec rake db:migrate'
-    run 'bundle exec rake db:test:prepare'
     run 'bundle exec rake db:seed'
+    run 'bundle exec rake db:test:prepare'
 
     # >-------------------------------[ Controllers ]--------------------------------<
     copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
@@ -1907,13 +1901,19 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     copy_from_repo 'spec/mailers/user_mailer_spec.rb', :repo => repo
     copy_from_repo 'spec/stripe/stripe_config_spec.rb', :repo => repo
 
-    # >-------------------------------[ Extras ]--------------------------------<
-    append_file 'config/application.yml' do <<-FILE
-# STRIPE_API_KEY: Your_Stripe_API_key
-# STRIPE_PUBLIC_KEY: Your_Stripe_Public_Key
-FILE
-    end
-    
+    # >-------------------------------[ Cucumber ]--------------------------------<
+    say_wizard "copying Cucumber scenarios from the rails-stripe-membership-saas examples"
+    remove_file 'features/users/user_show.feature'
+    copy_from_repo 'features/support/paths.rb', :repo => repo
+    copy_from_repo 'features/users/sign_in.feature', :repo => repo
+    copy_from_repo 'features/users/sign_up.feature', :repo => repo
+    copy_from_repo 'features/users/sign_up_with_stripe.feature', :repo => repo
+    copy_from_repo 'features/users/user_edit.feature', :repo => repo
+    copy_from_repo 'features/users/user_delete.feature', :repo => repo
+    copy_from_repo 'features/step_definitions/user_steps.rb', :repo => repo
+    copy_from_repo 'features/step_definitions/form_helper_steps.rb', :repo => repo 
+    copy_from_repo 'config/locales/devise.en.yml', :repo => repo
+
     ### GIT ###
     git :add => '-A' if prefer :git, true
     git :commit => '-qm "rails_apps_composer: membership app"' if prefer :git, true
@@ -1987,7 +1987,8 @@ case RbConfig::CONFIG['host_os']
       # was it already added for bootstrap-less?
       unless prefer :bootstrap, 'less'
         say_wizard "recipe adding 'therubyracer' JavaScript runtime gem"
-        gem 'therubyracer', '>= 0.11.0', :group => :assets, :platform => :ruby
+        gem 'libv8', '>= 3.11.8'
+        gem 'therubyracer', '>= 0.11.0', :group => :assets, :platform => :ruby, :require => 'v8'
       end
     end
 end
@@ -2085,18 +2086,19 @@ end
 
 # remove prefs which are diagnostically irrelevant
 redacted_prefs = prefs.clone
-redacted_prefs.delete(:git)
-redacted_prefs.delete(:dev_webserver)
-redacted_prefs.delete(:prod_webserver)
-redacted_prefs.delete(:templates)
-redacted_prefs.delete(:quiet_assets)
-redacted_prefs.delete(:better_errors)
 redacted_prefs.delete(:ban_spiders)
-redacted_prefs.delete(:jsruntime)
-redacted_prefs.delete(:rvmrc)
+redacted_prefs.delete(:better_errors)
+redacted_prefs.delete(:dev_webserver)
+redacted_prefs.delete(:git)
 redacted_prefs.delete(:github)
-redacted_prefs.delete(:prelaunch_branch)
+redacted_prefs.delete(:jsruntime)
+redacted_prefs.delete(:local_env_file)
 redacted_prefs.delete(:main_branch)
+redacted_prefs.delete(:prelaunch_branch)
+redacted_prefs.delete(:prod_webserver)
+redacted_prefs.delete(:quiet_assets)
+redacted_prefs.delete(:rvmrc)
+redacted_prefs.delete(:templates)
 
 if diagnostics_prefs.include? redacted_prefs
   diagnostics[:prefs] = 'success'
