@@ -140,6 +140,19 @@ def html_to_slim(source)
   Haml2Slim.convert!(haml)
 end
 
+# full credit to @mislav in this StackOverflow answer for the #which() method:
+# - http://stackoverflow.com/a/5471032
+def which(cmd)
+  exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+  ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+    exts.each do |ext|
+    exe = "#{path}#{File::SEPARATOR}#{cmd}#{ext}"
+      return exe if File.executable? exe
+    end
+  end
+  return nil
+end
+
 
 if diagnostics_recipes.sort.include? recipes.sort
   diagnostics[:recipes] = 'success'
@@ -1114,7 +1127,9 @@ RUBY
     if prefer :integration, 'cucumber'
       gsub_file 'features/step_definitions/user_steps.rb', /@user = FactoryGirl.create\(:user, email: @visitor\[:email\]\)/, '@user = Fabricate(:user, email: @visitor[:email])'
     end
-    gsub_file 'spec/controllers/users_controller_spec.rb', /@user = FactoryGirl.create\(:user\)/, '@user = Fabricate(:user)'
+    if File.exist?('spec/controllers/users_controller_spec.rb')
+      gsub_file 'spec/controllers/users_controller_spec.rb', /@user = FactoryGirl.create\(:user\)/, '@user = Fabricate(:user)'
+    end
   end
 end # after_everything
 
@@ -1644,7 +1659,7 @@ FILE
   unless prefer :authentication, 'omniauth'
     append_file 'db/seeds.rb' do <<-FILE
 puts 'DEFAULT USERS'
-user = User.find_or_create_by_name :name => ENV['ADMIN_NAME'].dup, :email => ENV['ADMIN_EMAIL'].dup, :password => ENV['ADMIN_PASSWORD'].dup, :password_confirmation => ENV['ADMIN_PASSWORD'].dup
+user = User.find_or_create_by_email :name => ENV['ADMIN_NAME'].dup, :email => ENV['ADMIN_EMAIL'].dup, :password => ENV['ADMIN_PASSWORD'].dup, :password_confirmation => ENV['ADMIN_PASSWORD'].dup
 puts 'user: ' << user.name
 FILE
     end
@@ -1900,6 +1915,8 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     copy_from_repo 'spec/controllers/content_controller_spec.rb', :repo => repo
     copy_from_repo 'spec/mailers/user_mailer_spec.rb', :repo => repo
     copy_from_repo 'spec/stripe/stripe_config_spec.rb', :repo => repo
+    copy_from_repo 'spec/support/stripe_helper.rb', :repo => repo
+    copy_from_repo 'spec/support/fixtures/success.json', :repo => repo
 
     # >-------------------------------[ Cucumber ]--------------------------------<
     say_wizard "copying Cucumber scenarios from the rails-stripe-membership-saas examples"
@@ -1998,43 +2015,47 @@ if config['rvmrc']
   prefs[:rvmrc] = true
 end
 if prefs[:rvmrc]
-  say_wizard "recipe creating project-specific rvm gemset and .rvmrc"
-  # using the rvm Ruby API, see:
-  # http://blog.thefrontiergroup.com.au/2010/12/a-brief-introduction-to-the-rvm-ruby-api/
-  # https://rvm.io/integration/passenger
-  if ENV['MY_RUBY_HOME'] && ENV['MY_RUBY_HOME'].include?('rvm')
+  if which("rvm")
+    say_wizard "recipe creating project-specific rvm gemset and .rvmrc"
+    # using the rvm Ruby API, see:
+    # http://blog.thefrontiergroup.com.au/2010/12/a-brief-introduction-to-the-rvm-ruby-api/
+    # https://rvm.io/integration/passenger
+    if ENV['MY_RUBY_HOME'] && ENV['MY_RUBY_HOME'].include?('rvm')
+      begin
+        gems_path = ENV['MY_RUBY_HOME'].split(/@/)[0].sub(/rubies/,'gems')
+        ENV['GEM_PATH'] = "#{gems_path}:#{gems_path}@global"
+        require 'rvm'
+        RVM.use_from_path! File.dirname(File.dirname(__FILE__))
+      rescue LoadError
+        raise "RVM gem is currently unavailable."
+      end
+    end
+    say_wizard "creating RVM gemset '#{app_name}'"
+    RVM.gemset_create app_name
+    say_wizard "switching to gemset '#{app_name}'"
+    # RVM.gemset_use! requires rvm version 1.11.3.5 or newer
+    rvm_spec =
+      if Gem::Specification.respond_to?(:find_by_name)
+        Gem::Specification.find_by_name("rvm")
+      else
+        Gem.source_index.find_name("rvm").last
+      end
+      unless rvm_spec.version > Gem::Version.create('1.11.3.4')
+        say_wizard "rvm gem version: #{rvm_spec.version}"
+        raise "Please update rvm gem to 1.11.3.5 or newer"
+      end
     begin
-      gems_path = ENV['MY_RUBY_HOME'].split(/@/)[0].sub(/rubies/,'gems')
-      ENV['GEM_PATH'] = "#{gems_path}:#{gems_path}@global"
-      require 'rvm'
-      RVM.use_from_path! File.dirname(File.dirname(__FILE__))
-    rescue LoadError
-      raise "RVM gem is currently unavailable."
+      RVM.gemset_use! app_name
+    rescue => e
+      say_wizard "rvm failure: unable to use gemset #{app_name}, reason: #{e}"
+      raise
     end
+    run "rvm gemset list"
+    copy_from_repo '.rvmrc'
+    gsub_file '.rvmrc', /App_Name/, "#{app_name}"
+  else
+    say_wizard "WARNING! RVM does not appear to be available."
   end
-  say_wizard "creating RVM gemset '#{app_name}'"
-  RVM.gemset_create app_name
-  say_wizard "switching to gemset '#{app_name}'"
-  # RVM.gemset_use! requires rvm version 1.11.3.5 or newer
-  rvm_spec =
-    if Gem::Specification.respond_to?(:find_by_name)
-      Gem::Specification.find_by_name("rvm")
-    else
-      Gem.source_index.find_name("rvm").last
-    end
-    unless rvm_spec.version > Gem::Version.create('1.11.3.4')
-      say_wizard "rvm gem version: #{rvm_spec.version}"
-      raise "Please update rvm gem to 1.11.3.5 or newer"
-    end
-  begin
-    RVM.gemset_use! app_name
-  rescue => e
-    say_wizard "rvm failure: unable to use gemset #{app_name}, reason: #{e}"
-    raise
-  end
-  run "rvm gemset list"
-  copy_from_repo '.rvmrc'
-  gsub_file '.rvmrc', /App_Name/, "#{app_name}"
 end
 
 ## AFTER_EVERYTHING
