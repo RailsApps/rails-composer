@@ -1,16 +1,16 @@
 <h3>Users</h3>
 <div class="span8">
 <table class="table table-condensed">
-	  <thead>
+    <thead>
       <tr>
           <th>Username</th>
           <th>Email</th>
           <th>Registered</th>
           <th>Role</th>
           <th></th>
-          <th></th>                                      
+          <th></th>
       </tr>
-  </thead>   
+  </thead>
   <tbody>
   <% @users.each do |user| %>
     <tr>
@@ -22,7 +22,7 @@
           <a data-toggle="modal" href="#role-options-<%= user.id %>" class="btn btn-mini" type="button">Change role</a>
           <%= render user %>
         </td>
-        <td><%= link_to("Delete user", user_path(user), :data => { :confirm => "Are you sure?" }, :method => :delete, :class => 'btn btn-mini') unless user == current_user %></td>                                       
+        <td><%= link_to("Delete user", user_path(user), :data => { :confirm => "Are you sure?" }, :method => :delete, :class => 'btn btn-mini') unless user == current_user %></td>
     </tr>
   <% end %>
   </tbody>

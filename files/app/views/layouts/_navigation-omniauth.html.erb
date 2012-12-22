@@ -5,11 +5,11 @@
     Logged in as <%= current_user.name %>
     </li>
     <li>
-    <%= link_to 'Logout', signout_path %>        
+    <%= link_to 'Logout', signout_path %>
     </li>
   <% else %>
     <li>
-    <%= link_to 'Login', signin_path %>  
+    <%= link_to 'Login', signin_path %>
     </li>
   <% end %>
 </ul>

@@ -2,11 +2,11 @@
 <ul class="nav">
   <% if user_signed_in? %>
     <li>
-    <%= link_to 'Logout', signout_path %>      
+    <%= link_to 'Logout', signout_path %>
     </li>
   <% else %>
     <li>
-    <%= link_to 'Login', signin_path %> 
+    <%= link_to 'Login', signin_path %>
     </li>
   <% end %>
   <% if user_signed_in? %>

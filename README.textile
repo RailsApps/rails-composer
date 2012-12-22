@@ -47,7 +47,7 @@ See the "Troubleshooting" section below if you see errors.
 
 h2. Your Options
 
-The Rails Composer application template will ask you for various preferences, some of which will depend on previous choices. 
+The Rails Composer application template will ask you for various preferences, some of which will depend on previous choices.
 
 Here's an example:
 
@@ -129,11 +129,11 @@ question  Devise modules?
 question  Authorization?
       1)  None
       2)  CanCan with Rolify
-      
+
 question  Use a form builder gem?
       1)  None
       2)  SimpleForm
-            
+
 question  Install a starter app?
       1)  None
       2)  Home Page
@@ -232,7 +232,7 @@ If you get an error like this:
 Your bundle is complete! Use `bundle show [gemname]` to see where a bundled gem is installed.
     composer  Running 'after bundler' callbacks.
 The template [...] could not be loaded.
-Error: You have already activated ..., but your Gemfile requires .... 
+Error: You have already activated ..., but your Gemfile requires ....
 Using bundle exec may solve this.
 </pre>
 
