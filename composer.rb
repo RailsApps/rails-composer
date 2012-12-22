@@ -31,7 +31,7 @@ RUBY
 @prefs = {}
 @gems = []
 @diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["controllers", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"]]
-@diagnostics_prefs = [{:railsapps=>"rails-stripe-membership-saas", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails-stripe-membership-saas", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"mandrill", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails-prelaunch-signup", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"mandrill", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails3-bootstrap-devise-cancan", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails3-devise-rspec-cucumber", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-devise", :database=>"mongodb", :orm=>"mongoid", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-omniauth", :database=>"mongodb", :orm=>"mongoid", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-subdomains", :database=>"mongodb", :orm=>"mongoid", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"subdomains_app", :form_builder=>"none"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"rspec-capybara", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"invitable", :authorization=>"cancan", :form_builder=>"simple_form", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"test_unit", :integration=>"none", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"less", :email=>"sendgrid", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}]
+@diagnostics_prefs = [{:railsapps=>"rails-recurly-subscription-saas", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails-stripe-membership-saas", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails-stripe-membership-saas", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"mandrill", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails-prelaunch-signup", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"mandrill", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails3-bootstrap-devise-cancan", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails3-devise-rspec-cucumber", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-devise", :database=>"mongodb", :orm=>"mongoid", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-omniauth", :database=>"mongodb", :orm=>"mongoid", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-subdomains", :database=>"mongodb", :orm=>"mongoid", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"subdomains_app", :form_builder=>"none"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"rspec-capybara", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"invitable", :authorization=>"cancan", :form_builder=>"simple_form", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"test_unit", :integration=>"none", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"less", :email=>"sendgrid", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}]
 diagnostics = {}
 
 def recipes; @recipes end
@@ -243,18 +243,42 @@ say_recipe 'railsapps'
 # Application template recipe for the rails_apps_composer. Change the recipe here:
 # https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/railsapps.rb
 
-prefs[:railsapps] = multiple_choice "Install an example application?", 
-  [["I want to build my own application", "none"], 
-  ["rails-stripe-membership-saas", "rails-stripe-membership-saas"], 
-  ["rails-prelaunch-signup", "rails-prelaunch-signup"], 
-  ["rails3-bootstrap-devise-cancan", "rails3-bootstrap-devise-cancan"], 
-  ["rails3-devise-rspec-cucumber", "rails3-devise-rspec-cucumber"], 
+prefs[:railsapps] = multiple_choice "Install an example application?",
+  [["I want to build my own application", "none"],
+  ["membership/subscription/saas", "saas"],
+  ["rails-prelaunch-signup", "rails-prelaunch-signup"],
+  ["rails3-bootstrap-devise-cancan", "rails3-bootstrap-devise-cancan"],
+  ["rails3-devise-rspec-cucumber", "rails3-devise-rspec-cucumber"],
   ["rails3-mongoid-devise", "rails3-mongoid-devise"],
   ["rails3-mongoid-omniauth", "rails3-mongoid-omniauth"],
   ["rails3-subdomains", "rails3-subdomains"]] unless prefs.has_key? :railsapps
 
 case prefs[:railsapps]
+  when 'saas'
+    prefs[:railsapps] = multiple_choice "Billing with Stripe or Recurly?",
+      [["Stripe", "rails-stripe-membership-saas"],
+      ["Recurly", "rails-recurly-subscription-saas"]]
+end
+
+case prefs[:railsapps]
   when 'rails-stripe-membership-saas'
+    prefs[:git] = true
+    prefs[:database] = 'sqlite'
+    prefs[:unit_test] = 'rspec'
+    prefs[:integration] = 'cucumber'
+    prefs[:fixtures] = 'factory_girl'
+    prefs[:frontend] = 'bootstrap'
+    prefs[:bootstrap] = 'sass'
+    prefs[:email] = 'gmail'
+    prefs[:authentication] = 'devise'
+    prefs[:devise_modules] = 'default'
+    prefs[:authorization] = 'cancan'
+    prefs[:starter_app] = 'admin_app'
+    prefs[:form_builder] = 'simple_form'
+    prefs[:quiet_assets] = true
+    prefs[:local_env_file] = true
+    prefs[:better_errors] = true
+  when 'rails-recurly-subscription-saas'
     prefs[:git] = true
     prefs[:database] = 'sqlite'
     prefs[:unit_test] = 'rspec'
@@ -660,7 +684,7 @@ end
 
 ## Database Adapter
 gsub_file 'Gemfile', /gem 'sqlite3'\n/, '' unless prefer :database, 'sqlite'
-gem 'mongoid', '>= 3.0.14' if prefer :orm, 'mongoid'
+gem 'mongoid', '>= 3.0.15' if prefer :orm, 'mongoid'
 unless File.open('Gemfile').lines.any?{|line| line.include?('pg')}
   gem 'pg', '>= 0.14.1' if prefer :database, 'postgresql'
 end
@@ -674,16 +698,16 @@ if prefer :templates, 'haml'
   gem 'haml-rails', '>= 0.3.5', :group => :development
   # hpricot and ruby_parser are needed for conversion of HTML to Haml
   gem 'hpricot', '>= 0.8.6', :group => :development
-  gem 'ruby_parser', '>= 3.1.0', :group => :development
+  gem 'ruby_parser', '>= 3.1.1', :group => :development
 end
 if prefer :templates, 'slim'
-  gem 'slim', '>= 1.3.3'
+  gem 'slim', '>= 1.3.5'
   gem 'haml2slim', '>= 0.4.6', :group => :development
   # Haml is needed for conversion of HTML to Slim
   gem 'haml', '>= 3.1.6', :group => :development
   gem 'haml-rails', '>= 0.3.5', :group => :development
   gem 'hpricot', '>= 0.8.6', :group => :development
-  gem 'ruby_parser', '>= 3.1.0', :group => :development
+  gem 'ruby_parser', '>= 3.1.1', :group => :development
 end
 
 ## Testing Framework
@@ -713,7 +737,7 @@ gem 'fabrication', '>= 2.3.0', :group => [:development, :test] if prefer :fixtur
 gem 'machinist', '>= 2.0', :group => :test if prefer :fixtures, 'machinist'
 
 ## Front-end Framework
-gem 'bootstrap-sass', '>= 2.1.1.0' if prefer :bootstrap, 'sass'
+gem 'bootstrap-sass', '>= 2.2.2.0' if prefer :bootstrap, 'sass'
 gem 'compass-rails', '>= 1.0.3', :group => :assets if prefer :frontend, 'foundation'
 gem 'zurb-foundation', '>= 3.2.3', :group => :assets if prefer :frontend, 'foundation'
 if prefer :bootstrap, 'less'
@@ -741,7 +765,7 @@ gem 'omniauth-linkedin' if prefer :omniauth_provider, 'linkedin'
 gem 'omniauth-google-oauth2' if prefer :omniauth_provider, 'google_oauth2'
 gem 'omniauth-tumblr' if prefer :omniauth_provider, 'tumblr'
 
-## Authorization 
+## Authorization
 if prefer :authorization, 'cancan'
   gem 'cancan', '>= 1.6.8'
   gem 'rolify', '>= 3.2.0'
@@ -750,13 +774,20 @@ end
 ## Form Builder
 gem 'simple_form', '>= 2.0.4' if prefer :form_builder, 'simple_form'
 
-## Membership App 
+## Membership App
 if prefer :railsapps, 'rails-stripe-membership-saas'
   gem 'stripe', '>= 1.7.4'
   gem 'stripe_event', '>= 0.4.0'
 end
+if prefer :railsapps, 'rails-recurly-subscription-saas'
+  gem 'recurly', '>= 2.1.5'
+  gem 'nokogiri', '>= 1.5.5'
+  gem 'countries', '>= 0.8.4'
+  gem 'httpi', '>= 1.1.1'
+  gem 'httpclient', '>= 2.3.0.1'
+end
 
-## Signup App 
+## Signup App
 if prefer :railsapps, 'rails-prelaunch-signup'
   gem 'google_visualr', '>= 2.1.2'
   gem 'jquery-datatables-rails', '>= 1.11.2'
@@ -764,7 +795,7 @@ end
 
 ## Gems from a defaults file or added interactively
 gems.each do |g|
-  gem g
+  gem(*g)
 end
 
 ## Git
@@ -1284,7 +1315,9 @@ RUBY
       end
     else
       ## DEVISE AND ACTIVE RECORD
-      generate 'migration AddNameToUsers name:string'
+      unless prefer :railsapps, 'rails-recurly-subscription-saas'
+        generate 'migration AddNameToUsers name:string'
+      end
       copy_from_repo 'app/models/user.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
       if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
         gsub_file 'app/models/user.rb', /:registerable,/, ":registerable, :confirmable,"
@@ -1304,7 +1337,7 @@ RUBY
     copy_from_repo 'config/initializers/omniauth.rb', :repo => repo
     gsub_file 'config/initializers/omniauth.rb', /twitter/, prefs[:omniauth_provider] unless prefer :omniauth_provider, 'twitter'
     generate 'model User name:string email:string provider:string uid:string' unless prefer :orm, 'mongoid'
-    run 'bundle exec rake db:migrate' unless prefer :orm, 'mongoid' 
+    run 'bundle exec rake db:migrate' unless prefer :orm, 'mongoid'
     copy_from_repo 'app/models/user.rb', :repo => repo  # copy the User model (Mongoid version)
     unless prefer :orm, 'mongoid'
       ## OMNIAUTH AND ACTIVE RECORD
@@ -1320,7 +1353,7 @@ RUBY
   ### AUTHORIZATION ###
   if prefer :authorization, 'cancan'
     generate 'cancan:ability'
-    if prefer :starter_app, 'admin_app' 
+    if prefer :starter_app, 'admin_app'
       # Limit access to the users#index page
       copy_from_repo 'app/models/ability.rb', :repo => 'https://raw.github.com/RailsApps/rails3-bootstrap-devise-cancan/master/'
       # allow an admin to update roles
@@ -1330,13 +1363,13 @@ RUBY
       generate 'rolify:role Role User'
     else
       generate 'rolify:role Role User mongoid'
-    	# correct the generation of rolify 3.1 with mongoid
-    	# the call to `rolify` should be *after* the inclusion of mongoid
-    	# (see https://github.com/EppO/rolify/issues/61)
-    	# This isn't needed for rolify>=3.2.0.beta4, but should cause no harm
-    	gsub_file 'app/models/user.rb',
-    		  /^\s*(rolify.*?)$\s*(include Mongoid::Document.*?)$/,
-    		  "  \\2\n  extend Rolify\n  \\1\n"
+      # correct the generation of rolify 3.1 with mongoid
+      # the call to `rolify` should be *after* the inclusion of mongoid
+      # (see https://github.com/EppO/rolify/issues/61)
+      # This isn't needed for rolify>=3.2.0.beta4, but should cause no harm
+      gsub_file 'app/models/user.rb',
+          /^\s*(rolify.*?)$\s*(include Mongoid::Document.*?)$/,
+          "  \\2\n  extend Rolify\n  \\1\n"
     end
   end
   ### GIT ###
@@ -1688,7 +1721,9 @@ FILE
     run 'bundle exec rake db:drop'
     run 'bundle exec rake db:mongoid:create_indexes'
   end
-  run 'bundle exec rake db:seed'
+  unless prefer :railsapps, 'rails-recurly-subscription-saas'
+    run 'bundle exec rake db:seed'
+  end
   ### GIT ###
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: set up database"' if prefer :git, true
@@ -1835,7 +1870,7 @@ say_recipe 'prelaunch'
 # https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/saas.rb
 
 if prefer :railsapps, 'rails-stripe-membership-saas'
-  
+
   after_everything do
     say_wizard "recipe running after 'bundle install'"
     repo = 'https://raw.github.com/RailsApps/rails-stripe-membership-saas/master/'
@@ -1899,12 +1934,12 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     copy_from_repo 'config/routes.rb', :repo => repo
     ### CORRECT APPLICATION NAME ###
     gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
-    
+
     # >-------------------------------[ Assets ]--------------------------------<
     copy_from_repo 'app/assets/javascripts/application.js', :repo => repo
     copy_from_repo 'app/assets/javascripts/jquery.readyselector.js', :repo => repo
     copy_from_repo 'app/assets/javascripts/jquery.externalscript.js', :repo => repo
-    copy_from_repo 'app/assets/javascripts/registrations.js.erb', :repo => repo
+    copy_from_repo 'app/assets/javascripts/registrations.js', :repo => repo
     copy_from_repo 'app/assets/stylesheets/application.css.scss', :repo => repo
     copy_from_repo 'app/assets/stylesheets/pricing.css.scss', :repo => repo
 
@@ -1928,7 +1963,7 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     copy_from_repo 'features/users/user_edit.feature', :repo => repo
     copy_from_repo 'features/users/user_delete.feature', :repo => repo
     copy_from_repo 'features/step_definitions/user_steps.rb', :repo => repo
-    copy_from_repo 'features/step_definitions/form_helper_steps.rb', :repo => repo 
+    copy_from_repo 'features/step_definitions/form_helper_steps.rb', :repo => repo
     copy_from_repo 'config/locales/devise.en.yml', :repo => repo
 
     ### GIT ###
@@ -1936,6 +1971,109 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     git :commit => '-qm "rails_apps_composer: membership app"' if prefer :git, true
   end # after_bundler
 end # rails-stripe-membership-saas
+
+if prefer :railsapps, 'rails-recurly-subscription-saas'
+
+  after_everything do
+    say_wizard "recipe running after 'bundle install'"
+    repo = 'https://raw.github.com/RailsApps/rails-recurly-subscription-saas/master/'
+
+    # >-------------------------------[ Clean up starter app ]--------------------------------<
+
+    %w{
+      public/index.html
+      app/assets/images/rails.png
+    }.each { |file| remove_file file }
+    # remove commented lines and multiple blank lines from Gemfile
+    # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
+    gsub_file 'Gemfile', /#.*\n/, "\n"
+    gsub_file 'Gemfile', /\n^\s*\n/, "\n"
+    # remove commented lines and multiple blank lines from config/routes.rb
+    gsub_file 'config/routes.rb', /  #.*\n/, "\n"
+    gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
+    # GIT
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: clean up starter app"' if prefer :git, true
+
+    # >-------------------------------[ Migrations ]--------------------------------<
+    generate 'migration AddRecurlyToUsers first_name:string last_name:string customer_id:string'
+    run 'bundle exec rake db:drop'
+    run 'bundle exec rake db:migrate'
+
+    # >-------------------------------[ Models ]--------------------------------<
+    copy_from_repo 'app/models/ability.rb', :repo => repo
+    copy_from_repo 'app/models/user.rb', :repo => repo
+
+    # >-------------------------------[ Init ]--------------------------------<
+    copy_from_repo 'config/application.yml', :repo => repo
+    remove_file 'config/application.example.yml'
+    copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
+    copy_from_repo 'db/seeds.rb', :repo => repo
+    copy_from_repo 'config/initializers/recurly.rb', :repo => repo
+    run 'bundle exec rake db:seed'
+    run 'bundle exec rake db:test:prepare'
+
+    # >-------------------------------[ Controllers ]--------------------------------<
+    copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
+    generate 'controller content silver gold platinum --skip-stylesheets --skip-javascripts'
+    copy_from_repo 'app/controllers/content_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/registrations_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/application_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/users_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/recurly_controller.rb', :repo => repo
+
+    # >-------------------------------[ Mailers ]--------------------------------<
+    generate 'mailer UserMailer'
+    copy_from_repo 'app/mailers/user_mailer.rb', :repo => repo
+
+    # >-------------------------------[ Views ]--------------------------------<
+    copy_from_repo 'app/views/home/index.html.erb', :repo => repo
+    copy_from_repo 'app/views/layouts/_navigation.html.erb', :repo => repo
+    copy_from_repo 'app/views/devise/registrations/new.html.erb', :repo => repo
+    copy_from_repo 'app/views/devise/registrations/edit.html.erb', :repo => repo
+    copy_from_repo 'app/views/user_mailer/expire_email.html.erb', :repo => repo
+    copy_from_repo 'app/views/user_mailer/expire_email.text.erb', :repo => repo
+
+    # >-------------------------------[ Routes ]--------------------------------<
+    copy_from_repo 'config/routes.rb', :repo => repo
+    ### CORRECT APPLICATION NAME ###
+    gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
+
+    # >-------------------------------[ Assets ]--------------------------------<
+    copy_from_repo 'app/assets/javascripts/application.js', :repo => repo
+    copy_from_repo 'app/assets/javascripts/jquery.readyselector.js', :repo => repo
+    copy_from_repo 'app/assets/javascripts/recurly.js', :repo => repo
+    copy_from_repo 'app/assets/javascripts/registrations.js', :repo => repo
+    copy_from_repo 'app/assets/stylesheets/application.css.scss', :repo => repo
+    copy_from_repo 'app/assets/stylesheets/pricing.css.scss', :repo => repo
+
+    # >-------------------------------[ RSpec ]--------------------------------<
+    say_wizard "copying RSpec tests from the rails-recurly-subscription-saas examples"
+    copy_from_repo 'spec/factories/roles.rb', :repo => repo
+    copy_from_repo 'spec/factories/users.rb', :repo => repo
+    copy_from_repo 'spec/models/user_spec.rb', :repo => repo
+    copy_from_repo 'spec/controllers/content_controller_spec.rb', :repo => repo
+    copy_from_repo 'spec/mailers/user_mailer_spec.rb', :repo => repo
+    copy_from_repo 'spec/recurly/recurly_config_spec.rb', :repo => repo
+
+    # >-------------------------------[ Cucumber ]--------------------------------<
+    say_wizard "copying Cucumber scenarios from the rails-recurly-subscription-saas examples"
+    remove_file 'features/users/user_show.feature'
+    copy_from_repo 'features/support/paths.rb', :repo => repo
+    copy_from_repo 'features/users/sign_in.feature', :repo => repo
+    copy_from_repo 'features/users/sign_up.feature', :repo => repo
+    copy_from_repo 'features/users/sign_up_with_recurly.feature', :repo => repo
+    copy_from_repo 'features/users/user_edit.feature', :repo => repo
+    copy_from_repo 'features/users/user_delete.feature', :repo => repo
+    copy_from_repo 'features/step_definitions/user_steps.rb', :repo => repo
+    copy_from_repo 'features/step_definitions/form_helper_steps.rb', :repo => repo
+    copy_from_repo 'config/locales/devise.en.yml', :repo => repo
+
+    ### GIT ###
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: membership app"' if prefer :git, true
+  end # after_bundler
+end # rails-recurly-subscription-saas
 
 
 # >--------------------------------[ extras ]---------------------------------<
@@ -1980,7 +2118,7 @@ if config['better_errors']
 end
 if prefs[:better_errors]
   say_wizard "recipe adding better_errors gem"
-  gem 'better_errors', '>= 0.2.0', :group => :development
+  gem 'better_errors', '>= 0.3.2', :group => :development
   gem 'binding_of_caller', '>= 0.6.8', :group => :development
 end
 
