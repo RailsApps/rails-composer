@@ -725,16 +725,16 @@ end
 
 ## Testing Framework
 if prefer :unit_test, 'rspec'
-  gem 'rspec-rails', '>= 2.11.4', :group => [:development, :test]
+  gem 'rspec-rails', '>= 2.12.2', :group => [:development, :test]
   gem 'capybara', '>= 2.0.1', :group => :test if prefer :integration, 'rspec-capybara'
   gem 'database_cleaner', '>= 0.9.1', :group => :test
   if prefer :orm, 'mongoid'
-    gem 'mongoid-rspec', '>= 1.5.5', :group => :test
+    gem 'mongoid-rspec', '>= 1.5.6', :group => :test
   end
   gem 'email_spec', '>= 1.4.0', :group => :test
 end
 if prefer :unit_test, 'minitest'
-  gem 'minitest-spec-rails', '>= 3.0.7', :group => :test
+  gem 'minitest-spec-rails', '>= 4.3.6', :group => :test
   gem 'minitest-wscolor', '>= 0.0.3', :group => :test
   gem 'capybara', '>= 2.0.1', :group => :test if prefer :integration, 'minitest-capybara'
 end
@@ -752,13 +752,13 @@ gem 'machinist', '>= 2.0', :group => :test if prefer :fixtures, 'machinist'
 ## Front-end Framework
 gem 'bootstrap-sass', '>= 2.2.2.0' if prefer :bootstrap, 'sass'
 gem 'compass-rails', '>= 1.0.3', :group => :assets if prefer :frontend, 'foundation'
-gem 'zurb-foundation', '>= 3.2.3', :group => :assets if prefer :frontend, 'foundation'
+gem 'zurb-foundation', '>= 3.2.4', :group => :assets if prefer :frontend, 'foundation'
 if prefer :bootstrap, 'less'
   gem 'less-rails', '>= 2.2.6', :group => :assets
   gem 'twitter-bootstrap-rails', '>= 2.1.8', :group => :assets
   # install gem 'therubyracer' to use Less
   gem 'libv8', '>= 3.11.8'
-  gem 'therubyracer', '>= 0.11.0', :group => :assets, :platform => :ruby, :require => 'v8'
+  gem 'therubyracer', '>= 0.11.3', :group => :assets, :platform => :ruby, :require => 'v8'
 end
 
 ## Email
@@ -766,7 +766,7 @@ gem 'sendgrid', '>= 1.0.1' if prefer :email, 'sendgrid'
 gem 'hominid', '>= 3.0.5' if prefer :email, 'mandrill'
 
 ## Authentication (Devise)
-gem 'devise', '>= 2.1.2' if prefer :authentication, 'devise'
+gem 'devise', '>= 2.2.2' if prefer :authentication, 'devise'
 gem 'devise_invitable', '>= 1.1.4' if prefer :devise_modules, 'invitable'
 
 ## Authentication (OmniAuth)
@@ -1161,8 +1161,8 @@ RUBY
 Fabricator(:user) do
   name     'Test User'
   email    'example@example.com'
-  password 'please'
-  password_confirmation 'please'
+  password 'password'
+  password_confirmation 'password'
   # required if the Devise Confirmable module is used
   # confirmed_at Time.now
 end
@@ -1655,7 +1655,7 @@ after_everything do
   append_file 'config/application.yml' do <<-FILE
 ADMIN_NAME: First User
 ADMIN_EMAIL: user@example.com
-ADMIN_PASSWORD: please
+ADMIN_PASSWORD: password
 FILE
   end
   ## AUTHENTICATION
@@ -1712,7 +1712,7 @@ FILE
   end
   ## DEVISE-CONFIRMABLE
   if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
-    append_file 'db/seeds.rb', 'user.confirm!'
+    append_file 'db/seeds.rb', "user.confirm!\n"
   end
   if (prefer :authorization, 'cancan') && !(prefer :authentication, 'omniauth')
     append_file 'db/seeds.rb', 'user.add_role :admin'
@@ -2122,7 +2122,7 @@ if config['local_env_file']
 end
 if prefs[:local_env_file]
   say_wizard "recipe creating application.yml file for environment variables"
-  gem 'figaro', '>= 0.5.0'
+  gem 'figaro', '>= 0.5.3'
 end
 
 ## BETTER ERRORS
@@ -2156,7 +2156,7 @@ case RbConfig::CONFIG['host_os']
       unless prefer :bootstrap, 'less'
         say_wizard "recipe adding 'therubyracer' JavaScript runtime gem"
         gem 'libv8', '>= 3.11.8'
-        gem 'therubyracer', '>= 0.11.0', :group => :assets, :platform => :ruby, :require => 'v8'
+        gem 'therubyracer', '>= 0.11.3', :group => :assets, :platform => :ruby, :require => 'v8'
       end
     end
 end
