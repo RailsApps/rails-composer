@@ -930,7 +930,7 @@ after_bundler do
     end
 
 RUBY
-    end  
+    end
   end
   ### RSPEC ###
   if prefer :unit_test, 'rspec'
@@ -1161,8 +1161,8 @@ RUBY
 Fabricator(:user) do
   name     'Test User'
   email    'example@example.com'
-  password 'password'
-  password_confirmation 'password'
+  password 'changeme'
+  password_confirmation 'changeme'
   # required if the Devise Confirmable module is used
   # confirmed_at Time.now
 end
@@ -1655,7 +1655,7 @@ after_everything do
   append_file 'config/application.yml' do <<-FILE
 ADMIN_NAME: First User
 ADMIN_EMAIL: user@example.com
-ADMIN_PASSWORD: password
+ADMIN_PASSWORD: changeme
 FILE
   end
   ## AUTHENTICATION
