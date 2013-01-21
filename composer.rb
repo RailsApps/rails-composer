@@ -697,7 +697,7 @@ end
 
 ## Database Adapter
 gsub_file 'Gemfile', /gem 'sqlite3'\n/, '' unless prefer :database, 'sqlite'
-gem 'mongoid', '>= 3.0.15' if prefer :orm, 'mongoid'
+gem 'mongoid', '>= 3.0.18' if prefer :orm, 'mongoid'
 unless File.open('Gemfile').lines.any?{|line| line.include?('pg')}
   gem 'pg', '>= 0.14.1' if prefer :database, 'postgresql'
 end
@@ -726,7 +726,7 @@ end
 ## Testing Framework
 if prefer :unit_test, 'rspec'
   gem 'rspec-rails', '>= 2.12.2', :group => [:development, :test]
-  gem 'capybara', '>= 2.0.1', :group => :test if prefer :integration, 'rspec-capybara'
+  gem 'capybara', '>= 2.0.2', :group => :test if prefer :integration, 'rspec-capybara'
   gem 'database_cleaner', '>= 0.9.1', :group => :test
   if prefer :orm, 'mongoid'
     gem 'mongoid-rspec', '>= 1.5.6', :group => :test
@@ -736,13 +736,13 @@ end
 if prefer :unit_test, 'minitest'
   gem 'minitest-spec-rails', '>= 4.3.6', :group => :test
   gem 'minitest-wscolor', '>= 0.0.3', :group => :test
-  gem 'capybara', '>= 2.0.1', :group => :test if prefer :integration, 'minitest-capybara'
+  gem 'capybara', '>= 2.0.2', :group => :test if prefer :integration, 'minitest-capybara'
 end
 if prefer :integration, 'cucumber'
   gem 'cucumber-rails', '>= 1.3.0', :group => :test, :require => false
   gem 'database_cleaner', '>= 0.9.1', :group => :test unless prefer :unit_test, 'rspec'
   gem 'launchy', '>= 2.1.2', :group => :test
-  gem 'capybara', '>= 2.0.1', :group => :test
+  gem 'capybara', '>= 2.0.2', :group => :test
 end
 gem 'turnip', '>= 1.1.0', :group => :test if prefer :integration, 'turnip'
 gem 'factory_girl_rails', '>= 4.1.0', :group => [:development, :test] if prefer :fixtures, 'factory_girl'
@@ -1709,6 +1709,8 @@ user = User.find_or_create_by_email :name => ENV['ADMIN_NAME'].dup, :email => EN
 puts 'user: ' << user.name
 FILE
     end
+    # Mongoid doesn't have a 'find_or_create_by' method
+    gsub_file 'db/seeds.rb', /find_or_create_by_email/, 'create!' if prefer :orm, 'mongoid'
   end
   ## DEVISE-CONFIRMABLE
   if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
