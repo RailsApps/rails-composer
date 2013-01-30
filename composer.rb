@@ -697,7 +697,7 @@ end
 
 ## Database Adapter
 gsub_file 'Gemfile', /gem 'sqlite3'\n/, '' unless prefer :database, 'sqlite'
-gem 'mongoid', '>= 3.0.18' if prefer :orm, 'mongoid'
+gem 'mongoid', '>= 3.0.19' if prefer :orm, 'mongoid'
 unless File.open('Gemfile').lines.any?{|line| line.include?('pg')}
   gem 'pg', '>= 0.14.1' if prefer :database, 'postgresql'
 end
@@ -729,7 +729,7 @@ if prefer :unit_test, 'rspec'
   gem 'capybara', '>= 2.0.2', :group => :test if prefer :integration, 'rspec-capybara'
   gem 'database_cleaner', '>= 0.9.1', :group => :test
   if prefer :orm, 'mongoid'
-    gem 'mongoid-rspec', '>= 1.5.6', :group => :test
+    gem 'mongoid-rspec', '>= 1.6.0', :group => :test
   end
   gem 'email_spec', '>= 1.4.0', :group => :test
 end
@@ -745,14 +745,14 @@ if prefer :integration, 'cucumber'
   gem 'capybara', '>= 2.0.2', :group => :test
 end
 gem 'turnip', '>= 1.1.0', :group => :test if prefer :integration, 'turnip'
-gem 'factory_girl_rails', '>= 4.1.0', :group => [:development, :test] if prefer :fixtures, 'factory_girl'
+gem 'factory_girl_rails', '>= 4.2.0', :group => [:development, :test] if prefer :fixtures, 'factory_girl'
 gem 'fabrication', '>= 2.3.0', :group => [:development, :test] if prefer :fixtures, 'fabrication'
 gem 'machinist', '>= 2.0', :group => :test if prefer :fixtures, 'machinist'
 
 ## Front-end Framework
 gem 'bootstrap-sass', '>= 2.2.2.0' if prefer :bootstrap, 'sass'
 gem 'compass-rails', '>= 1.0.3', :group => :assets if prefer :frontend, 'foundation'
-gem 'zurb-foundation', '>= 3.2.4', :group => :assets if prefer :frontend, 'foundation'
+gem 'zurb-foundation', '>= 3.2.5', :group => :assets if prefer :frontend, 'foundation'
 if prefer :bootstrap, 'less'
   gem 'less-rails', '>= 2.2.6', :group => :assets
   gem 'twitter-bootstrap-rails', '>= 2.1.8', :group => :assets
@@ -766,8 +766,8 @@ gem 'sendgrid', '>= 1.0.1' if prefer :email, 'sendgrid'
 gem 'hominid', '>= 3.0.5' if prefer :email, 'mandrill'
 
 ## Authentication (Devise)
-gem 'devise', '>= 2.2.2' if prefer :authentication, 'devise'
-gem 'devise_invitable', '>= 1.1.4' if prefer :devise_modules, 'invitable'
+gem 'devise', '>= 2.2.3' if prefer :authentication, 'devise'
+gem 'devise_invitable', '>= 1.1.5' if prefer :devise_modules, 'invitable'
 
 ## Authentication (OmniAuth)
 gem 'omniauth', '>= 1.1.1' if prefer :authentication, 'omniauth'
@@ -951,7 +951,7 @@ RUBY
     config.generators do |g|
       #{"g.test_framework :rspec" if prefer :fixtures, 'none'}
       #{"g.test_framework :rspec, fixture: true" unless prefer :fixtures, 'none'}
-      #{"g.fixture_replacement :factory_girl" if prefer :fixtures, 'factory_girl'}
+      #{"g.fixture_replacement :factory_girl, dir: 'spec/factories'" if prefer :fixtures, 'factory_girl'}
       #{"g.fixture_replacement :machinist" if prefer :fixtures, 'machinist'}
       #{"g.fixture_replacement :fabrication" if prefer :fixtures, 'fabrication'}
       g.view_specs false
