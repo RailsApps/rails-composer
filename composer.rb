@@ -47,7 +47,7 @@ def say_recipe(name); say "\033[1m\033[36m" + "recipe".rjust(10) + "\033[0m" + "
 def say_wizard(text); say_custom(@current_recipe || 'composer', text) end
 
 def ask_wizard(question)
-  ask "\033[1m\033[30m\033[46m" + (@current_recipe || "prompt").rjust(10) + "\033[1m\033[36m" + "  #{question}\033[0m"
+  ask "\033[1m\033[36m" + (@current_recipe || "prompt").rjust(10) + "\033[1m\033[36m" + "  #{question}\033[0m"
 end
 
 def yes_wizard?(question)
@@ -459,9 +459,9 @@ gemfile = File.read(destination_root() + '/Gemfile')
 sqlite_detected = gemfile.include? 'sqlite3'
 
 ## Web Server
-prefs[:dev_webserver] = multiple_choice "Web server for development?", [["WEBrick (default)", "webrick"], 
+prefs[:dev_webserver] = multiple_choice "Web server for development?", [["WEBrick (default)", "webrick"],
   ["Thin", "thin"], ["Unicorn", "unicorn"], ["Puma", "puma"]] unless prefs.has_key? :dev_webserver
-webserver = multiple_choice "Web server for production?", [["Same as development", "same"], 
+webserver = multiple_choice "Web server for production?", [["Same as development", "same"],
   ["Thin", "thin"], ["Unicorn", "unicorn"], ["Puma", "puma"]] unless prefs.has_key? :prod_webserver
 if webserver == 'same'
   case prefs[:dev_webserver]
@@ -477,7 +477,7 @@ else
 end
 
 ## Database Adapter
-prefs[:database] = multiple_choice "Database used in development?", [["SQLite", "sqlite"], ["PostgreSQL", "postgresql"], 
+prefs[:database] = multiple_choice "Database used in development?", [["SQLite", "sqlite"], ["PostgreSQL", "postgresql"],
   ["MySQL", "mysql"], ["MongoDB", "mongodb"]] unless prefs.has_key? :database
 case prefs[:database]
   when 'mongodb'
@@ -501,14 +501,14 @@ prefs[:templates] = multiple_choice "Template engine?", [["ERB", "erb"], ["Haml"
 ## Testing Framework
 if recipes.include? 'testing'
   prefs[:unit_test] = multiple_choice "Unit testing?", [["Test::Unit", "test_unit"], ["RSpec", "rspec"], ["MiniTest", "minitest"]] unless prefs.has_key? :unit_test
-  prefs[:integration] = multiple_choice "Integration testing?", [["None", "none"], ["RSpec with Capybara", "rspec-capybara"], 
+  prefs[:integration] = multiple_choice "Integration testing?", [["None", "none"], ["RSpec with Capybara", "rspec-capybara"],
     ["Cucumber with Capybara", "cucumber"], ["Turnip with Capybara", "turnip"], ["MiniTest with Capybara", "minitest-capybara"]] unless prefs.has_key? :integration
   prefs[:fixtures] = multiple_choice "Fixture replacement?", [["None","none"], ["Factory Girl","factory_girl"], ["Machinist","machinist"], ["Fabrication","fabrication"]] unless prefs.has_key? :fixtures
 end
 
 ## Front-end Framework
 if recipes.include? 'frontend'
-  prefs[:frontend] = multiple_choice "Front-end framework?", [["None", "none"], ["Twitter Bootstrap", "bootstrap"], 
+  prefs[:frontend] = multiple_choice "Front-end framework?", [["None", "none"], ["Twitter Bootstrap", "bootstrap"],
     ["Zurb Foundation", "foundation"], ["Skeleton", "skeleton"], ["Just normalize CSS for consistent styling", "normalize"]] unless prefs.has_key? :frontend
   if prefer :frontend, 'bootstrap'
     case HOST_OS
@@ -523,7 +523,7 @@ end
 
 ## Email
 if recipes.include? 'email'
-  prefs[:email] = multiple_choice "Add support for sending email?", [["None", "none"], ["Gmail","gmail"], ["SMTP","smtp"], 
+  prefs[:email] = multiple_choice "Add support for sending email?", [["None", "none"], ["Gmail","gmail"], ["SMTP","smtp"],
     ["SendGrid","sendgrid"], ["Mandrill","mandrill"]] unless prefs.has_key? :email
 else
   prefs[:email] = 'none'
@@ -537,11 +537,11 @@ if recipes.include? 'models'
       if prefer :orm, 'mongoid'
         prefs[:devise_modules] = multiple_choice "Devise modules?", [["Devise with default modules","default"]] unless prefs.has_key? :devise_modules
       else
-        prefs[:devise_modules] = multiple_choice "Devise modules?", [["Devise with default modules","default"], ["Devise with Confirmable module","confirmable"], 
+        prefs[:devise_modules] = multiple_choice "Devise modules?", [["Devise with default modules","default"], ["Devise with Confirmable module","confirmable"],
           ["Devise with Confirmable and Invitable modules","invitable"]] unless prefs.has_key? :devise_modules
       end
     when 'omniauth'
-      prefs[:omniauth_provider] = multiple_choice "OmniAuth provider?", [["Facebook", "facebook"], ["Twitter", "twitter"], ["GitHub", "github"], 
+      prefs[:omniauth_provider] = multiple_choice "OmniAuth provider?", [["Facebook", "facebook"], ["Twitter", "twitter"], ["GitHub", "github"],
         ["LinkedIn", "linkedin"], ["Google-Oauth-2", "google_oauth2"], ["Tumblr", "tumblr"]] unless prefs.has_key? :omniauth_provider
   end
   prefs[:authorization] = multiple_choice "Authorization?", [["None", "none"], ["CanCan with Rolify", "cancan"]] unless prefs.has_key? :authorization
@@ -553,18 +553,18 @@ prefs[:form_builder] = multiple_choice "Use a form builder gem?", [["None", "non
 ## MVC
 if (recipes.include? 'models') && (recipes.include? 'controllers') && (recipes.include? 'views') && (recipes.include? 'routes')
   if prefer :authorization, 'cancan'
-    prefs[:starter_app] = multiple_choice "Install a starter app?", [["None", "none"], ["Home Page", "home_app"], 
+    prefs[:starter_app] = multiple_choice "Install a starter app?", [["None", "none"], ["Home Page", "home_app"],
       ["Home Page, User Accounts", "users_app"], ["Home Page, User Accounts, Admin Dashboard", "admin_app"]] unless prefs.has_key? :starter_app
   elsif prefer :authentication, 'devise'
     if prefer :orm, 'mongoid'
-      prefs[:starter_app] = multiple_choice "Install a starter app?", [["None", "none"], ["Home Page", "home_app"], 
+      prefs[:starter_app] = multiple_choice "Install a starter app?", [["None", "none"], ["Home Page", "home_app"],
         ["Home Page, User Accounts", "users_app"], ["Home Page, User Accounts, Subdomains", "subdomains_app"]] unless prefs.has_key? :starter_app
     else
-      prefs[:starter_app] = multiple_choice "Install a starter app?", [["None", "none"], ["Home Page", "home_app"], 
+      prefs[:starter_app] = multiple_choice "Install a starter app?", [["None", "none"], ["Home Page", "home_app"],
         ["Home Page, User Accounts", "users_app"]] unless prefs.has_key? :starter_app
     end
   elsif prefer :authentication, 'omniauth'
-    prefs[:starter_app] = multiple_choice "Install a starter app?", [["None", "none"], ["Home Page", "home_app"], 
+    prefs[:starter_app] = multiple_choice "Install a starter app?", [["None", "none"], ["Home Page", "home_app"],
       ["Home Page, User Accounts", "users_app"]] unless prefs.has_key? :starter_app
   else
     prefs[:starter_app] = multiple_choice "Install a starter app?", [["None", "none"], ["Home Page", "home_app"]] unless prefs.has_key? :starter_app
@@ -590,7 +590,7 @@ say_recipe 'readme'
 
 after_everything do
   say_wizard "recipe running after everything"
-  
+
   # remove default READMEs
   %w{
     README
@@ -612,11 +612,11 @@ after_everything do
   gsub_file "README.textile", /PREFERENCES/, prefs.inspect
   gsub_file "README", /RECIPES/, recipes.sort.inspect
   gsub_file "README", /PREFERENCES/, prefs.inspect
-  
+
   # Ruby on Rails
   gsub_file "README.textile", /\* Ruby/, "* Ruby version #{RUBY_VERSION}"
   gsub_file "README.textile", /\* Rails/, "* Rails version #{Rails::VERSION::STRING}"
-    
+
   # Database
   gsub_file "README.textile", /SQLite/, "PostgreSQL" if prefer :database, 'postgresql'
   gsub_file "README.textile", /SQLite/, "MySQL" if prefer :database, 'mysql'
@@ -660,7 +660,7 @@ after_everything do
 
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: add README files"' if prefer :git, true
-  
+
 end # after_everything
 
 
@@ -1201,9 +1201,9 @@ config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 RUBY
     end
     ### TEST
-    inject_into_file 'config/environments/test.rb', :before => "\nend" do 
+    inject_into_file 'config/environments/test.rb', :before => "\nend" do
   <<-RUBY
-\n  
+\n
   # ActionMailer Config
   config.action_mailer.default_url_options = { :host => 'example.com' }
 RUBY
@@ -1413,7 +1413,7 @@ after_bundler do
   end
 RUBY
     end
-  end  
+  end
   ### HOME_CONTROLLER ###
   if ['home_app','users_app','admin_app','subdomains_app'].include? prefs[:starter_app]
     generate(:controller, "home index")
@@ -1581,7 +1581,7 @@ after_bundler do
     copy_from_repo 'app/views/layouts/_navigation-devise.html.erb', :prefs => 'devise'
     copy_from_repo 'app/views/layouts/_navigation-omniauth.html.erb', :prefs => 'omniauth'
   end
-  copy_from_repo 'app/views/layouts/_navigation-subdomains_app.html.erb', :prefs => 'subdomains_app'  
+  copy_from_repo 'app/views/layouts/_navigation-subdomains_app.html.erb', :prefs => 'subdomains_app'
   ## APPLICATION NAME
   application_layout_file = Dir['app/views/layouts/application.html.*'].first
   navigation_partial_file = Dir['app/views/layouts/_navigation.html.*'].first
@@ -1645,30 +1645,34 @@ after_everything do
     when 'mandrill'
       credentials = "MANDRILL_USERNAME: Your_Username\nMANDRILL_API_KEY: Your_API_Key\n"
   end
-  append_file 'config/application.yml', credentials
-  ## DEFAULT USER
-  append_file 'config/application.yml' do <<-FILE
+  append_file 'config/application.yml', credentials if prefs[:local_env_file]
+  if prefs[:local_env_file]
+    ## DEFAULT USER
+    append_file 'config/application.yml' do <<-FILE
 ADMIN_NAME: First User
 ADMIN_EMAIL: user@example.com
 ADMIN_PASSWORD: changeme
 FILE
-  end
-  ## AUTHENTICATION
-  if prefer :authentication, 'omniauth'
-    append_file 'config/application.yml' do <<-FILE
+    end
+    ## AUTHENTICATION
+    if prefer :authentication, 'omniauth'
+      append_file 'config/application.yml' do <<-FILE
 OMNIAUTH_PROVIDER_KEY: Your_OmniAuth_Provider_Key
 OMNIAUTH_PROVIDER_SECRET: Your_OmniAuth_Provider_Secret
 FILE
+      end
     end
-  end
-  ## AUTHORIZATION
-  if (prefer :authorization, 'cancan')
-    append_file 'config/application.yml', "ROLES: [admin, user, VIP]\n"
+    ## AUTHORIZATION
+    if (prefer :authorization, 'cancan')
+      append_file 'config/application.yml', "ROLES: [admin, user, VIP]\n"
+    end
   end
   ### SUBDOMAINS ###
   copy_from_repo 'config/application.yml', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
   ### APPLICATION.EXAMPLE.YML ###
-  copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
+  if prefs[:local_env_file]
+    copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
+  end
   ### DATABASE SEED ###
   append_file 'db/seeds.rb' do <<-FILE
 # Environment variables (ENV['...']) are set in the file config/application.yml.
@@ -1753,7 +1757,7 @@ say_recipe 'prelaunch'
 # https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/prelaunch.rb
 
 if prefer :railsapps, 'rails-prelaunch-signup'
-  
+
   after_everything do
     say_wizard "recipe running after 'bundle install'"
     repo = 'https://raw.github.com/RailsApps/rails-prelaunch-signup/master/'
@@ -1807,7 +1811,7 @@ if prefer :railsapps, 'rails-prelaunch-signup'
     copy_from_repo 'db/seeds.rb', :repo => repo
     run 'bundle exec rake db:seed'
     run 'bundle exec rake db:test:prepare'
-    
+
     # >-------------------------------[ Controllers ]--------------------------------<
 
     copy_from_repo 'app/controllers/confirmations_controller.rb', :repo => repo
@@ -1816,7 +1820,7 @@ if prefer :railsapps, 'rails-prelaunch-signup'
     copy_from_repo 'app/controllers/users_controller.rb', :repo => repo
 
     # >-------------------------------[ Mailers ]--------------------------------<
-    
+
     generate 'mailer UserMailer'
     copy_from_repo 'spec/mailers/user_mailer_spec.rb', :repo => repo
     copy_from_repo 'app/mailers/user_mailer.rb', :repo => repo
@@ -1840,7 +1844,7 @@ if prefer :railsapps, 'rails-prelaunch-signup'
     copy_from_repo 'config/routes.rb', :repo => repo
     ### CORRECT APPLICATION NAME ###
     gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
-    
+
     # >-------------------------------[ Assets ]--------------------------------<
 
     copy_from_repo 'app/assets/javascripts/application.js', :repo => repo
@@ -1849,14 +1853,14 @@ if prefer :railsapps, 'rails-prelaunch-signup'
 
     # >-------------------------------[ Cucumber ]--------------------------------<
     say_wizard "copying Cucumber scenarios from the rails-prelaunch-signup examples"
-    copy_from_repo 'features/admin/send_invitations.feature', :repo => repo    
+    copy_from_repo 'features/admin/send_invitations.feature', :repo => repo
     copy_from_repo 'features/admin/view_progress.feature', :repo => repo
     copy_from_repo 'features/visitors/request_invitation.feature', :repo => repo
     copy_from_repo 'features/users/sign_in.feature', :repo => repo
     copy_from_repo 'features/users/sign_up.feature', :repo => repo
     copy_from_repo 'features/users/user_show.feature', :repo => repo
     copy_from_repo 'features/step_definitions/admin_steps.rb', :repo => repo
-    copy_from_repo 'features/step_definitions/user_steps.rb', :repo => repo    
+    copy_from_repo 'features/step_definitions/user_steps.rb', :repo => repo
     copy_from_repo 'features/step_definitions/visitor_steps.rb', :repo => repo
     copy_from_repo 'config/locales/devise.en.yml', :repo => repo
 
