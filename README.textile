@@ -2,11 +2,11 @@ h1. !http://railsapps.github.com/images/rails-36x36.jpg(Rails Composer)! Rails C
 
 An application template that creates a Rails 3.2 starter app.
 
-See the "Rails Composer project page":http://railsapps.github.com/rails-composer.
+It's the Rails generator on steroids. See the "Rails Composer project page":http://railsapps.github.com/rails-composer.
 
-It's the Rails generator on steroids.
+The Rails Composer application template is built from recipes provided by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem. Need to customize the Rails Composer application template? Want to build your own application template? Use "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer.
 
-The Rails Composer application template is built from recipes provided by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem.
+If you’re new to Rails, see recommendations for a "Rails tutorial":https://tutorials.railsapps.org/rails-tutorial and resources for getting started with "Rails":http://railsapps.github.com/rails.html.
 
 h2. !http://twitter-badges.s3.amazonaws.com/t_logo-a.png(Follow on Twitter)!:http://www.twitter.com/rails_apps Follow on Twitter
 
@@ -49,16 +49,22 @@ h2. Your Options
 
 The Rails Composer application template will ask you for various preferences, some of which will depend on previous choices.
 
+If you choose "I want to build my own application," you will get a full set of choices.
+
+If you choose one of the RailsApps example applications, you will get fewer choices but you will get an exact copy of a known working example application. See "Rails example applications":http://railsapps.github.com/ for more information.
+
 Here's an example:
 
 <pre>
 question  Install an example application?
-      1)  I want to build my own application
-      2)  rails3-bootstrap-devise-cancan
-      3)  rails3-devise-rspec-cucumber
-      4)  rails3-mongoid-devise
-      5)  rails3-mongoid-omniauth
-      6)  rails3-subdomains
+        1)  I want to build my own application
+        2)  membership/subscription/saas (Stripe or Recurly)
+        3)  rails-prelaunch-signup
+        4)  rails3-bootstrap-devise-cancan
+        5)  rails3-devise-rspec-cucumber
+        6)  rails3-mongoid-devise
+        7)  rails3-mongoid-omniauth
+        8)  rails3-subdomains
 
 question  Web server for development?
       1)  WEBrick (default)
@@ -309,5 +315,19 @@ h2. License
 "MIT License":http://www.opensource.org/licenses/mit-license
 
 Copyright 2012 Daniel Kehoe
+
+h2. RailsApps
+
+|_. Getting Started |_. Articles |_. Example Application |_. Tutorial |
+| Recommendations for a "Rails Tutorial":https://tutorials.railsapps.org/rails-tutorial | "title":link | "rails3-bootstrap-devise-cancan":https://github.com/RailsApps/rails3-bootstrap-devise-cancan | "Devise with CanCan and Twitter Bootstrap":https://tutorials.railsapps.org/rails3-bootstrap-devise-cancan |
+| Resouces for "Rails":http://railsapps.github.com/rails.html | "title":link | "rails-stripe-membership-saas":http://railsapps.github.com/rails-stripe-membership-saas/ | "Rails Membership Site with Stripe":https://tutorials.railsapps.org/rails-stripe-membership-saas |
+| "Installing Rails":http://railsapps.github.com/installing-rails.html | "title":link | "rails-recurly-subscription-saas":http://railsapps.github.com/rails-recurly-subscription-saas/ | "Rails Subscription Site with Recurly":https://tutorials.railsapps.org/rails-recurly-subscription-saas |
+| "Updating Rails":http://railsapps.github.com/updating-rails.html | "title":link | "rails-prelaunch-signup":http://railsapps.github.com/rails-prelaunch-signup/ | "Startup Prelaunch Signup Application":http://railsapps.github.com/tutorial-rails-prelaunch-signup.html |
+| | "title":link | "rails3-devise-rspec-cucumber":https://github.com/RailsApps/rails3-devise-rspec-cucumber | "Devise with RSpec and Cucumber":http://railsapps.github.com/tutorial-rails-devise-rspec-cucumber.html |
+| | "title":link | "rails3-mongoid-devise":https://github.com/RailsApps/rails3-mongoid-devise | "Devise with Mongoid":http://railsapps.github.com/tutorial-rails-mongoid-devise.html |
+| | "title":link | "rails3-mongoid-omniauth":https://github.com/RailsApps/rails3-mongoid-omniauth | "OmniAuth with Mongoid":http://railsapps.github.com/tutorial-rails-mongoid-omniauth.html |
+| | "title":link | "rails3-subdomains":https://github.com/RailsApps/rails3-subdomains | "Subdomains with Devise":http://railsapps.github.com/tutorial-rails-subdomains.html |
+
+
 
 !https://cruel-carlota.pagodabox.com/9a7ed11e8570e461c585a7afd3722d71(githalytics.com alpha)!
