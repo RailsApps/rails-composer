@@ -329,7 +329,7 @@ h2. Useful Links
 | | "Rails Application Layout":http://railsapps.github.com/rails-default-application-layout.html | "Subdomains with Devise":http://railsapps.github.com/tutorial-rails-subdomains.html |
 | | "HTML5 Boilerplate for Rails":http://railsapps.github.com/rails-html5-boilerplate.html | |
 | | "Example Gemfiles for Rails":http://railsapps.github.com/rails-3-2-example-gemfile.html | |
-| | "Rails Application Template":http://railsapps.github.com/rails-application-templates.html | |
+| | "Rails Application Templates":http://railsapps.github.com/rails-application-templates.html | |
 
 
 !https://cruel-carlota.pagodabox.com/9a7ed11e8570e461c585a7afd3722d71(githalytics.com alpha)!
