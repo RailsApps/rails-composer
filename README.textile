@@ -318,16 +318,16 @@ Copyright 2012 Daniel Kehoe
 
 h2. RailsApps
 
-|_. Getting Started |_. Articles |_. Example Application |_. Tutorial |
-| Recommendations for a "Rails Tutorial":https://tutorials.railsapps.org/rails-tutorial | "title":link | "rails3-bootstrap-devise-cancan":https://github.com/RailsApps/rails3-bootstrap-devise-cancan | "Devise with CanCan and Twitter Bootstrap":https://tutorials.railsapps.org/rails3-bootstrap-devise-cancan |
-| Resouces for "Rails":http://railsapps.github.com/rails.html | "title":link | "rails-stripe-membership-saas":http://railsapps.github.com/rails-stripe-membership-saas/ | "Rails Membership Site with Stripe":https://tutorials.railsapps.org/rails-stripe-membership-saas |
-| "Installing Rails":http://railsapps.github.com/installing-rails.html | "title":link | "rails-recurly-subscription-saas":http://railsapps.github.com/rails-recurly-subscription-saas/ | "Rails Subscription Site with Recurly":https://tutorials.railsapps.org/rails-recurly-subscription-saas |
-| "Updating Rails":http://railsapps.github.com/updating-rails.html | "title":link | "rails-prelaunch-signup":http://railsapps.github.com/rails-prelaunch-signup/ | "Startup Prelaunch Signup Application":http://railsapps.github.com/tutorial-rails-prelaunch-signup.html |
-| | "title":link | "rails3-devise-rspec-cucumber":https://github.com/RailsApps/rails3-devise-rspec-cucumber | "Devise with RSpec and Cucumber":http://railsapps.github.com/tutorial-rails-devise-rspec-cucumber.html |
-| | "title":link | "rails3-mongoid-devise":https://github.com/RailsApps/rails3-mongoid-devise | "Devise with Mongoid":http://railsapps.github.com/tutorial-rails-mongoid-devise.html |
-| | "title":link | "rails3-mongoid-omniauth":https://github.com/RailsApps/rails3-mongoid-omniauth | "OmniAuth with Mongoid":http://railsapps.github.com/tutorial-rails-mongoid-omniauth.html |
-| | "title":link | "rails3-subdomains":https://github.com/RailsApps/rails3-subdomains | "Subdomains with Devise":http://railsapps.github.com/tutorial-rails-subdomains.html |
-
-
+|_. Getting Started |_. Articles |_. Tutorials |
+| "Rails Tutorial":https://tutorials.railsapps.org/rails-tutorial recommendations | "Heroku and Rails":http://railsapps.github.com/rails-heroku-tutorial.html | "Devise with CanCan and Twitter Bootstrap":https://tutorials.railsapps.org/rails3-bootstrap-devise-cancan |
+| "Rails":http://railsapps.github.com/rails.html resources| "Twitter Bootstrap and Rails":Twitter Bootstrap and Rails | "Rails Membership Site with Stripe":https://tutorials.railsapps.org/rails-stripe-membership-saas |
+| "Installing Rails":http://railsapps.github.com/installing-rails.html | "JavaScript and Rails":http://railsapps.github.com/rails-javascript-include-external.html | "Rails Subscription Site with Recurly":https://tutorials.railsapps.org/rails-recurly-subscription-saas |
+| "Updating Rails":http://railsapps.github.com/updating-rails.html | "Rails Environment Variables":http://railsapps.github.com/rails-environment-variables.html | "Startup Prelaunch Signup Application":http://railsapps.github.com/tutorial-rails-prelaunch-signup.html |
+| "Rails Composer":http://railsapps.github.com/rails-composer/ | "Git with Rails":http://railsapps.github.com/rails-git.html | "Devise with RSpec and Cucumber":http://railsapps.github.com/tutorial-rails-devise-rspec-cucumber.html |
+| "Rails Examples":http://railsapps.github.com/ | "Send Email with Rails":http://railsapps.github.com/rails-send-email.html | "Devise with Mongoid":http://railsapps.github.com/tutorial-rails-mongoid-devise.html |
+| | "Haml and Rails":http://railsapps.github.com/rails-haml.html | "OmniAuth with Mongoid":http://railsapps.github.com/tutorial-rails-mongoid-omniauth.html |
+| | "Rails Default Application Layout":http://railsapps.github.com/rails-default-application-layout.html | "Subdomains with Devise":http://railsapps.github.com/tutorial-rails-subdomains.html |
+| | "HTML5 Boilerplate for Rails Developers":http://railsapps.github.com/rails-html5-boilerplate.html | |
+| | "Example Gemfiles for Rails":http://railsapps.github.com/rails-3-2-example-gemfile.html | |
 
 !https://cruel-carlota.pagodabox.com/9a7ed11e8570e461c585a7afd3722d71(githalytics.com alpha)!
