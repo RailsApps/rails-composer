@@ -679,7 +679,7 @@ say_recipe 'gems'
 ### GEMFILE ###
 
 ## Ruby on Rails
-insert_into_file 'Gemfile', "ruby '1.9.3'\n", :before => "gem 'rails', '3.2.6'" if prefer :deploy, 'heroku'
+insert_into_file('Gemfile', "ruby '1.9.3'\n", before: /^ *gem 'rails'/, force: false) if prefer :deploy, 'heroku'
 
 ## Web Server
 if (prefs[:dev_webserver] == prefs[:prod_webserver])
@@ -697,7 +697,7 @@ end
 
 ## Database Adapter
 gsub_file 'Gemfile', /gem 'sqlite3'\n/, '' unless prefer :database, 'sqlite'
-gem 'mongoid', '>= 3.1.0' if prefer :orm, 'mongoid'
+gem 'mongoid', '>= 3.1.1' if prefer :orm, 'mongoid'
 unless File.open('Gemfile').lines.any?{|line| line.include?('pg')}
   gem 'pg', '>= 0.14.1' if prefer :database, 'postgresql'
 end
@@ -708,14 +708,14 @@ end
 ## Template Engine
 if prefer :templates, 'haml'
   gem 'haml-rails', '>= 0.4'
-  gem 'html2haml', '>= 1.0.0', :group => :development
+  gem 'html2haml', '>= 1.0.1', :group => :development
 end
 if prefer :templates, 'slim'
   gem 'slim', '>= 2.0.0.pre.6'
   gem 'haml2slim', '>= 0.4.6', :group => :development
   # Haml is needed for conversion of HTML to Slim
   gem 'haml-rails', '>= 0.4', :group => :development
-  gem 'html2haml', '>= 1.0.0', :group => :development
+  gem 'html2haml', '>= 1.0.1', :group => :development
 end
 
 ## Testing Framework
@@ -750,7 +750,7 @@ gem 'compass-rails', '>= 1.0.3', :group => :assets if prefer :frontend, 'foundat
 gem 'zurb-foundation', '>= 3.2.5', :group => :assets if prefer :frontend, 'foundation'
 if prefer :bootstrap, 'less'
   gem 'less-rails', '>= 2.2.6', :group => :assets
-  gem 'twitter-bootstrap-rails', '>= 2.2.3', :group => :assets
+  gem 'twitter-bootstrap-rails', '>= 2.2.4', :group => :assets
   # install gem 'therubyracer' to use Less
   gem 'libv8', '>= 3.11.8'
   gem 'therubyracer', '>= 0.11.3', :group => :assets, :platform => :ruby, :require => 'v8'
@@ -1701,7 +1701,7 @@ FILE
     end
   end
   ## DEVISE-DEFAULT
-  unless prefer :authentication, 'omniauth'
+  if prefer :authentication, 'devise'
     append_file 'db/seeds.rb' do <<-FILE
 puts 'DEFAULT USERS'
 user = User.find_or_create_by_email :name => ENV['ADMIN_NAME'].dup, :email => ENV['ADMIN_EMAIL'].dup, :password => ENV['ADMIN_PASSWORD'].dup, :password_confirmation => ENV['ADMIN_PASSWORD'].dup
@@ -2097,74 +2097,24 @@ end # rails-recurly-subscription-saas
 say_recipe 'extras'
 
 config = {}
-config['quiet_assets'] = yes_wizard?("Reduce assets logger noise during development?") if true && true unless config.key?('quiet_assets') || prefs.has_key?(:quiet_assets)
-config['local_env_file'] = yes_wizard?("Use application.yml file for environment variables?") if true && true unless config.key?('local_env_file') || prefs.has_key?(:local_env_file)
-config['better_errors'] = yes_wizard?("Improve error reporting with 'better_errors' during development?") if true && true unless config.key?('better_errors') || prefs.has_key?(:better_errors)
 config['ban_spiders'] = yes_wizard?("Set a robots.txt file to ban spiders?") if true && true unless config.key?('ban_spiders') || prefs.has_key?(:ban_spiders)
-config['rvmrc'] = yes_wizard?("Create a project-specific rvm gemset and .rvmrc?") if true && true unless config.key?('rvmrc') || prefs.has_key?(:rvmrc)
 config['github'] = yes_wizard?("Create a GitHub repository?") if true && true unless config.key?('github') || prefs.has_key?(:github)
+config['local_env_file'] = yes_wizard?("Use application.yml file for environment variables?") if true && true unless config.key?('local_env_file') || prefs.has_key?(:local_env_file)
+config['quiet_assets'] = yes_wizard?("Reduce assets logger noise during development?") if true && true unless config.key?('quiet_assets') || prefs.has_key?(:quiet_assets)
+config['better_errors'] = yes_wizard?("Improve error reporting with 'better_errors' during development?") if true && true unless config.key?('better_errors') || prefs.has_key?(:better_errors)
 @configs[@current_recipe] = config
 
 # Application template recipe for the rails_apps_composer. Change the recipe here:
 # https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/extras.rb
 
-## QUIET ASSETS
-if config['quiet_assets']
-  prefs[:quiet_assets] = true
-end
-if prefs[:quiet_assets]
-  say_wizard "recipe setting quiet_assets for reduced asset pipeline logging"
-  gem 'quiet_assets', '>= 1.0.1', :group => :development
-end
-
-## LOCAL_ENV.YML FILE
-if config['local_env_file']
-  prefs[:local_env_file] = true
-end
-if prefs[:local_env_file]
-  say_wizard "recipe creating application.yml file for environment variables"
-  gem 'figaro', '>= 0.5.3'
-end
-
-## BETTER ERRORS
-if config['better_errors']
-  prefs[:better_errors] = true
-end
-if prefs[:better_errors]
-  say_wizard "recipe adding better_errors gem"
-  gem 'better_errors', '>= 0.6.0', :group => :development
-  gem 'binding_of_caller', '>= 0.6.9', :group => :development
-end
-
-## BAN SPIDERS
-if config['ban_spiders']
-  prefs[:ban_spiders] = true
-end
-if prefs[:ban_spiders]
-  say_wizard "recipe banning spiders by modifying 'public/robots.txt'"
-  after_bundler do
-    gsub_file 'public/robots.txt', /# User-Agent/, 'User-Agent'
-    gsub_file 'public/robots.txt', /# Disallow/, 'Disallow'
-  end
-end
-
-## JSRUNTIME
-case RbConfig::CONFIG['host_os']
-  when /linux/i
-    prefs[:jsruntime] = yes_wizard? "Add 'therubyracer' JavaScript runtime (for Linux users without node.js)?" unless prefs.has_key? :jsruntime
-    if prefs[:jsruntime]
-      # was it already added for bootstrap-less?
-      unless prefer :bootstrap, 'less'
-        say_wizard "recipe adding 'therubyracer' JavaScript runtime gem"
-        gem 'libv8', '>= 3.11.8'
-        gem 'therubyracer', '>= 0.11.3', :group => :assets, :platform => :ruby, :require => 'v8'
-      end
-    end
-end
-
 ## RVMRC
-if config['rvmrc']
-  prefs[:rvmrc] = true
+rvmrc_detected = false
+if File.exist?('.rvmrc')
+  rvmrc_file = File.read('.rvmrc')
+  rvmrc_detected = rvmrc_file.include? app_name
+end
+unless rvmrc_detected
+  prefs[:rvmrc] = yes_wizard? "Create a project-specific rvm gemset and .rvmrc?"
 end
 if prefs[:rvmrc]
   if which("rvm")
@@ -2208,6 +2158,60 @@ if prefs[:rvmrc]
   else
     say_wizard "WARNING! RVM does not appear to be available."
   end
+end
+
+## QUIET ASSETS
+if config['quiet_assets']
+  prefs[:quiet_assets] = true
+end
+if prefs[:quiet_assets]
+  say_wizard "recipe setting quiet_assets for reduced asset pipeline logging"
+  gem 'quiet_assets', '>= 1.0.1', :group => :development
+end
+
+## LOCAL_ENV.YML FILE
+if config['local_env_file']
+  prefs[:local_env_file] = true
+end
+if prefs[:local_env_file]
+  say_wizard "recipe creating application.yml file for environment variables"
+  gem 'figaro', '>= 0.5.3'
+end
+
+## BETTER ERRORS
+if config['better_errors']
+  prefs[:better_errors] = true
+end
+if prefs[:better_errors]
+  say_wizard "recipe adding better_errors gem"
+  gem 'better_errors', '>= 0.6.0', :group => :development
+  gem 'binding_of_caller', '>= 0.7.1', :group => :development, :platforms => [:mri_19, :rbx]
+end
+
+## BAN SPIDERS
+if config['ban_spiders']
+  prefs[:ban_spiders] = true
+end
+if prefs[:ban_spiders]
+  say_wizard "recipe banning spiders by modifying 'public/robots.txt'"
+  after_bundler do
+    gsub_file 'public/robots.txt', /# User-Agent/, 'User-Agent'
+    gsub_file 'public/robots.txt', /# Disallow/, 'Disallow'
+  end
+end
+
+## JSRUNTIME
+case RbConfig::CONFIG['host_os']
+  when /linux/i
+    prefs[:jsruntime] = yes_wizard? "Add 'therubyracer' JavaScript runtime (for Linux users without node.js)?" unless prefs.has_key? :jsruntime
+    if prefs[:jsruntime]
+      # was it already added for bootstrap-less?
+      unless prefer :bootstrap, 'less'
+        say_wizard "recipe adding 'therubyracer' JavaScript runtime gem"
+        gem 'libv8', '>= 3.11.8'
+        gem 'therubyracer', '>= 0.11.3', :group => :assets, :platform => :ruby, :require => 'v8'
+      end
+    end
 end
 
 ## AFTER_EVERYTHING
