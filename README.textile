@@ -6,7 +6,11 @@ It's the Rails generator on steroids. See the "Rails Composer project page":http
 
 The Rails Composer application template is built from recipes provided by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem. Need to customize the Rails Composer application template? Want to build your own application template? Use "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer.
 
-If you’re new to Rails, see recommendations for a "Rails tutorial":https://tutorials.railsapps.org/rails-tutorial and resources for getting started with "Rails":http://railsapps.github.com/rails.html.
+If you're new to Rails, see "What is Ruby? And Rails?":http://railsapps.github.com/what-is-ruby-rails.html,  recommendations for a "Rails tutorial":https://tutorials.railsapps.org/rails-tutorial, and a list of top resources for "Ruby and Rails":http://railsapps.github.com/ruby-and-rails.html.
+
+h3. From the RailsApps Project
+
+The "RailsApps project":http://railsapps.github.com/ provides example applications that developers use as starter apps. Hundreds of developers use the apps, report problems as they arise, and propose solutions. Rails changes frequently; each application is known to work and serves as your personal "reference implementation" so you can stay up to date. Each is accompanied by a tutorial so there is no mystery code. Maintenance and development of the RailsApps applications is supported by subscriptions to the "RailsApps tutorials":https://tutorials.railsapps.org.
 
 h2. !http://twitter-badges.s3.amazonaws.com/t_logo-a.png(Follow on Twitter)!:http://www.twitter.com/rails_apps Follow on Twitter
 
@@ -16,7 +20,7 @@ h2. Dependencies
 
 Before running the Rails Composer tool, you need to install:
 
-* The Ruby language (version 1.9.3)
+* The Ruby language (version 1.9.3 or 2.0.0)
 * Rails 3.2
 
 Check that appropriate versions of Ruby and Rails are installed in your development environment:
@@ -25,15 +29,15 @@ Check that appropriate versions of Ruby and Rails are installed in your developm
 
 Be sure to read "Installing Rails":http://railsapps.github.com/installing-rails.html to make sure your development environment is set up properly.
 
-I recommend using "rvm":https://rvm.io/, the Ruby Version Manager, to manage your Rails versions. Before you run the Rails Composer tool, create a dedicated gemset for your application.
-
 h2. Creating a Starter App
 
-To build a Rails application, run the command (where @myapp@ is the name of your application):
+To build a Rails application using the Rails Composer tool:
 
 <pre>
 $ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb
 </pre>
+
+Replace @myapp@ with the name of your application.
 
 You can use the @-T@ flag to skip Test::Unit files or the @-O@ flag to skip Active Record files:
 
@@ -43,7 +47,33 @@ $ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/comp
 
 Skip Test::Unit if you plan to use RSpec for unit testing. Skip Active Record if you plan to use a NoSQL datastore with an ORM such as Mongoid.
 
-See the "Troubleshooting" section below if you see errors.
+See the "Troubleshooting" section below if you see errors. In general, you'll avoid many problems if you create your application using RVM as described below.
+
+h2. Creating a Starter App Using RVM
+
+I recommend using "rvm":https://rvm.io/, the Ruby Version Manager, to manage your Rails versions, as described in the "Installing Rails":http://railsapps.github.com/installing-rails.html article.
+
+Here's how to generate a new Rails application using the Rails Composer tool and RVM:
+
+<pre>
+$ mkdir myapp
+$ cd myapp
+$ rvm use ruby-2.0.0@myapp --rvmrc --create
+$ gem install rails
+$ rails new . -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb
+</pre>
+
+You can add the @-T@ flag to skip Test::Unit files or the @-O@ flag to skip Active Record files. Skip Test::Unit if you plan to use RSpec for unit testing. Skip Active Record if you plan to use a NoSQL datastore with an ORM such as Mongoid.
+
+Instead of installing Rails into the global gemset and running @rails new@, we'll create a root directory for a new application, create a new gemset, install Rails, and then generate a starter application.
+
+When we create the gemset, the option "--rvmrc" creates an *.rvmrc* file in the root directory. RVM recognizes an *.rvmrc* file in an application's root directory and loads the required version of Ruby and the correct gemset whenever you enter the directory.
+
+When we create the gemset, it will be empty (though it inherits use of all the gems in the global gemset). We immediately install Rails. The command @gem install rails@ installs the most recent stable release of Rails.
+
+Finally we run @rails new .@. We use the Unix "dot" convention to refer to the current directory. This assigns the name of the directory to the new application.
+
+This approach is different from the way most beginners are taught to create a Rails application. Our approach makes it easy to create a project-specific gemset to avoid clashes between gem versions when using the Rails Composer tool.
 
 h2. Your Options
 
@@ -319,8 +349,8 @@ Copyright 2012 Daniel Kehoe
 h2. Useful Links
 
 |_. Getting Started |_. Articles |_. Tutorials |
-| "Rails Tutorial":https://tutorials.railsapps.org/rails-tutorial (recommendations) | "Heroku and Rails":http://railsapps.github.com/rails-heroku-tutorial.html | "Devise with CanCan and Twitter Bootstrap":https://tutorials.railsapps.org/rails3-bootstrap-devise-cancan |
-| "Rails":http://railsapps.github.com/rails.html (resources)| "Twitter Bootstrap and Rails":http://railsapps.github.com/twitter-bootstrap-rails.html | "Rails Membership Site with Stripe":https://tutorials.railsapps.org/rails-stripe-membership-saas |
+| "Rails Tutorial":https://tutorials.railsapps.org/rails-tutorial | "Heroku and Rails":http://railsapps.github.com/rails-heroku-tutorial.html | "Devise with CanCan and Twitter Bootstrap":https://tutorials.railsapps.org/rails3-bootstrap-devise-cancan |
+| "Ruby and Rails":http://railsapps.github.com/ruby-and-rails.html | "Twitter Bootstrap and Rails":http://railsapps.github.com/twitter-bootstrap-rails.html | "Rails Membership Site with Stripe":https://tutorials.railsapps.org/rails-stripe-membership-saas |
 | "Installing Rails":http://railsapps.github.com/installing-rails.html | "JavaScript and Rails":http://railsapps.github.com/rails-javascript-include-external.html | "Rails Subscription Site with Recurly":https://tutorials.railsapps.org/rails-recurly-subscription-saas |
 | "Updating Rails":http://railsapps.github.com/updating-rails.html | "Rails Environment Variables":http://railsapps.github.com/rails-environment-variables.html | "Startup Prelaunch Signup Application":http://railsapps.github.com/tutorial-rails-prelaunch-signup.html |
 | "Rails Composer":http://railsapps.github.com/rails-composer/ | "Git and GitHub with Rails":http://railsapps.github.com/rails-git.html | "Devise with RSpec and Cucumber":http://railsapps.github.com/tutorial-rails-devise-rspec-cucumber.html |
