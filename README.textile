@@ -225,7 +225,7 @@ h4. Login
 If you've created a version of the application that sets up a default user, log in with:
 
 * email: user@example.com
-* password: please
+* password: changeme
 
 You should delete or change any pre-configured logins before you deploy your application.
 
