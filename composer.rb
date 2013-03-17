@@ -2155,6 +2155,7 @@ if prefs[:rvmrc]
     run "rvm gemset list"
     copy_from_repo '.rvmrc'
     gsub_file '.rvmrc', /App_Name/, "#{app_name}"
+    gsub_file '.rvmrc', /-2.0.0/, "-#{RUBY_VERSION}"
   else
     say_wizard "WARNING! RVM does not appear to be available."
   end
