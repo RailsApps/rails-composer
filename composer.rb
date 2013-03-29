@@ -2111,8 +2111,12 @@ if File.exist?('.rvmrc')
   rvmrc_file = File.read('.rvmrc')
   rvmrc_detected = rvmrc_file.include? app_name
 end
+if File.exist?('.ruby-gemset')
+  rvmrc_file = File.read('.ruby-gemset')
+  rvmrc_detected = rvmrc_file.include? app_name
+end
 unless rvmrc_detected || prefs[:rvmrc]
-  prefs[:rvmrc] = yes_wizard? "Use or create a project-specific rvm gemset and .rvmrc?"
+  prefs[:rvmrc] = yes_wizard? "Use or create a project-specific rvm gemset?"
 end
 if prefs[:rvmrc]
   if which("rvm")
@@ -2151,9 +2155,16 @@ if prefs[:rvmrc]
       raise
     end
     run "rvm gemset list"
-    copy_from_repo '.rvmrc'
-    gsub_file '.rvmrc', /App_Name/, "#{app_name}"
-    gsub_file '.rvmrc', /-2.0.0/, "-#{RUBY_VERSION}"
+    if File.exist?('.ruby-version')
+      say_wizard ".ruby-version file already exists"
+    else
+      create_file '.ruby-version', "#{RUBY_VERSION}\n"
+    end
+    if File.exist?('.ruby-gemset')
+      say_wizard ".ruby-gemset file already exists"
+    else
+      create_file '.ruby-gemset', "#{app_name}\n"
+    end
   else
     say_wizard "WARNING! RVM does not appear to be available."
   end
