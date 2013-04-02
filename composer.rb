@@ -503,6 +503,7 @@ if recipes.include? 'testing'
   prefs[:unit_test] = multiple_choice "Unit testing?", [["Test::Unit", "test_unit"], ["RSpec", "rspec"], ["MiniTest", "minitest"]] unless prefs.has_key? :unit_test
   prefs[:integration] = multiple_choice "Integration testing?", [["None", "none"], ["RSpec with Capybara", "rspec-capybara"],
     ["Cucumber with Capybara", "cucumber"], ["Turnip with Capybara", "turnip"], ["MiniTest with Capybara", "minitest-capybara"]] unless prefs.has_key? :integration
+  prefs[:continuous_testing] = multiple_choice "Continuous testing?", [["None", "none"], ["Guard", "guard"]] unless prefs.has_key? :continuous_testing
   prefs[:fixtures] = multiple_choice "Fixture replacement?", [["None","none"], ["Factory Girl","factory_girl"], ["Machinist","machinist"], ["Fabrication","fabrication"]] unless prefs.has_key? :fixtures
 end
 
@@ -738,6 +739,15 @@ if prefer :integration, 'cucumber'
   gem 'capybara', '>= 2.0.3', :group => :test
 end
 gem 'turnip', '>= 1.1.0', :group => :test if prefer :integration, 'turnip'
+if prefer :continuous_testing, 'guard'
+  gem 'guard-bundler', '>= 1.0.0', :group => :development
+  gem 'guard-cucumber', '>= 1.4.0', :group => :development if prefer :integration, 'cucumber'
+  gem 'guard-rails', '>= 0.4.0', :group => :development
+  gem 'guard-rspec', '>= 2.5.2', :group => :development if prefer :unit_test, 'rspec'
+  gem 'rb-inotify', '>= 0.9.0', :group => :development, :require => false
+  gem 'rb-fsevent', '>= 0.9.3', :group => :development, :require => false
+  gem 'rb-fchange', '>= 0.0.6', :group => :development, :require => false
+end
 gem 'factory_girl_rails', '>= 4.2.0', :group => [:development, :test] if prefer :fixtures, 'factory_girl'
 gem 'fabrication', '>= 2.3.0', :group => [:development, :test] if prefer :fixtures, 'fabrication'
 gem 'machinist', '>= 2.0', :group => :test if prefer :fixtures, 'machinist'
@@ -1011,6 +1021,11 @@ RUBY
   if prefer :fixtures, 'machinist'
     say_wizard "generating blueprints file for 'machinist'"
     generate 'machinist:install'
+  end
+  ### GUARD
+  if prefer :continuous_testing, 'guard'
+    say_wizard "recipe initializing Guard"
+    run 'bundle exec guard init'
   end
   ### GIT ###
   git :add => '-A' if prefer :git, true

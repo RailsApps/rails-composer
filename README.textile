@@ -58,7 +58,7 @@ Here's how to generate a new Rails application using the Rails Composer tool and
 <pre>
 $ mkdir myapp
 $ cd myapp
-$ rvm use ruby-2.0.0@myapp --rvmrc --create
+$ rvm use ruby-2.0.0@myapp --ruby-version --create
 $ gem install rails
 $ rails new . -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb
 </pre>
@@ -67,7 +67,7 @@ You can add the @-T@ flag to skip Test::Unit files or the @-O@ flag to skip Acti
 
 Instead of installing Rails into the global gemset and running @rails new@, we'll create a root directory for a new application, create a new gemset, install Rails, and then generate a starter application.
 
-When we create the gemset, the option "--rvmrc" creates an *.rvmrc* file in the root directory. RVM recognizes an *.rvmrc* file in an application's root directory and loads the required version of Ruby and the correct gemset whenever you enter the directory.
+When we create the gemset, the option "--ruby-version" creates *.ruby-version* and *.ruby-gemset* files in the root directory. RVM recognizes these files in an application's root directory and loads the required version of Ruby and the correct gemset whenever you enter the directory.
 
 When we create the gemset, it will be empty (though it inherits use of all the gems in the global gemset). We immediately install Rails. The command @gem install rails@ installs the most recent stable release of Rails.
 
