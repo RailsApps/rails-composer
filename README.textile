@@ -117,7 +117,7 @@ question  Database used in development?
 question  Template engine?
       1)  ERB
       2)  Haml
-      3)  Slim
+      3)  Slim (experimental)
 
 question  Unit testing?
       1)  Test::Unit
