@@ -766,7 +766,6 @@ end
 
 ## Email
 gem 'sendgrid', '>= 1.0.1' if prefer :email, 'sendgrid'
-gem 'hominid', '>= 3.0.5' if prefer :email, 'mandrill'
 
 ## Authentication (Devise)
 gem 'devise', '>= 2.2.3' if prefer :authentication, 'devise'
@@ -805,8 +804,7 @@ end
 
 ## Signup App
 if prefer :railsapps, 'rails-prelaunch-signup'
-  gem 'google_visualr', '>= 2.1.7'
-  gem 'jquery-datatables-rails', '>= 1.11.2'
+  gem 'gibbon', '>= 0.4.2'
 end
 
 ## Gems from a defaults file or added interactively
@@ -1808,11 +1806,6 @@ if prefer :railsapps, 'rails-prelaunch-signup'
       end
     end
 
-    # >-------------------------------[ Migrations ]--------------------------------<
-    generate 'migration AddOptinToUsers opt_in:boolean'
-    run 'bundle exec rake db:drop'
-    run 'bundle exec rake db:migrate'
-
     # >-------------------------------[ Models ]--------------------------------<
 
     copy_from_repo 'app/models/user.rb', :repo => repo
@@ -1849,7 +1842,6 @@ if prefer :railsapps, 'rails-prelaunch-signup'
     copy_from_repo 'app/views/user_mailer/welcome_email.html.erb', :repo => repo
     copy_from_repo 'app/views/user_mailer/welcome_email.text.erb', :repo => repo
     copy_from_repo 'app/views/users/index.html.erb', :repo => repo
-    remove_file 'app/views/users/_user.html.erb'
     copy_from_repo 'public/thankyou.html', :repo => repo
 
     # >-------------------------------[ Routes ]--------------------------------<
@@ -1861,7 +1853,6 @@ if prefer :railsapps, 'rails-prelaunch-signup'
     # >-------------------------------[ Assets ]--------------------------------<
 
     copy_from_repo 'app/assets/javascripts/application.js', :repo => repo
-    copy_from_repo 'app/assets/javascripts/users.js.coffee', :repo => repo
     copy_from_repo 'app/assets/stylesheets/application.css.scss', :repo => repo
 
     # >-------------------------------[ Cucumber ]--------------------------------<
