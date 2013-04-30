@@ -1,16 +1,16 @@
-h1. !http://railsapps.github.com/images/rails-36x36.jpg(Rails Composer)! Rails Composer
+h1. !http://railsapps.github.io/images/rails-36x36.jpg(Rails Composer)! Rails Composer
 
 An application template that creates a Rails 3.2 starter app.
 
-It's the Rails generator on steroids. See the "Rails Composer project page":http://railsapps.github.com/rails-composer.
+It's the Rails generator on steroids. See the "Rails Composer project page":http://railsapps.github.io/rails-composer.
 
 The Rails Composer application template is built from recipes provided by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem. Need to customize the Rails Composer application template? Want to build your own application template? Use "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer.
 
-If you're new to Rails, see "What is Ruby? And Rails?":http://railsapps.github.com/what-is-ruby-rails.html,  recommendations for a "Rails tutorial":https://tutorials.railsapps.org/rails-tutorial, and a list of top resources for "Ruby and Rails":http://railsapps.github.com/ruby-and-rails.html.
+If you're new to Rails, see "What is Ruby? And Rails?":http://railsapps.github.io/what-is-ruby-rails.html,  recommendations for a "Rails tutorial":https://tutorials.railsapps.org/rails-tutorial, and a list of top resources for "Ruby and Rails":http://railsapps.github.io/ruby-and-rails.html.
 
 h3. From the RailsApps Project
 
-The "RailsApps project":http://railsapps.github.com/ provides example applications that developers use as starter apps. Hundreds of developers use the apps, report problems as they arise, and propose solutions. Rails changes frequently; each application is known to work and serves as your personal "reference implementation" so you can stay up to date. Each is accompanied by a tutorial so there is no mystery code. Maintenance and development of the RailsApps applications is supported by subscriptions to the "RailsApps tutorials":https://tutorials.railsapps.org.
+The "RailsApps project":http://railsapps.github.io/ provides example applications that developers use as starter apps. Hundreds of developers use the apps, report problems as they arise, and propose solutions. Rails changes frequently; each application is known to work and serves as your personal "reference implementation" so you can stay up to date. Each is accompanied by a tutorial so there is no mystery code. Maintenance and development of the RailsApps applications is supported by subscriptions to the "RailsApps tutorials":https://tutorials.railsapps.org.
 
 h2. !http://twitter-badges.s3.amazonaws.com/t_logo-a.png(Follow on Twitter)!:http://www.twitter.com/rails_apps Follow on Twitter
 
@@ -27,7 +27,7 @@ Check that appropriate versions of Ruby and Rails are installed in your developm
 @$ ruby -v@
 @$ rails -v@
 
-Be sure to read "Installing Rails":http://railsapps.github.com/installing-rails.html to make sure your development environment is set up properly.
+Be sure to read "Installing Rails":http://railsapps.github.io/installing-rails.html to make sure your development environment is set up properly.
 
 h2. Creating a Starter App
 
@@ -51,7 +51,7 @@ See the "Troubleshooting" section below if you see errors. In general, you'll av
 
 h2. Creating a Starter App Using RVM
 
-I recommend using "rvm":https://rvm.io/, the Ruby Version Manager, to manage your Rails versions, as described in the "Installing Rails":http://railsapps.github.com/installing-rails.html article.
+I recommend using "rvm":https://rvm.io/, the Ruby Version Manager, to manage your Rails versions, as described in the "Installing Rails":http://railsapps.github.io/installing-rails.html article.
 
 Here's how to generate a new Rails application using the Rails Composer tool and RVM:
 
@@ -81,7 +81,7 @@ The Rails Composer application template will ask you for various preferences, so
 
 If you choose "I want to build my own application," you will get a full set of choices.
 
-If you choose one of the RailsApps example applications, you will get fewer choices but you will get an exact copy of a known working example application. See "Rails example applications":http://railsapps.github.com/ for more information.
+If you choose one of the RailsApps example applications, you will get fewer choices but you will get an exact copy of a known working example application. See "Rails example applications":http://railsapps.github.io/ for more information.
 
 Here's an example:
 
@@ -252,13 +252,13 @@ For easy deployment, use a “platform as a service” provider such as:
 
 For deployment on Heroku, see the article:
 
-* "Rails on Heroku":http://railsapps.github.com/rails-heroku-tutorial.html
+* "Rails on Heroku":http://railsapps.github.io/rails-heroku-tutorial.html
 
 h2. Troubleshooting
 
 Problems? Please check both "issues for the Rails Composer tool":https://github.com/RailsApps/rails-composer/issues and the "issues for the rails_apps_composer gem":https://github.com/RailsApps/rails_apps_composer/issues.
 
-You should review the article "Installing Rails":http://railsapps.github.com/installing-rails.html to make sure you've updated all the components that are required to run Rails successfully.
+You should review the article "Installing Rails":http://railsapps.github.io/installing-rails.html to make sure you've updated all the components that are required to run Rails successfully.
 
 h4. Problems with "Could not be loaded... You have already activated..."
 
@@ -272,11 +272,11 @@ Error: You have already activated ..., but your Gemfile requires ....
 Using bundle exec may solve this.
 </pre>
 
-It's due to conflicting gem versions. See the article "Rails Error: “You have already activated (…)”":http://railsapps.github.com/rails-error-you-have-already-activated.html.
+It's due to conflicting gem versions. See the article "Rails Error: “You have already activated (…)”":http://railsapps.github.io/rails-error-you-have-already-activated.html.
 
 h4. Problems with "Certificate Verify Failed"
 
-Are you getting an error "OpenSSL certificate verify failed" when you try to generate a new Rails app from an application template? See suggestions to resolve the error "Certificate Verify Failed":http://railsapps.github.com/openssl-certificate-verify-failed.html.
+Are you getting an error "OpenSSL certificate verify failed" when you try to generate a new Rails app from an application template? See suggestions to resolve the error "Certificate Verify Failed":http://railsapps.github.io/openssl-certificate-verify-failed.html.
 
 h4. Problems with "Segmentation Fault"
 
@@ -315,8 +315,8 @@ h4. Similar Projects
 
 There are many similar projects:
 
-* "Rails application template projects":http://railsapps.github.com/rails-application-templates.html
-* "Rails examples, tutorials, and starter apps":http://railsapps.github.com/rails-examples-tutorials.html.
+* "Rails application template projects":http://railsapps.github.io/rails-application-templates.html
+* "Rails examples, tutorials, and starter apps":http://railsapps.github.io/rails-examples-tutorials.html.
 
 h4. Issues
 
@@ -349,17 +349,17 @@ Copyright 2012 Daniel Kehoe
 h2. Useful Links
 
 |_. Getting Started |_. Articles |_. Tutorials |
-| "Rails Tutorial":https://tutorials.railsapps.org/rails-tutorial | "Heroku and Rails":http://railsapps.github.com/rails-heroku-tutorial.html | "Devise with CanCan and Twitter Bootstrap":https://tutorials.railsapps.org/rails3-bootstrap-devise-cancan |
-| "Ruby and Rails":http://railsapps.github.com/ruby-and-rails.html | "Twitter Bootstrap and Rails":http://railsapps.github.com/twitter-bootstrap-rails.html | "Rails Membership Site with Stripe":https://tutorials.railsapps.org/rails-stripe-membership-saas |
-| "Installing Rails":http://railsapps.github.com/installing-rails.html | "JavaScript and Rails":http://railsapps.github.com/rails-javascript-include-external.html | "Rails Subscription Site with Recurly":https://tutorials.railsapps.org/rails-recurly-subscription-saas |
-| "Updating Rails":http://railsapps.github.com/updating-rails.html | "Rails Environment Variables":http://railsapps.github.com/rails-environment-variables.html | "Startup Prelaunch Signup Application":http://railsapps.github.com/tutorial-rails-prelaunch-signup.html |
-| "Rails Composer":http://railsapps.github.com/rails-composer/ | "Git and GitHub with Rails":http://railsapps.github.com/rails-git.html | "Devise with RSpec and Cucumber":http://railsapps.github.com/tutorial-rails-devise-rspec-cucumber.html |
-| "Rails Examples":http://railsapps.github.com/ | "Send Email with Rails":http://railsapps.github.com/rails-send-email.html | "Devise with Mongoid":http://railsapps.github.com/tutorial-rails-mongoid-devise.html |
-| "Rails Starter Apps":http://railsapps.github.com/rails-examples-tutorials.html | "Haml and Rails":http://railsapps.github.com/rails-haml.html | "OmniAuth with Mongoid":http://railsapps.github.com/tutorial-rails-mongoid-omniauth.html |
-| | "Rails Application Layout":http://railsapps.github.com/rails-default-application-layout.html | "Subdomains with Devise":http://railsapps.github.com/tutorial-rails-subdomains.html |
-| | "HTML5 Boilerplate for Rails":http://railsapps.github.com/rails-html5-boilerplate.html | |
-| | "Example Gemfiles for Rails":http://railsapps.github.com/rails-3-2-example-gemfile.html | |
-| | "Rails Application Templates":http://railsapps.github.com/rails-application-templates.html | |
+| "Rails Tutorial":https://tutorials.railsapps.org/rails-tutorial | "Heroku and Rails":http://railsapps.github.io/rails-heroku-tutorial.html | "Devise with CanCan and Twitter Bootstrap":https://tutorials.railsapps.org/rails3-bootstrap-devise-cancan |
+| "Ruby and Rails":http://railsapps.github.io/ruby-and-rails.html | "Twitter Bootstrap and Rails":http://railsapps.github.io/twitter-bootstrap-rails.html | "Rails Membership Site with Stripe":https://tutorials.railsapps.org/rails-stripe-membership-saas |
+| "Installing Rails":http://railsapps.github.io/installing-rails.html | "JavaScript and Rails":http://railsapps.github.io/rails-javascript-include-external.html | "Rails Subscription Site with Recurly":https://tutorials.railsapps.org/rails-recurly-subscription-saas |
+| "Updating Rails":http://railsapps.github.io/updating-rails.html | "Rails Environment Variables":http://railsapps.github.io/rails-environment-variables.html | "Startup Prelaunch Signup Application":http://railsapps.github.io/tutorial-rails-prelaunch-signup.html |
+| "Rails Composer":http://railsapps.github.io/rails-composer/ | "Git and GitHub with Rails":http://railsapps.github.io/rails-git.html | "Devise with RSpec and Cucumber":http://railsapps.github.io/tutorial-rails-devise-rspec-cucumber.html |
+| "Rails Examples":http://railsapps.github.io/ | "Send Email with Rails":http://railsapps.github.io/rails-send-email.html | "Devise with Mongoid":http://railsapps.github.io/tutorial-rails-mongoid-devise.html |
+| "Rails Starter Apps":http://railsapps.github.io/rails-examples-tutorials.html | "Haml and Rails":http://railsapps.github.io/rails-haml.html | "OmniAuth with Mongoid":http://railsapps.github.io/tutorial-rails-mongoid-omniauth.html |
+| | "Rails Application Layout":http://railsapps.github.io/rails-default-application-layout.html | "Subdomains with Devise":http://railsapps.github.io/tutorial-rails-subdomains.html |
+| | "HTML5 Boilerplate for Rails":http://railsapps.github.io/rails-html5-boilerplate.html | |
+| | "Example Gemfiles for Rails":http://railsapps.github.io/rails-3-2-example-gemfile.html | |
+| | "Rails Application Templates":http://railsapps.github.io/rails-application-templates.html | |
 
 
 !https://cruel-carlota.pagodabox.com/9a7ed11e8570e461c585a7afd3722d71(githalytics.com alpha)!

@@ -892,7 +892,7 @@ after_bundler do
     gsub_file 'config/application.yml', /# STRIPE_.*\n/, ''
     prepend_to_file 'config/application.yml' do <<-FILE
 # Add account credentials and API keys here.
-# See http://railsapps.github.com/rails-environment-variables.html
+# See http://railsapps.github.io/rails-environment-variables.html
 # This file should be listed in .gitignore to keep your settings secret!
 # Each entry sets a local environment variable and overrides ENV variables in the Unix shell.
 # For example, setting:
@@ -1687,7 +1687,7 @@ FILE
   ### DATABASE SEED ###
   append_file 'db/seeds.rb' do <<-FILE
 # Environment variables (ENV['...']) are set in the file config/application.yml.
-# See http://railsapps.github.com/rails-environment-variables.html
+# See http://railsapps.github.io/rails-environment-variables.html
 FILE
   end
   if (prefer :authorization, 'cancan')
