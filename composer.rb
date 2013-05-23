@@ -805,6 +805,7 @@ end
 ## Signup App
 if prefer :railsapps, 'rails-prelaunch-signup'
   gem 'gibbon', '>= 0.4.2'
+  gem 'selenium-webdriver', '~> 2.32.1'
 end
 
 ## Gems from a defaults file or added interactively
