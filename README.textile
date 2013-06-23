@@ -6,7 +6,7 @@ It's the Rails generator on steroids. See the "Rails Composer project page":http
 
 The Rails Composer application template is built from recipes provided by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem. Need to customize the Rails Composer application template? Want to build your own application template? Use "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer.
 
-If you're new to Rails, see "What is Ruby? And Rails?":http://railsapps.github.io/what-is-ruby-rails.html,  recommendations for a "Rails tutorial":https://tutorials.railsapps.org/rails-tutorial, and a list of top resources for "Ruby and Rails":http://railsapps.github.io/ruby-and-rails.html.
+If you're new to Rails, see "What is Ruby on Rails?":http://railsapps.github.io/what-is-ruby-rails.html,  recommendations for a "Rails tutorial":https://tutorials.railsapps.org/rails-tutorial, and a list of top resources for "Ruby and Rails":http://railsapps.github.io/ruby-and-rails.html.
 
 h3. From the RailsApps Project
 
@@ -20,8 +20,10 @@ h2. Dependencies
 
 Before running the Rails Composer tool, you need to install:
 
-* The Ruby language (version 1.9.3 or 2.0.0)
+* The Ruby language (version 2.0.0)
 * Rails 3.2
+
+Rails 4.0.0 will not work due to an unresolved "issue involving a minitest gem version conflict":https://github.com/RailsApps/rails_apps_composer/issues/220.
 
 Check that appropriate versions of Ruby and Rails are installed in your development environment:
 @$ ruby -v@
