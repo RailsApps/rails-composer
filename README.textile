@@ -21,9 +21,7 @@ h2. Dependencies
 Before running the Rails Composer tool, you need to install:
 
 * The Ruby language (version 2.0.0)
-* Rails 3.2
-
-Rails 4.0.0 will not work due to an unresolved "issue involving a minitest gem version conflict":https://github.com/RailsApps/rails_apps_composer/issues/220.
+* Rails 3.2 or Rails 4.0
 
 Check that appropriate versions of Ruby and Rails are installed in your development environment:
 @$ ruby -v@

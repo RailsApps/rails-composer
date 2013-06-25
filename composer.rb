@@ -101,7 +101,7 @@ module Gemfile
 end
 def add_gem(*all) Gemfile.add(*all); end
 
-@recipes = ["core", "git", "railsapps", "setup", "readme", "gems", "testing", "email", "models", "controllers", "views", "routes", "frontend", "init", "prelaunch", "saas", "extras"]
+@recipes = ["core", "git", "railsapps", "setup", "readme", "gems", "testing", "email", "models", "controllers", "views", "routes", "frontend", "init", "apps4", "prelaunch", "saas", "extras"]
 @prefs = {}
 @gems = []
 @diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["controllers", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"]]
@@ -263,7 +263,7 @@ when "3"
     raise StandardError.new "Rails #{Rails::VERSION::STRING} is not supported. Try 3.1 or newer."
   end
 when "4"
-  say_wizard "\033[1m\033[36m" + "WARNING! See GitHub for issues with Rails #{Rails::VERSION::STRING}." + "\033[0m"
+  say_wizard "You are using Rails version #{Rails::VERSION::STRING}."
 else
   say_wizard "You are using Rails version #{Rails::VERSION::STRING} which is not supported. Try 3.1 or newer."
   raise StandardError.new "Rails #{Rails::VERSION::STRING} is not supported. Try 3.1 or newer."
@@ -344,13 +344,12 @@ when "3"
     ["rails3-subdomains", "rails3-subdomains"]] unless prefs.has_key? :railsapps
 when "4"
   prefs[:apps4] = multiple_choice "Install an example application for Rails 4.0?",
-    [["simple-test", "simple-test"],
-    ["I want to build my own application", "none"],
-    ["Build a RailsApps starter application", "railsapps"],
-    ["Build a contributed application", "contributed_app"]] unless prefs.has_key? :apps4
+    [["Build a RailsApps starter application", "railsapps"],
+    ["Build a contributed application", "contributed_app"],
+    ["I want to build my own application", "none"]] unless prefs.has_key? :apps4
   case prefs[:apps4]
     when 'railsapps'
-      prefs[:apps4] = multiple_choice "Only one starter app is currently available.",
+      prefs[:apps4] = multiple_choice "One starter app is available for Rails 4.0. More to come.",
         [["learn-rails", "learn-rails"]]
     when 'contributed_app'
       prefs[:apps4] = multiple_choice "No contributed applications are available.",
@@ -813,7 +812,7 @@ say_recipe 'gems'
 ### GEMFILE ###
 
 ## Ruby on Rails
-insert_into_file('Gemfile', "ruby '#{RUBY_VERSION}'\n", :before => /^ *gem 'rails'/, :force => false) if prefer :deploy, 'heroku'
+insert_into_file('Gemfile', "ruby '#{RUBY_VERSION}'\n", :before => /^ *gem 'rails'/, :force => false)
 
 ## Web Server
 if (prefs[:dev_webserver] == prefs[:prod_webserver])
@@ -1891,6 +1890,102 @@ end # after_everything
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
 # >-------------------------- templates/recipe.erb ---------------------------start<
+# >---------------------------------[ apps4 ]---------------------------------<
+@current_recipe = "apps4"
+@before_configs["apps4"].call if @before_configs["apps4"]
+say_recipe 'apps4'
+@configs[@current_recipe] = config
+# >---------------------------- recipes/apps4.rb -----------------------------start<
+
+# Application template recipe for the rails_apps_composer. Change the recipe here:
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/apps4.rb
+
+if prefer :apps4, 'learn-rails'
+
+  # >-------------------------------[ Gems ]--------------------------------<
+
+  add_gem 'activerecord-tableless'
+  add_gem 'high_voltage'
+  add_gem 'gibbon'
+  gsub_file 'Gemfile', /gem 'sqlite3'\n/, ''
+  add_gem 'sqlite3', :group => :development
+  add_gem 'pg', :group => :production
+  add_gem 'thin', :group => :production
+  add_gem 'rails_on_heroku', :group => :production
+
+  # >-------------------------------[ after_everything ]--------------------------------<
+
+  after_everything do
+    say_wizard "recipe running after 'bundle install'"
+    repo = 'https://raw.github.com/RailsApps/learn-rails/master/'
+
+    # >-------------------------------[ Clean up starter app ]--------------------------------<
+
+    gsub_file 'Gemfile', /gem 'sdoc'/, "# gem 'sdoc'"
+    # remove commented lines and multiple blank lines from Gemfile
+    # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
+    gsub_file 'Gemfile', /#.*\n/, "\n"
+    gsub_file 'Gemfile', /\n^\s*\n/, "\n"
+    # remove commented lines and multiple blank lines from config/routes.rb
+    gsub_file 'config/routes.rb', /  #.*\n/, "\n"
+    gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
+    # GIT
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: clean up starter app"' if prefer :git, true
+
+    # >-------------------------------[ Models ]--------------------------------<
+
+    copy_from_repo 'app/models/contact.rb', :repo => repo
+    copy_from_repo 'app/models/visitor.rb', :repo => repo
+
+    # >-------------------------------[ Init ]--------------------------------<
+    copy_from_repo 'config/application.yml', :repo => repo
+    remove_file 'config/application.example.yml'
+    copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
+
+    # >-------------------------------[ Controllers ]--------------------------------<
+
+    copy_from_repo 'app/controllers/contacts_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/visitors_controller.rb', :repo => repo
+
+    # >-------------------------------[ Mailers ]--------------------------------<
+
+    generate 'mailer UserMailer'
+    copy_from_repo 'app/mailers/user_mailer.rb', :repo => repo
+
+    # >-------------------------------[ Views ]--------------------------------<
+
+    copy_from_repo 'app/views/contacts/new.html.erb', :repo => repo
+    copy_from_repo 'app/views/layouts/_messages.html.erb', :repo => repo
+    copy_from_repo 'app/views/layouts/_navigation.html.erb', :repo => repo
+    copy_from_repo 'app/views/layouts/application.html.erb', :repo => repo
+    copy_from_repo 'app/views/pages/about.html.erb', :repo => repo
+    copy_from_repo 'app/views/user_mailer/contact_email.html.erb', :repo => repo
+    copy_from_repo 'app/views/user_mailer/contact_email.text.erb', :repo => repo
+    copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
+
+    # >-------------------------------[ Routes ]--------------------------------<
+
+    copy_from_repo 'config/routes.rb', :repo => repo
+    ### CORRECT APPLICATION NAME ###
+    gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
+
+    # >-------------------------------[ Assets ]--------------------------------<
+
+    copy_from_repo 'app/assets/javascripts/application.js', :repo => repo
+    copy_from_repo 'app/assets/javascripts/segmentio.js', :repo => repo
+    copy_from_repo 'app/assets/stylesheets/application.css.scss', :repo => repo
+    copy_from_repo 'app/assets/stylesheets/bootstrap_and_overrides.css.scss', :repo => repo
+
+    ### GIT ###
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: learn-rails app"' if prefer :git, true
+  end # after_bundler
+end # learn-rails
+# >---------------------------- recipes/apps4.rb -----------------------------end<
+# >-------------------------- templates/recipe.erb ---------------------------end<
+
+# >-------------------------- templates/recipe.erb ---------------------------start<
 # >-------------------------------[ prelaunch ]-------------------------------<
 @current_recipe = "prelaunch"
 @before_configs["prelaunch"].call if @before_configs["prelaunch"]
@@ -2452,7 +2547,6 @@ end
 # >-----------------------------[ Run 'After Bundler' Callbacks ]-------------------------------<
 
 say_wizard "Running 'after bundler' callbacks."
-require 'bundler/setup'
 if prefer :templates, 'haml'
   say_wizard "importing html2haml conversion tool"
   require 'html2haml'
