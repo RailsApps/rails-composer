@@ -828,6 +828,9 @@ else
   add_gem 'puma', :group => :production if prefer :prod_webserver, 'puma'
 end
 
+## Rails 4.0 attr_accessible Compatibility
+add_gem 'protected_attributes' if Rails::VERSION::MAJOR.to_s == "4"
+
 ## Database Adapter
 gsub_file 'Gemfile', /gem 'sqlite3'\n/, '' unless prefer :database, 'sqlite'
 add_gem 'mongoid' if prefer :orm, 'mongoid'
@@ -919,7 +922,11 @@ if prefer :authorization, 'cancan'
 end
 
 ## Form Builder
-add_gem 'simple_form' if prefer :form_builder, 'simple_form'
+if Rails::VERSION::MAJOR.to_s == "4"
+  add_gem 'simple_form', '~> 3.0.0.rc' if prefer :form_builder, 'simple_form'
+else
+  add_gem 'simple_form' if prefer :form_builder, 'simple_form'
+end
 
 ## Membership App
 if prefer :railsapps, 'rails-stripe-membership-saas'
@@ -1679,7 +1686,11 @@ after_bundler do
   ### USER_ACCOUNTS ###
   if ['users_app','admin_app'].include? prefs[:starter_app]
     ## DEVISE
-    copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/' if prefer :authentication, 'devise'
+    if prefer :authentication, 'devise'
+      copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
+      ## Rails 4.0 doesn't allow two 'root' routes
+      gsub_file 'config/routes.rb', /authenticated :user do\n.*\n.*\n  /, '' if Rails::VERSION::MAJOR.to_s == "4"
+    end
     ## OMNIAUTH
     copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/' if prefer :authentication, 'omniauth'
   end
@@ -1833,6 +1844,8 @@ YAML.load(ENV['ROLES']).each do |role|
 end
 FILE
       end
+      ## Fix db seed for Rails 4.0
+      gsub_file 'db/seeds.rb', /{ :name => role }/, 'role' if Rails::VERSION::MAJOR.to_s == "4"
     else
       append_file 'db/seeds.rb' do <<-FILE
 puts 'ROLES'
@@ -2543,7 +2556,8 @@ if prefs.has_key? :bundle_path
 else
   run 'bundle install --without production'
 end
-
+say_wizard "Updating gem paths."
+Gem.clear_paths
 # >-----------------------------[ Run 'After Bundler' Callbacks ]-------------------------------<
 
 say_wizard "Running 'after bundler' callbacks."
