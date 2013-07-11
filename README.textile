@@ -1,16 +1,16 @@
 h1. !http://railsapps.github.io/images/rails-36x36.jpg(Rails Composer)! Rails Composer
 
-An application template that creates a Rails 3.2 starter app.
+An application template that creates a starter application for Rails 4.0 or Rails 3.2.
 
 It's the Rails generator on steroids. See the "Rails Composer project page":http://railsapps.github.io/rails-composer.
 
-The Rails Composer application template is built from recipes provided by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem. Need to customize the Rails Composer application template? Want to build your own application template? Use "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer.
+The Rails Composer application template is built from recipes provided by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem. Need to customize the Rails Composer application template? Want to build your own application template? Use the  "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem.
 
 If you're new to Rails, see "What is Ruby on Rails?":http://railsapps.github.io/what-is-ruby-rails.html,  recommendations for a "Rails tutorial":https://tutorials.railsapps.org/rails-tutorial, and a list of top resources for "Ruby and Rails":http://railsapps.github.io/ruby-and-rails.html.
 
 h3. From the RailsApps Project
 
-The "RailsApps project":http://railsapps.github.io/ provides example applications that developers use as starter apps. Hundreds of developers use the apps, report problems as they arise, and propose solutions. Rails changes frequently; each application is known to work and serves as your personal "reference implementation" so you can stay up to date. Each is accompanied by a tutorial so there is no mystery code. Maintenance and development of the RailsApps applications is supported by subscriptions to the "RailsApps tutorials":https://tutorials.railsapps.org.
+The "RailsApps project":http://railsapps.github.io/ provides example applications that developers use as starter apps. Hundreds of developers use the apps, report problems as they arise, and propose solutions. Rails changes frequently; each application is known to work and serves as your personal "reference implementation" so you can stay up to date. Each is accompanied by a tutorial so there is no mystery code. Support for the project, including all the example applications and free articles, comes from subscribers. Please purchase a subscription to the "RailsApps tutorials":https://tutorials.railsapps.org if you can.
 
 h2. !http://twitter-badges.s3.amazonaws.com/t_logo-a.png(Follow on Twitter)!:http://www.twitter.com/rails_apps Follow on Twitter
 
@@ -27,7 +27,7 @@ Check that appropriate versions of Ruby and Rails are installed in your developm
 @$ ruby -v@
 @$ rails -v@
 
-Be sure to read "Installing Rails":http://railsapps.github.io/installing-rails.html to make sure your development environment is set up properly.
+Be sure to read the article "Installing Rails":http://railsapps.github.io/installing-rails.html to make sure your development environment is set up properly.
 
 h2. Creating a Starter App
 
@@ -38,6 +38,8 @@ $ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/comp
 </pre>
 
 Replace @myapp@ with the name of your application.
+
+The @$@ character indicates a shell prompt; don't include it when you run the command.
 
 You can use the @-T@ flag to skip Test::Unit files or the @-O@ flag to skip Active Record files:
 
@@ -75,13 +77,97 @@ Finally we run @rails new .@. We use the Unix "dot" convention to refer to the c
 
 This approach is different from the way most beginners are taught to create a Rails application. Our approach makes it easy to create a project-specific gemset to avoid clashes between gem versions when using the Rails Composer tool.
 
-h2. Your Options
+h2. Choose a RailsApps Starter Application
 
-The Rails Composer application template will ask you for various preferences, some of which will depend on previous choices.
+Use Rails Composer to generate any of the example applications from the "RailsApps project":http://railsapps.github.io/. You'll be able to choose your own project name when you generate the app. Generating the application gives you additional options.
 
-If you choose "I want to build my own application," you will get a full set of choices.
+To build the example application, Rails must be installed in your development environment.
 
-If you choose one of the RailsApps example applications, you will get fewer choices but you will get an exact copy of a known working example application. See "Rails example applications":http://railsapps.github.io/ for more information.
+Here's an example:
+
+<pre>
+$ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb
+</pre>
+
+The @$@ character indicates a shell prompt; don't include it when you run the command.
+
+You can use the @-T@ flag to skip Test::Unit files or the @-O@ flag to skip Active Record files:
+
+<pre>
+$ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb -T -O
+</pre>
+
+This creates a new Rails app named @myapp@ on your computer. You can use a different name if you wish.
+
+You'll see a prompt:
+
+<pre>
+question  Install an example application for Rails 4.0?
+      1)  Build a RailsApps starter application
+      2)  Build a contributed application
+      3)  I want to build my own application
+</pre>
+
+Enter "1" to select *Build a RailsApps starter application*. You'll see a prompt:
+
+<pre>
+question  Starter apps for Rails 4.0. More to come.
+      1)  learn-rails
+      2)  rails-bootstrap
+</pre>
+
+Make your choice. The Rails Composer tool may give you other options (other applications may have been added since these notes were written).
+
+The application generator template will ask you for additional preferences:
+
+<pre>
+ question  Web server for development?
+       1)  WEBrick (default)
+       2)  Thin
+       3)  Unicorn
+       4)  Puma
+ question  Web server for production?
+       1)  Same as development
+       2)  Thin
+       3)  Unicorn
+       4)  Puma
+ question  Template engine?
+       1)  ERB
+       2)  Haml
+       3)  Slim
+ question  Continuous testing?
+       1)  None
+       2)  Guard
+   extras  Set a robots.txt file to ban spiders? (y/n)
+   extras  Use or create a project-specific rvm gemset? (y/n)
+   extras  Create a GitHub repository? (y/n)
+</pre>
+
+h4. Web Servers
+
+We recommend Thin in development for speed and less noise in the log files.
+
+If you plan to deploy to Heroku, select Thin as your production webserver. Unicorn is recommended by Heroku but configuration is more complex.
+
+h4. Template Engine
+
+The example application uses the default "ERB" Rails template engine. Optionally, you can use another template engine, such as Haml or Slim. See instructions for "Haml and Rails":http://railsapps.github.io/rails-haml.html.
+
+h4. Other Choices
+
+If you are a beginner, you won't need "continuous testing." If you like to use "Guard":https://github.com/guard/guard, you can select it.
+
+Set a robots.txt file to ban spiders if you want to keep your new site out of Google search results.
+
+It is a good idea to use "RVM":https://rvm.io/, the Ruby Version Manager, and create a project-specific rvm gemset (not available on Windows). See "Installing Rails":http://railsapps.github.io/installing-rails.html.
+
+If you choose to create a GitHub repository, the generator will prompt you for a GitHub username and password.
+
+h2. Build Your Own Application
+
+If you choose "I want to build my own application," you will get a wide set of choices.
+
+These options are for experienced developers. Expect to spend time debugging your starter application as not all options are tested or fully supported.
 
 Here's an example:
 
