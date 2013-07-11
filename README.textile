@@ -81,7 +81,7 @@ h2. Choose a RailsApps Starter Application
 
 Use Rails Composer to generate any of the example applications from the "RailsApps project":http://railsapps.github.io/. You'll be able to choose your own project name when you generate the app. Generating the application gives you additional options.
 
-To build the example application, Rails must be installed in your development environment.
+To build the example application, Rails must be installed in your development environment. Choices of starter applications will differ depending on whether you are using Rails 4.0 or Rails 3.2.
 
 Here's an example:
 
