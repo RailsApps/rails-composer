@@ -25,11 +25,6 @@
 
 # >----------------------------[ Initial Setup ]------------------------------<
 
-initializer 'generators.rb', <<-RUBY
-Rails.application.config.generators do |g|
-end
-RUBY
-
 module Gemfile
   class GemInfo
     def initialize(name) @name=name; @group=[]; @opts={}; end
@@ -349,8 +344,9 @@ when "4"
     ["I want to build my own application", "none"]] unless prefs.has_key? :apps4
   case prefs[:apps4]
     when 'railsapps'
-      prefs[:apps4] = multiple_choice "One starter app is available for Rails 4.0. More to come.",
-        [["learn-rails", "learn-rails"]]
+      prefs[:apps4] = multiple_choice "Starter apps for Rails 4.0. More to come.",
+        [["learn-rails", "learn-rails"],
+        ["rails-bootstrap", "rails-bootstrap"]]
     when 'contributed_app'
       prefs[:apps4] = multiple_choice "No contributed applications are available.",
         [["continue", "none"]]
@@ -383,13 +379,30 @@ case prefs[:apps4]
     prefs[:continuous_testing] = false
   when 'learn-rails'
     prefs[:git] = true
-    prefs[:database] = 'sqlite'
+    prefs[:database] = 'default'
     prefs[:unit_test] = false
     prefs[:integration] = false
     prefs[:fixtures] = false
     prefs[:frontend] = 'bootstrap'
     prefs[:bootstrap] = 'sass'
     prefs[:email] = 'gmail'
+    prefs[:authentication] = false
+    prefs[:devise_modules] = false
+    prefs[:authorization] = false
+    prefs[:starter_app] = false
+    prefs[:form_builder] = 'simple_form'
+    prefs[:quiet_assets] = true
+    prefs[:local_env_file] = true
+    prefs[:better_errors] = true
+  when 'rails-bootstrap'
+    prefs[:git] = true
+    prefs[:database] = 'default'
+    prefs[:unit_test] = false
+    prefs[:integration] = false
+    prefs[:fixtures] = false
+    prefs[:frontend] = 'bootstrap'
+    prefs[:bootstrap] = 'sass'
+    prefs[:email] = 'none'
     prefs[:authentication] = false
     prefs[:devise_modules] = false
     prefs[:authorization] = false
@@ -814,6 +827,11 @@ say_recipe 'gems'
 ## Ruby on Rails
 insert_into_file('Gemfile', "ruby '#{RUBY_VERSION}'\n", :before => /^ *gem 'rails'/, :force => false)
 
+## Cleanup
+# remove the 'sdoc' gem
+gsub_file 'Gemfile', /group :doc do/, ''
+gsub_file 'Gemfile', /\s*gem 'sdoc', require: false\nend/, ''
+
 ## Web Server
 if (prefs[:dev_webserver] == prefs[:prod_webserver])
   add_gem 'thin' if prefer :dev_webserver, 'thin'
@@ -829,10 +847,14 @@ else
 end
 
 ## Rails 4.0 attr_accessible Compatibility
-add_gem 'protected_attributes' if Rails::VERSION::MAJOR.to_s == "4"
+if prefer :apps4, false
+  add_gem 'protected_attributes' if Rails::VERSION::MAJOR.to_s == "4"
+end
 
 ## Database Adapter
-gsub_file 'Gemfile', /gem 'sqlite3'\n/, '' unless prefer :database, 'sqlite'
+unless prefer :database, 'default'
+  gsub_file 'Gemfile', /gem 'sqlite3'\n/, '' unless prefer :database, 'sqlite'
+end
 add_gem 'mongoid' if prefer :orm, 'mongoid'
 gsub_file 'Gemfile', /gem 'pg'.*/, ''
 add_gem 'pg' if prefer :database, 'postgresql'
@@ -923,7 +945,7 @@ end
 
 ## Form Builder
 if Rails::VERSION::MAJOR.to_s == "4"
-  add_gem 'simple_form', '~> 3.0.0.rc' if prefer :form_builder, 'simple_form'
+  add_gem 'simple_form', '>= 3.0.0.rc' if prefer :form_builder, 'simple_form'
 else
   add_gem 'simple_form' if prefer :form_builder, 'simple_form'
 end
@@ -958,57 +980,59 @@ git :commit => '-qm "rails_apps_composer: Gemfile"' if prefer :git, true
 
 ### CREATE DATABASE ###
 after_bundler do
-  copy_from_repo 'config/database-postgresql.yml', :prefs => 'postgresql'
-  copy_from_repo 'config/database-mysql.yml', :prefs => 'mysql'
-  generate 'mongoid:config' if prefer :orm, 'mongoid'
-  remove_file 'config/database.yml' if prefer :orm, 'mongoid'
-  if prefer :database, 'postgresql'
-    begin
-      pg_username = ask_wizard("Username for PostgreSQL? (leave blank to use the app name)")
-      if pg_username.blank?
-        say_wizard "Creating a user named '#{app_name}' for PostgreSQL"
-        run "createuser #{app_name}" if prefer :database, 'postgresql'
+  unless prefer :database, 'default'
+    copy_from_repo 'config/database-postgresql.yml', :prefs => 'postgresql'
+    copy_from_repo 'config/database-mysql.yml', :prefs => 'mysql'
+    generate 'mongoid:config' if prefer :orm, 'mongoid'
+    remove_file 'config/database.yml' if prefer :orm, 'mongoid'
+    if prefer :database, 'postgresql'
+      begin
+        pg_username = ask_wizard("Username for PostgreSQL? (leave blank to use the app name)")
+        if pg_username.blank?
+          say_wizard "Creating a user named '#{app_name}' for PostgreSQL"
+          run "createuser #{app_name}" if prefer :database, 'postgresql'
+          gsub_file "config/database.yml", /username: .*/, "username: #{app_name}"
+        else
+          gsub_file "config/database.yml", /username: .*/, "username: #{pg_username}"
+          pg_password = ask_wizard("Password for PostgreSQL user #{pg_username}?")
+          gsub_file "config/database.yml", /password:/, "password: #{pg_password}"
+          say_wizard "set config/database.yml for username/password #{pg_username}/#{pg_password}"
+        end
+      rescue StandardError => e
+        raise "unable to create a user for PostgreSQL, reason: #{e}"
+      end
+      gsub_file "config/database.yml", /database: myapp_development/, "database: #{app_name}_development"
+      gsub_file "config/database.yml", /database: myapp_test/,        "database: #{app_name}_test"
+      gsub_file "config/database.yml", /database: myapp_production/,  "database: #{app_name}_production"
+    end
+    if prefer :database, 'mysql'
+      mysql_username = ask_wizard("Username for MySQL? (leave blank to use the app name)")
+      if mysql_username.blank?
         gsub_file "config/database.yml", /username: .*/, "username: #{app_name}"
       else
-        gsub_file "config/database.yml", /username: .*/, "username: #{pg_username}"
-        pg_password = ask_wizard("Password for PostgreSQL user #{pg_username}?")
-        gsub_file "config/database.yml", /password:/, "password: #{pg_password}"
-        say_wizard "set config/database.yml for username/password #{pg_username}/#{pg_password}"
+        gsub_file "config/database.yml", /username: .*/, "username: #{mysql_username}"
+        mysql_password = ask_wizard("Password for MySQL user #{mysql_username}?")
+        gsub_file "config/database.yml", /password:/, "password: #{mysql_password}"
+        say_wizard "set config/database.yml for username/password #{mysql_username}/#{mysql_password}"
       end
-    rescue StandardError => e
-      raise "unable to create a user for PostgreSQL, reason: #{e}"
+      gsub_file "config/database.yml", /database: myapp_development/, "database: #{app_name}_development"
+      gsub_file "config/database.yml", /database: myapp_test/,        "database: #{app_name}_test"
+      gsub_file "config/database.yml", /database: myapp_production/,  "database: #{app_name}_production"
     end
-    gsub_file "config/database.yml", /database: myapp_development/, "database: #{app_name}_development"
-    gsub_file "config/database.yml", /database: myapp_test/,        "database: #{app_name}_test"
-    gsub_file "config/database.yml", /database: myapp_production/,  "database: #{app_name}_production"
-  end
-  if prefer :database, 'mysql'
-    mysql_username = ask_wizard("Username for MySQL? (leave blank to use the app name)")
-    if mysql_username.blank?
-      gsub_file "config/database.yml", /username: .*/, "username: #{app_name}"
-    else
-      gsub_file "config/database.yml", /username: .*/, "username: #{mysql_username}"
-      mysql_password = ask_wizard("Password for MySQL user #{mysql_username}?")
-      gsub_file "config/database.yml", /password:/, "password: #{mysql_password}"
-      say_wizard "set config/database.yml for username/password #{mysql_username}/#{mysql_password}"
+    unless prefer :database, 'sqlite'
+      affirm = yes_wizard? "Drop any existing databases named #{app_name}?"
+      if affirm
+        run 'bundle exec rake db:drop'
+      else
+        raise "aborted at user's request"
+      end
     end
-    gsub_file "config/database.yml", /database: myapp_development/, "database: #{app_name}_development"
-    gsub_file "config/database.yml", /database: myapp_test/,        "database: #{app_name}_test"
-    gsub_file "config/database.yml", /database: myapp_production/,  "database: #{app_name}_production"
+    run 'bundle exec rake db:create:all' unless prefer :orm, 'mongoid'
+    run 'bundle exec rake db:create' if prefer :orm, 'mongoid'
+    ## Git
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: create database"' if prefer :git, true
   end
-  unless prefer :database, 'sqlite'
-    affirm = yes_wizard? "Drop any existing databases named #{app_name}?"
-    if affirm
-      run 'bundle exec rake db:drop'
-    else
-      raise "aborted at user's request"
-    end
-  end
-  run 'bundle exec rake db:create:all' unless prefer :orm, 'mongoid'
-  run 'bundle exec rake db:create' if prefer :orm, 'mongoid'
-  ## Git
-  git :add => '-A' if prefer :git, true
-  git :commit => '-qm "rails_apps_composer: create database"' if prefer :git, true
 end # after_bundler
 
 ### GENERATORS ###
@@ -1339,9 +1363,16 @@ say_recipe 'email'
 after_bundler do
   say_wizard "recipe running after 'bundle install'"
   unless prefer :email, 'none'
-    ### DEVELOPMENT
-    gsub_file 'config/environments/development.rb', /# Don't care if the mailer can't send/, '# ActionMailer Config'
-    gsub_file 'config/environments/development.rb', /config.action_mailer.raise_delivery_errors = false/ do
+    if Rails::VERSION::MAJOR.to_s == "4"
+      send_email_text = <<-TEXT
+  # Send email in development mode.
+  config.action_mailer.perform_deliveries = true
+TEXT
+      inject_into_file 'config/environments/development.rb', send_email_text, :after => "config.assets.debug = true"
+    else
+      ### DEVELOPMENT
+      gsub_file 'config/environments/development.rb', /# Don't care if the mailer can't send/, '# ActionMailer Config'
+      gsub_file 'config/environments/development.rb', /config.action_mailer.raise_delivery_errors = false/ do
   <<-RUBY
 config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.action_mailer.delivery_method = :smtp
@@ -1350,17 +1381,17 @@ config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default :charset => "utf-8"
 RUBY
-    end
-    ### TEST
-    inject_into_file 'config/environments/test.rb', :before => "\nend" do
+      end
+      ### TEST
+      inject_into_file 'config/environments/test.rb', :before => "\nend" do
   <<-RUBY
 \n
   # ActionMailer Config
   config.action_mailer.default_url_options = { :host => 'example.com' }
 RUBY
-    end
-    ### PRODUCTION
-    gsub_file 'config/environments/production.rb', /config.active_support.deprecation = :notify/ do
+      end
+      ### PRODUCTION
+      gsub_file 'config/environments/production.rb', /config.active_support.deprecation = :notify/ do
   <<-RUBY
 config.active_support.deprecation = :notify
 
@@ -1372,6 +1403,7 @@ config.active_support.deprecation = :notify
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default :charset => "utf-8"
 RUBY
+      end
     end
   end
   ### GMAIL ACCOUNT
@@ -1381,15 +1413,15 @@ RUBY
   config.action_mailer.smtp_settings = {
     address: "smtp.gmail.com",
     port: 587,
-    domain: "example.com",
+    domain: ENV["DOMAIN_NAME"],
     authentication: "plain",
     enable_starttls_auto: true,
     user_name: ENV["GMAIL_USERNAME"],
     password: ENV["GMAIL_PASSWORD"]
   }
 TEXT
-    inject_into_file 'config/environments/development.rb', gmail_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
-    inject_into_file 'config/environments/production.rb', gmail_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
+    inject_into_file 'config/environments/development.rb', gmail_configuration_text, :after => "config.assets.debug = true"
+    inject_into_file 'config/environments/production.rb', gmail_configuration_text, :after => "config.active_support.deprecation = :notify"
   end
   ### SENDGRID ACCOUNT
   if prefer :email, 'sendgrid'
@@ -1398,14 +1430,14 @@ TEXT
   config.action_mailer.smtp_settings = {
     address: "smtp.sendgrid.net",
     port: 25,
-    domain: "example.com",
+    domain: ENV["DOMAIN_NAME"],
     authentication: "plain",
     user_name: ENV["SENDGRID_USERNAME"],
     password: ENV["SENDGRID_PASSWORD"]
   }
 TEXT
-    inject_into_file 'config/environments/development.rb', sendgrid_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
-    inject_into_file 'config/environments/production.rb', sendgrid_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
+    inject_into_file 'config/environments/development.rb', sendgrid_configuration_text, :after => "config.assets.debug = true"
+    inject_into_file 'config/environments/production.rb', sendgrid_configuration_text, :after => "config.active_support.deprecation = :notify"
   end
   ### MANDRILL ACCOUNT
   if prefer :email, 'mandrill'
@@ -1418,8 +1450,8 @@ TEXT
       :password  => ENV["MANDRILL_API_KEY"]
     }
   TEXT
-    inject_into_file 'config/environments/development.rb', mandrill_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
-    inject_into_file 'config/environments/production.rb', mandrill_configuration_text, :after => 'config.action_mailer.default :charset => "utf-8"'
+    inject_into_file 'config/environments/development.rb', mandrill_configuration_text, :after => "config.assets.debug = true"
+    inject_into_file 'config/environments/production.rb', mandrill_configuration_text, :after => "config.active_support.deprecation = :notify"
   end
   ### GIT
   git :add => '-A' if prefer :git, true
@@ -1803,11 +1835,13 @@ after_everything do
   append_file 'config/application.yml', credentials if prefs[:local_env_file]
   if prefs[:local_env_file]
     ## DEFAULT USER
-    append_file 'config/application.yml' do <<-FILE
+    unless prefer :starter_app, false
+      append_file 'config/application.yml' do <<-FILE
 ADMIN_NAME: First User
 ADMIN_EMAIL: user@example.com
 ADMIN_PASSWORD: changeme
 FILE
+      end
     end
     ## AUTHENTICATION
     if prefer :authentication, 'omniauth'
@@ -1829,10 +1863,12 @@ FILE
     copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
   end
   ### DATABASE SEED ###
-  append_file 'db/seeds.rb' do <<-FILE
-# Environment variables (ENV['...']) are set in the file config/application.yml.
+  if prefs[:local_env_file]
+    append_file 'db/seeds.rb' do <<-FILE
+# Environment variables (ENV['...']) can be set in the file config/application.yml.
 # See http://railsapps.github.io/rails-environment-variables.html
 FILE
+    end
   end
   if (prefer :authorization, 'cancan')
     unless prefer :orm, 'mongoid'
@@ -1882,10 +1918,12 @@ FILE
   end
   ### APPLY DATABASE SEED ###
   unless prefer :orm, 'mongoid'
-    ## ACTIVE_RECORD
-    say_wizard "applying migrations and seeding the database"
-    run 'bundle exec rake db:migrate'
-    run 'bundle exec rake db:test:prepare'
+    unless prefer :database, 'default'
+      ## ACTIVE_RECORD
+      say_wizard "applying migrations and seeding the database"
+      run 'bundle exec rake db:migrate'
+      run 'bundle exec rake db:test:prepare'
+    end
   else
     ## MONGOID
     say_wizard "dropping database, creating indexes and seeding the database"
@@ -1934,7 +1972,6 @@ if prefer :apps4, 'learn-rails'
 
     # >-------------------------------[ Clean up starter app ]--------------------------------<
 
-    gsub_file 'Gemfile', /gem 'sdoc'/, "# gem 'sdoc'"
     # remove commented lines and multiple blank lines from Gemfile
     # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
     gsub_file 'Gemfile', /#.*\n/, "\n"
@@ -1995,6 +2032,70 @@ if prefer :apps4, 'learn-rails'
     git :commit => '-qm "rails_apps_composer: learn-rails app"' if prefer :git, true
   end # after_bundler
 end # learn-rails
+
+if prefer :apps4, 'rails-bootstrap'
+
+  # >-------------------------------[ Gems ]--------------------------------<
+
+  add_gem 'high_voltage'
+
+  # >-------------------------------[ after_everything ]--------------------------------<
+
+  after_everything do
+    say_wizard "recipe running after 'bundle install'"
+    repo = 'https://raw.github.com/RailsApps/rails-bootstrap/master/'
+
+    # >-------------------------------[ Clean up starter app ]--------------------------------<
+
+    # remove commented lines and multiple blank lines from Gemfile
+    # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
+    gsub_file 'Gemfile', /#.*\n/, "\n"
+    gsub_file 'Gemfile', /\n^\s*\n/, "\n"
+    # remove commented lines and multiple blank lines from config/routes.rb
+    gsub_file 'config/routes.rb', /  #.*\n/, "\n"
+    gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
+    # GIT
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: clean up starter app"' if prefer :git, true
+
+    # >-------------------------------[ Models ]--------------------------------<
+
+    copy_from_repo 'app/models/visitor.rb', :repo => repo
+
+    # >-------------------------------[ Init ]--------------------------------<
+    copy_from_repo 'config/application.yml', :repo => repo
+    remove_file 'config/application.example.yml'
+    copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
+
+    # >-------------------------------[ Controllers ]--------------------------------<
+
+    copy_from_repo 'app/controllers/visitors_controller.rb', :repo => repo
+
+    # >-------------------------------[ Views ]--------------------------------<
+
+    copy_from_repo 'app/views/layouts/_messages.html.erb', :repo => repo
+    copy_from_repo 'app/views/layouts/_navigation.html.erb', :repo => repo
+    copy_from_repo 'app/views/layouts/application.html.erb', :repo => repo
+    copy_from_repo 'app/views/pages/about.html.erb', :repo => repo
+    copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
+
+    # >-------------------------------[ Routes ]--------------------------------<
+
+    copy_from_repo 'config/routes.rb', :repo => repo
+    ### CORRECT APPLICATION NAME ###
+    gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
+
+    # >-------------------------------[ Assets ]--------------------------------<
+
+    copy_from_repo 'app/assets/javascripts/application.js', :repo => repo
+    copy_from_repo 'app/assets/stylesheets/application.css.scss', :repo => repo
+    copy_from_repo 'app/assets/stylesheets/bootstrap_and_overrides.css.scss', :repo => repo
+
+    ### GIT ###
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: rails-bootstrap app"' if prefer :git, true
+  end # after_bundler
+end # rails-bootstrap
 # >---------------------------- recipes/apps4.rb -----------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
