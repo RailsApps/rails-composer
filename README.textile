@@ -169,7 +169,7 @@ If you choose "I want to build my own application," you will get a wide set of c
 
 These options are for experienced developers. Expect to spend time debugging your starter application as not all options are tested or fully supported.
 
-Here's an example:
+Here's an example of what you'll see using Rails 3.2:
 
 <pre>
 question  Install an example application?
