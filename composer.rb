@@ -116,6 +116,10 @@ def say_custom(tag, text); say "\033[1m\033[36m" + tag.to_s.rjust(10) + "\033[0m
 def say_recipe(name); say "\033[1m\033[36m" + "recipe".rjust(10) + "\033[0m" + "  Running #{name} recipe..." end
 def say_wizard(text); say_custom(@current_recipe || 'composer', text) end
 
+def rails_4?
+  Rails::VERSION::MAJOR.to_s == "4"
+end
+
 def ask_wizard(question)
   ask "\033[1m\033[36m" + (@current_recipe || "prompt").rjust(10) + "\033[1m\033[36m" + "  #{question}\033[0m"
 end
@@ -832,6 +836,8 @@ insert_into_file('Gemfile', "ruby '#{RUBY_VERSION}'\n", :before => /^ *gem 'rail
 gsub_file 'Gemfile', /group :doc do/, ''
 gsub_file 'Gemfile', /\s*gem 'sdoc', require: false\nend/, ''
 
+assets_group = rails_4? ? nil : :assets
+
 ## Web Server
 if (prefs[:dev_webserver] == prefs[:prod_webserver])
   add_gem 'thin' if prefer :dev_webserver, 'thin'
@@ -847,9 +853,9 @@ else
 end
 
 ## Rails 4.0 attr_accessible Compatibility
-if prefer :apps4, false
-  add_gem 'protected_attributes' if Rails::VERSION::MAJOR.to_s == "4"
-end
+# if prefer :apps4, false
+#   add_gem 'protected_attributes' if rails_4?
+# end
 
 ## Database Adapter
 unless prefer :database, 'default'
@@ -911,14 +917,13 @@ add_gem 'machinist', :group => :test if prefer :fixtures, 'machinist'
 
 ## Front-end Framework
 add_gem 'bootstrap-sass' if prefer :bootstrap, 'sass'
-add_gem 'compass-rails', :group => :assets if prefer :frontend, 'foundation'
-add_gem 'zurb-foundation', :group => :assets if prefer :frontend, 'foundation'
+add_gem 'compass-rails', :group => assets_group if prefer :frontend, 'foundation'
+add_gem 'zurb-foundation', :group => assets_group if prefer :frontend, 'foundation'
 if prefer :bootstrap, 'less'
-  add_gem 'less-rails', :group => :assets
-  add_gem 'twitter-bootstrap-rails', :group => :assets
+  add_gem 'less-rails', :group => assets_group
+  add_gem 'twitter-bootstrap-rails', :group => assets_group
   # install gem 'therubyracer' to use Less
-  add_gem 'libv8'
-  add_gem 'therubyracer', :group => :assets, :platform => :ruby, :require => 'v8'
+  add_gem 'therubyracer', :group => assets_group, :platform => :ruby
 end
 
 ## Email
@@ -944,7 +949,7 @@ if prefer :authorization, 'cancan'
 end
 
 ## Form Builder
-if Rails::VERSION::MAJOR.to_s == "4"
+if rails_4?
   add_gem 'simple_form', '>= 3.0.0.rc' if prefer :form_builder, 'simple_form'
 else
   add_gem 'simple_form' if prefer :form_builder, 'simple_form'
@@ -1363,7 +1368,7 @@ say_recipe 'email'
 after_bundler do
   say_wizard "recipe running after 'bundle install'"
   unless prefer :email, 'none'
-    if Rails::VERSION::MAJOR.to_s == "4"
+    if rails_4?
       send_email_text = <<-TEXT
   # Send email in development mode.
   config.action_mailer.perform_deliveries = true
@@ -1509,7 +1514,7 @@ RUBY
       unless prefer :railsapps, 'rails-recurly-subscription-saas'
         generate 'migration AddNameToUsers name:string'
       end
-      copy_from_repo 'app/models/user.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
+      copy_from_repo 'app/models/user.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/' unless rails_4?
       if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
         gsub_file 'app/models/user.rb', /:registerable,/, ":registerable, :confirmable,"
         generate 'migration AddConfirmableToUsers confirmation_token:string confirmed_at:datetime confirmation_sent_at:datetime unconfirmed_email:string'
@@ -1721,7 +1726,7 @@ after_bundler do
     if prefer :authentication, 'devise'
       copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
       ## Rails 4.0 doesn't allow two 'root' routes
-      gsub_file 'config/routes.rb', /authenticated :user do\n.*\n.*\n  /, '' if Rails::VERSION::MAJOR.to_s == "4"
+      gsub_file 'config/routes.rb', /authenticated :user do\n.*\n.*\n  /, '' if rails_4?
     end
     ## OMNIAUTH
     copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/' if prefer :authentication, 'omniauth'
@@ -1881,7 +1886,7 @@ end
 FILE
       end
       ## Fix db seed for Rails 4.0
-      gsub_file 'db/seeds.rb', /{ :name => role }/, 'role' if Rails::VERSION::MAJOR.to_s == "4"
+      gsub_file 'db/seeds.rb', /{ :name => role }, :without_protection => true/, 'role' if rails_4?
     else
       append_file 'db/seeds.rb' do <<-FILE
 puts 'ROLES'
@@ -1958,6 +1963,7 @@ if prefer :apps4, 'learn-rails'
   add_gem 'activerecord-tableless'
   add_gem 'high_voltage'
   add_gem 'gibbon'
+  add_gem 'google_drive'
   gsub_file 'Gemfile', /gem 'sqlite3'\n/, ''
   add_gem 'sqlite3', :group => :development
   add_gem 'pg', :group => :production
@@ -2568,8 +2574,7 @@ case RbConfig::CONFIG['host_os']
       # was it already added for bootstrap-less?
       unless prefer :bootstrap, 'less'
         say_wizard "recipe adding 'therubyracer' JavaScript runtime gem"
-        add_gem 'libv8'
-        add_gem 'therubyracer', :group => :assets, :platform => :ruby, :require => 'v8'
+        add_gem 'therubyracer', :group => :assets, :platform => :ruby
       end
     end
 end
