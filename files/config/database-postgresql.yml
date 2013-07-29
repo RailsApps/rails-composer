@@ -13,10 +13,11 @@
 # gem 'pg'
 #
 development:
-  adapter: postgresql
+  adapter:  postgresql
+  host:     localhost
   encoding: unicode
   database: myapp_development
-  pool: 5
+  pool:     5
   username: myapp
   password:
   template: template0
@@ -40,19 +41,21 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  adapter: postgresql
+  adapter:  postgresql
+  host:     localhost
   encoding: unicode
   database: myapp_test
-  pool: 5
+  pool:     5
   username: myapp
   password:
   template: template0
 
 production:
-  adapter: postgresql
+  adapter:  postgresql
+  host:     localhost
   encoding: unicode
   database: myapp_production
-  pool: 5
+  pool:     5
   username: myapp
   password:
   template: template0
