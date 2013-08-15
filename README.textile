@@ -391,6 +391,10 @@ To understand the code in these templates, take a look at "Thor::Actions":http:/
 
 h4. About Rails Application Templates
 
+There is an unfinished Rails Guide on "Rails Application Templates":https://github.com/rails/rails/blob/master/guides/source/rails_application_templates.md.
+
+Also see:
+
 "Cooking Up A Custom Rails 3 Template (11 Oct 2010) by Andrea Singh":http://blog.madebydna.com/all/code/2010/10/11/cooking-up-a-custom-rails3-template.html
 "Rails Application Templates (16 Sept 2010) by Collin Schaafsma":http://quickleft.com/blog/rails-application-templates
 "Application templates in Rails 3 (18 Sept 2009) by Ben Scofield":http://benscofield.com/2009/09/application-templates-in-rails-3/
