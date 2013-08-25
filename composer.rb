@@ -330,6 +330,14 @@ say_recipe 'railsapps'
 # Application template recipe for the rails_apps_composer. Change the recipe here:
 # https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/railsapps.rb
 
+raise if (defined? defaults) || (defined? preferences) # Shouldn't happen.
+if options[:verbose]
+  print "\nrecipes: ";p recipes
+  print "\ngems: "   ;p gems
+  print "\nprefs: "  ;p prefs
+  print "\nconfig: " ;p config
+end
+
 case Rails::VERSION::MAJOR.to_s
 when "3"
   prefs[:railsapps] = multiple_choice "Install an example application for Rails 3.2?",
@@ -477,12 +485,20 @@ case prefs[:railsapps]
     prefs[:local_env_file] = true
     prefs[:better_errors] = true
     if prefer :git, true
-      prefs[:prelaunch_branch] = multiple_choice "Git branch for the prelaunch app?", [["wip (work-in-progress)", "wip"], ["master", "master"], ["prelaunch", "prelaunch"], ["staging", "staging"]]
-      if prefs[:prelaunch_branch] == 'master'
-        prefs[:main_branch] = multiple_choice "Git branch for the main app?", [["None", "none"], ["wip (work-in-progress)", "wip"], ["edge", "edge"]]
+      prefs[:prelaunch_branch] = multiple_choice "Git branch for the prelaunch app?",
+        [["wip (work-in-progress)", "wip"],
+        ["master", "master"],
+        ["prelaunch", "prelaunch"],
+        ["staging", "staging"]] unless prefs.has_key? :prelaunch_branch
+
+      prefs[:main_branch] = unless 'master' == prefs[:prelaunch_branch]
+        'master'
       else
-        prefs[:main_branch] = 'master'
-      end
+        multiple_choice "Git branch for the main app?",
+          [["None", "none"],
+          ["wip (work-in-progress)", "wip"],
+          ["edge", "edge"]]
+      end unless prefs.has_key? :main_branch
     end
   when 'rails3-bootstrap-devise-cancan'
     prefs[:git] = true
@@ -861,7 +877,11 @@ end
 unless prefer :database, 'default'
   gsub_file 'Gemfile', /gem 'sqlite3'\n/, '' unless prefer :database, 'sqlite'
 end
-add_gem 'mongoid' if prefer :orm, 'mongoid'
+if rails_4?
+  add_gem 'mongoid', '~> 4', github: 'mongoid/mongoid' if prefer :orm, 'mongoid'
+else
+  add_gem 'mongoid' if prefer :orm, 'mongoid'
+end
 gsub_file 'Gemfile', /gem 'pg'.*/, ''
 add_gem 'pg' if prefer :database, 'postgresql'
 gsub_file 'Gemfile', /gem 'mysql2'.*/, ''
@@ -884,9 +904,13 @@ end
 if prefer :unit_test, 'rspec'
   add_gem 'rspec-rails', :group => [:development, :test]
   add_gem 'capybara', :group => :test if prefer :integration, 'rspec-capybara'
-  add_gem 'database_cleaner', :group => :test
+  add_gem 'database_cleaner', '1.0.1', :group => :test
   if prefer :orm, 'mongoid'
-    add_gem 'mongoid-rspec', :group => :test
+    if rails_4?
+      add_gem 'mongoid-rspec', '>= 1.6.0', github: 'evansagge/mongoid-rspec', :group => :test
+    else
+      add_gem 'mongoid-rspec', :group => :test
+    end
   end
   add_gem 'email_spec', :group => :test
 end
@@ -897,7 +921,7 @@ if prefer :unit_test, 'minitest'
 end
 if prefer :integration, 'cucumber'
   add_gem 'cucumber-rails', :group => :test, :require => false
-  add_gem 'database_cleaner', :group => :test unless prefer :unit_test, 'rspec'
+  add_gem 'database_cleaner', '1.0.1', :group => :test unless prefer :unit_test, 'rspec'
   add_gem 'launchy', :group => :test
   add_gem 'capybara', :group => :test
 end
@@ -1025,8 +1049,8 @@ after_bundler do
       gsub_file "config/database.yml", /database: myapp_production/,  "database: #{app_name}_production"
     end
     unless prefer :database, 'sqlite'
-      affirm = yes_wizard? "Drop any existing databases named #{app_name}?"
-      if affirm
+      if (prefs.has_key? :drop_database) ? prefs[:drop_database] :
+          (yes_wizard? "Drop any existing databases named #{app_name}?")
         run 'bundle exec rake db:drop'
       else
         raise "aborted at user's request"
@@ -2480,7 +2504,7 @@ if File.exist?('.ruby-gemset')
   rvmrc_file = File.read('.ruby-gemset')
   rvmrc_detected = rvmrc_file.include? app_name
 end
-unless rvmrc_detected || prefs[:rvmrc]
+unless rvmrc_detected || (prefs.has_key? :rvmrc)
   prefs[:rvmrc] = yes_wizard? "Use or create a project-specific rvm gemset?"
 end
 if prefs[:rvmrc]
@@ -2560,7 +2584,7 @@ end
 if prefs[:better_errors]
   say_wizard "recipe adding better_errors gem"
   add_gem 'better_errors', :group => :development
-  add_gem 'binding_of_caller', :group => :development, :platforms => [:mri_19, :rbx]
+  add_gem 'binding_of_caller', :group => :development, :platforms => [:mri_19, :mri_20, :rbx]
 end
 
 ## BAN SPIDERS
@@ -2685,13 +2709,13 @@ say_wizard "importing html2haml and haml2slim conversion tools"
   require 'html2haml'
   require 'haml2slim'
 end
-@after_blocks.each{|b| config = @configs[b[0]] || {}; @current_recipe = b[0]; b[1].call}
+@after_blocks.each{|b| config = @configs[b[0]] || {}; @current_recipe = b[0]; puts @current_recipe; b[1].call}
 
 # >-----------------------------[ Run 'After Everything' Callbacks ]-------------------------------<
 
 @current_recipe = nil
 say_wizard "Running 'after everything' callbacks."
-@after_everything_blocks.each{|b| config = @configs[b[0]] || {}; @current_recipe = b[0]; b[1].call}
+@after_everything_blocks.each{|b| config = @configs[b[0]] || {}; @current_recipe = b[0]; puts @current_recipe; b[1].call}
 
 @current_recipe = nil
 if diagnostics[:recipes] == 'success'
