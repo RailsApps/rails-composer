@@ -949,7 +949,7 @@ add_gem 'machinist', :group => :test if prefer :fixtures, 'machinist'
 add_gem 'bootstrap-sass' if prefer :bootstrap, 'sass'
 if prefer :frontend, 'foundation'
   if rails_4?
-    add_gem 'compass-rails', :group => assets_group, "~> 2.0.alpha.0"
+    add_gem 'compass-rails', '~> 2.0.alpha.0', :group => assets_group
   else
     add_gem 'compass-rails', :group => assets_group
   end
