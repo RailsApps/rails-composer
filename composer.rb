@@ -947,14 +947,14 @@ add_gem 'machinist', :group => :test if prefer :fixtures, 'machinist'
 
 ## Front-end Framework
 add_gem 'bootstrap-sass', '~> 2.3.2.2' if prefer :bootstrap, 'sass'
+add_gem 'rails_layout', :group => :development if prefer :bootstrap, 'sass'
 if prefer :frontend, 'foundation'
   if rails_4?
-    add_gem 'compass-rails', '~> 2.0.alpha.0', :group => assets_group
+    add_gem 'compass-rails', '~> 2.0.alpha.0'
   else
     add_gem 'compass-rails', :group => assets_group
   end
 end
-#add_gem 'compass-rails', :group => assets_group if prefer :frontend, 'foundation'
 add_gem 'zurb-foundation', :group => assets_group if prefer :frontend, 'foundation'
 if prefer :bootstrap, 'less'
   add_gem 'less-rails', :group => assets_group
@@ -2063,13 +2063,17 @@ if prefer :apps4, 'learn-rails'
     # >-------------------------------[ Views ]--------------------------------<
 
     copy_from_repo 'app/views/contacts/new.html.erb', :repo => repo
-    copy_from_repo 'app/views/layouts/_messages.html.erb', :repo => repo
-    copy_from_repo 'app/views/layouts/_navigation.html.erb', :repo => repo
-    copy_from_repo 'app/views/layouts/application.html.erb', :repo => repo
     copy_from_repo 'app/views/pages/about.html.erb', :repo => repo
     copy_from_repo 'app/views/user_mailer/contact_email.html.erb', :repo => repo
     copy_from_repo 'app/views/user_mailer/contact_email.text.erb', :repo => repo
     copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
+
+    # >-------------------------------[ Layouts ]--------------------------------<
+
+    # if view files were installed previously, navogation links will be created
+    if prefer :frontend, 'bootstrap'
+      generate 'layout bootstrap2 -f'
+    end
 
     # >-------------------------------[ Routes ]--------------------------------<
 
@@ -2117,7 +2121,7 @@ if prefer :apps4, 'rails-bootstrap'
 
     # >-------------------------------[ Models ]--------------------------------<
 
-    copy_from_repo 'app/models/visitor.rb', :repo => repo
+    # no models
 
     # >-------------------------------[ Init ]--------------------------------<
     copy_from_repo 'config/application.yml', :repo => repo
@@ -2130,11 +2134,15 @@ if prefer :apps4, 'rails-bootstrap'
 
     # >-------------------------------[ Views ]--------------------------------<
 
-    copy_from_repo 'app/views/layouts/_messages.html.erb', :repo => repo
-    copy_from_repo 'app/views/layouts/_navigation.html.erb', :repo => repo
-    copy_from_repo 'app/views/layouts/application.html.erb', :repo => repo
     copy_from_repo 'app/views/pages/about.html.erb', :repo => repo
     copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
+
+    # >-------------------------------[ Layouts ]--------------------------------<
+
+    # if view files were installed previously, navogation links will be created
+    if prefer :frontend, 'bootstrap'
+      generate 'layout bootstrap2 -f'
+    end
 
     # >-------------------------------[ Routes ]--------------------------------<
 
