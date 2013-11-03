@@ -377,7 +377,6 @@ case prefs[:apps4]
     prefs[:integration] = false
     prefs[:fixtures] = false
     prefs[:frontend] = false
-    prefs[:bootstrap] = false
     prefs[:email] = false
     prefs[:authentication] = false
     prefs[:devise_modules] = false
@@ -395,8 +394,7 @@ case prefs[:apps4]
     prefs[:unit_test] = false
     prefs[:integration] = false
     prefs[:fixtures] = false
-    prefs[:frontend] = 'bootstrap'
-    prefs[:bootstrap] = 'sass'
+    prefs[:frontend] = 'foundation4'
     prefs[:email] = 'gmail'
     prefs[:authentication] = false
     prefs[:devise_modules] = false
@@ -412,8 +410,7 @@ case prefs[:apps4]
     prefs[:unit_test] = false
     prefs[:integration] = false
     prefs[:fixtures] = false
-    prefs[:frontend] = 'bootstrap'
-    prefs[:bootstrap] = 'sass'
+    prefs[:frontend] = 'bootstrap2'
     prefs[:email] = 'none'
     prefs[:authentication] = false
     prefs[:devise_modules] = false
@@ -439,8 +436,7 @@ case prefs[:railsapps]
     prefs[:unit_test] = 'rspec'
     prefs[:integration] = 'cucumber'
     prefs[:fixtures] = 'factory_girl'
-    prefs[:frontend] = 'bootstrap'
-    prefs[:bootstrap] = 'sass'
+    prefs[:frontend] = 'bootstrap2'
     prefs[:email] = 'gmail'
     prefs[:authentication] = 'devise'
     prefs[:devise_modules] = 'default'
@@ -456,8 +452,7 @@ case prefs[:railsapps]
     prefs[:unit_test] = 'rspec'
     prefs[:integration] = 'cucumber'
     prefs[:fixtures] = 'factory_girl'
-    prefs[:frontend] = 'bootstrap'
-    prefs[:bootstrap] = 'sass'
+    prefs[:frontend] = 'bootstrap2'
     prefs[:email] = 'gmail'
     prefs[:authentication] = 'devise'
     prefs[:devise_modules] = 'default'
@@ -473,8 +468,7 @@ case prefs[:railsapps]
     prefs[:unit_test] = 'rspec'
     prefs[:integration] = 'cucumber'
     prefs[:fixtures] = 'factory_girl'
-    prefs[:frontend] = 'bootstrap'
-    prefs[:bootstrap] = 'sass'
+    prefs[:frontend] = 'bootstrap2'
     prefs[:email] = 'mandrill'
     prefs[:authentication] = 'devise'
     prefs[:devise_modules] = 'confirmable'
@@ -506,8 +500,7 @@ case prefs[:railsapps]
     prefs[:unit_test] = 'rspec'
     prefs[:integration] = 'cucumber'
     prefs[:fixtures] = 'factory_girl'
-    prefs[:frontend] = 'bootstrap'
-    prefs[:bootstrap] = 'sass'
+    prefs[:frontend] = 'bootstrap2'
     prefs[:email] = 'gmail'
     prefs[:authentication] = 'devise'
     prefs[:devise_modules] = 'default'
@@ -674,17 +667,8 @@ end
 
 ## Front-end Framework
 if recipes.include? 'frontend'
-  prefs[:frontend] = multiple_choice "Front-end framework?", [["None", "none"], ["Twitter Bootstrap", "bootstrap"],
-    ["Zurb Foundation", "foundation"], ["Skeleton", "skeleton"], ["Just normalize CSS for consistent styling", "normalize"]] unless prefs.has_key? :frontend
-  if prefer :frontend, 'bootstrap'
-    case HOST_OS
-      when /mswin|windows/i
-        prefs[:bootstrap] = multiple_choice "Twitter Bootstrap version?", [["Twitter Bootstrap (Sass)", "sass"]] unless prefs.has_key? :bootstrap
-      else
-        prefs[:bootstrap] = multiple_choice "Twitter Bootstrap version?", [["Twitter Bootstrap (Less)", "less"],
-          ["Twitter Bootstrap (Sass)", "sass"]] unless prefs.has_key? :bootstrap
-    end
-  end
+  prefs[:frontend] = multiple_choice "Front-end framework?", [["None", "none"], ["Zurb Foundation 4.0", "foundation4"],
+    ["Twitter Bootstrap 3.0", "bootstrap3"], ["Twitter Bootstrap 2.3", "bootstrap2"], ["Simple CSS", "simple"]] unless prefs.has_key? :frontend
 end
 
 ## Email
@@ -806,11 +790,9 @@ after_everything do
   gsub_file "README.textile", /RSpec/, "RSpec and Machinist" if prefer :fixtures, 'machinist'
 
   # Front-end Framework
-  gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Twitter Bootstrap (Sass)" if prefer :bootstrap, 'sass'
-  gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Twitter Bootstrap (Less)" if prefer :bootstrap, 'less'
-  gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Zurb Foundation" if prefer :frontend, 'foundation'
-  gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Skeleton" if prefer :frontend, 'skeleton'
-  gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Normalized CSS" if prefer :frontend, 'normalize'
+  gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Twitter Bootstrap 2.3 (Sass)" if prefer :frontend, 'bootstrap2'
+  gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Twitter Bootstrap 3.0 (Sass)" if prefer :frontend, 'bootstrap3'
+  gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Zurb Foundation" if prefer :frontend, 'foundation4'
 
   # Form Builder
   gsub_file "README.textile", /Form Builder: None/, "Form Builder: SimpleForm" if prefer :form_builder, 'simple_form'
@@ -946,21 +928,20 @@ add_gem 'fabrication', :group => [:development, :test] if prefer :fixtures, 'fab
 add_gem 'machinist', :group => :test if prefer :fixtures, 'machinist'
 
 ## Front-end Framework
-add_gem 'bootstrap-sass', '~> 2.3.2.2' if prefer :bootstrap, 'sass'
-add_gem 'rails_layout', :group => :development if prefer :bootstrap, 'sass'
-if prefer :frontend, 'foundation'
-  if rails_4?
-    add_gem 'compass-rails', '~> 2.0.alpha.0'
-  else
-    add_gem 'compass-rails', :group => assets_group
-  end
-end
-add_gem 'zurb-foundation', :group => assets_group if prefer :frontend, 'foundation'
-if prefer :bootstrap, 'less'
-  add_gem 'less-rails', :group => assets_group
-  add_gem 'twitter-bootstrap-rails', :group => assets_group
-  # install gem 'therubyracer' to use Less
-  add_gem 'therubyracer', :group => assets_group, :platform => :ruby
+add_gem 'rails_layout', :group => :development
+case prefs[:frontend]
+  when 'bootstrap2'
+    add_gem 'bootstrap-sass', '~> 2.3.2.2'
+  when 'bootstrap3'
+    add_gem 'bootstrap-sass', '>= 3.0.0.0'
+  when 'foundation4'
+    if rails_4?
+      add_gem 'zurb-foundation'
+      add_gem 'compass-rails', '~> 2.0.alpha.0'
+    else
+      add_gem 'zurb-foundation', :group => assets_group
+      add_gem 'compass-rails', '~> 1.0.3', :group => assets_group
+    end
 end
 
 ## Email
@@ -986,11 +967,7 @@ if prefer :authorization, 'cancan'
 end
 
 ## Form Builder
-if rails_4?
-  add_gem 'simple_form', '>= 3.0.0.rc' if prefer :form_builder, 'simple_form'
-else
-  add_gem 'simple_form' if prefer :form_builder, 'simple_form'
-end
+add_gem 'simple_form' if prefer :form_builder, 'simple_form'
 
 ## Membership App
 if prefer :railsapps, 'rails-stripe-membership-saas'
@@ -1079,16 +1056,21 @@ end # after_bundler
 
 ### GENERATORS ###
 after_bundler do
-  ## Front-end Framework
-  generate 'foundation:install' if prefer :frontend, 'foundation'
   ## Form Builder
   if prefer :form_builder, 'simple_form'
-    if prefer :frontend, 'bootstrap'
-      say_wizard "recipe installing simple_form for use with Twitter Bootstrap"
-      generate 'simple_form:install --bootstrap'
-    else
-      say_wizard "recipe installing simple_form"
-      generate 'simple_form:install'
+    case prefs[:frontend]
+      when 'bootstrap2'
+        say_wizard "recipe installing simple_form for use with Twitter Bootstrap"
+        generate 'simple_form:install --bootstrap'
+      when 'bootstrap3'
+        say_wizard "recipe installing simple_form for use with Twitter Bootstrap"
+        generate 'simple_form:install --bootstrap'
+      when 'foundation4'
+        say_wizard "recipe installing simple_form for use with Zurb Foundation"
+        generate 'simple_form:install --foundation'
+      else
+        say_wizard "recipe installing simple_form"
+        generate 'simple_form:install'
     end
   end
   ## Figaro Gem
@@ -1104,6 +1086,7 @@ after_bundler do
 # For example, setting:
 # GMAIL_USERNAME: Your_Gmail_Username
 # makes 'Your_Gmail_Username' available as ENV["GMAIL_USERNAME"]
+
 FILE
     end
   end
@@ -1805,12 +1788,19 @@ say_recipe 'frontend'
 
 after_bundler do
   say_wizard "recipe running after 'bundle install'"
-  ### LAYOUTS ###
-  copy_from_repo 'app/views/layouts/application.html.erb'
-  copy_from_repo 'app/views/layouts/application-bootstrap.html.erb', :prefs => 'bootstrap'
-  copy_from_repo 'app/views/layouts/_messages.html.erb'
-  copy_from_repo 'app/views/layouts/_messages-bootstrap.html.erb', :prefs => 'bootstrap'
-  copy_from_repo 'app/views/layouts/_navigation.html.erb'
+  # set up a front-end framework using the rails_layout gem
+  case prefs[:frontend]
+    when 'simple'
+      generate 'layout simple -f'
+    when 'bootstrap2'
+      generate 'layout bootstrap2 -f'
+    when 'bootstrap3'
+      generate 'layout bootstrap3 -f'
+    when 'foundation4'
+      generate 'layout foundation4 -f'
+  end
+
+  # specialized navigation partials
   if prefer :authorization, 'cancan'
     case prefs[:authentication]
       when 'devise'
@@ -1823,35 +1813,7 @@ after_bundler do
     copy_from_repo 'app/views/layouts/_navigation-omniauth.html.erb', :prefs => 'omniauth'
   end
   copy_from_repo 'app/views/layouts/_navigation-subdomains_app.html.erb', :prefs => 'subdomains_app'
-  ## APPLICATION NAME
-  application_layout_file = Dir['app/views/layouts/application.html.*'].first
-  navigation_partial_file = Dir['app/views/layouts/_navigation.html.*'].first
-  gsub_file application_layout_file, /App_Name/, "#{app_name.humanize.titleize}"
-  gsub_file navigation_partial_file, /App_Name/, "#{app_name.humanize.titleize}"
-  ### CSS ###
-  copy_from_repo 'app/assets/stylesheets/application.css.scss'
-  copy_from_repo 'app/assets/stylesheets/application-bootstrap.css.scss', :prefs => 'bootstrap'
-  if prefer :bootstrap, 'less'
-    generate 'bootstrap:install'
-    insert_into_file 'app/assets/stylesheets/bootstrap_and_overrides.css.less', "body { padding-top: 60px; }\n", :after => "@import \"twitter/bootstrap/bootstrap\";\n"
-  elsif prefer :bootstrap, 'sass'
-    insert_into_file 'app/assets/javascripts/application.js', "//= require bootstrap\n", :after => "jquery_ujs\n"
-    create_file 'app/assets/stylesheets/bootstrap_and_overrides.css.scss', <<-RUBY
-@import "bootstrap";
-body { padding-top: 60px; }
-@import "bootstrap-responsive";
-RUBY
-  elsif prefer :frontend, 'foundation'
-    insert_into_file 'app/assets/stylesheets/application.css.scss', " *= require foundation_and_overrides\n", :after => "require_self\n"
-  elsif prefer :frontend, 'skeleton'
-    copy_from 'https://raw.github.com/necolas/normalize.css/master/normalize.css', 'app/assets/stylesheets/normalize.css'
-    copy_from 'https://raw.github.com/dhgamache/Skeleton/master/stylesheets/base.css', 'app/assets/stylesheets/base.css'
-    copy_from 'https://raw.github.com/dhgamache/Skeleton/master/stylesheets/layout.css', 'app/assets/stylesheets/layout.css'
-    copy_from 'https://raw.github.com/dhgamache/Skeleton/master/stylesheets/skeleton.css', 'app/assets/stylesheets/skeleton.css'
-  elsif prefer :frontend, 'normalize'
-    copy_from 'https://raw.github.com/necolas/normalize.css/master/normalize.css', 'app/assets/stylesheets/normalize.css'
-  end
-  remove_file 'app/assets/stylesheets/application.css'
+
   ### GIT ###
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: front-end framework"' if prefer :git, true
@@ -2019,7 +1981,7 @@ if prefer :apps4, 'learn-rails'
   add_gem 'sqlite3', :group => :development
   add_gem 'pg', :group => :production
   add_gem 'thin', :group => :production
-  add_gem 'rails_on_heroku', :group => :production
+  add_gem 'rails_12factor', :group => :production
 
   # >-------------------------------[ after_everything ]--------------------------------<
 
@@ -2067,13 +2029,7 @@ if prefer :apps4, 'learn-rails'
     copy_from_repo 'app/views/user_mailer/contact_email.html.erb', :repo => repo
     copy_from_repo 'app/views/user_mailer/contact_email.text.erb', :repo => repo
     copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
-
-    # >-------------------------------[ Layouts ]--------------------------------<
-
-    # if view files were installed previously, navogation links will be created
-    if prefer :frontend, 'bootstrap'
-      generate 'layout bootstrap2 -f'
-    end
+    copy_from_repo 'app/views/layouts/_navigation.html.erb', :repo => repo
 
     # >-------------------------------[ Routes ]--------------------------------<
 
@@ -2083,10 +2039,7 @@ if prefer :apps4, 'learn-rails'
 
     # >-------------------------------[ Assets ]--------------------------------<
 
-    copy_from_repo 'app/assets/javascripts/application.js', :repo => repo
     copy_from_repo 'app/assets/javascripts/segmentio.js', :repo => repo
-    copy_from_repo 'app/assets/stylesheets/application.css.scss', :repo => repo
-    copy_from_repo 'app/assets/stylesheets/bootstrap_and_overrides.css.scss', :repo => repo
 
     ### GIT ###
     git :add => '-A' if prefer :git, true
@@ -2136,13 +2089,7 @@ if prefer :apps4, 'rails-bootstrap'
 
     copy_from_repo 'app/views/pages/about.html.erb', :repo => repo
     copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
-
-    # >-------------------------------[ Layouts ]--------------------------------<
-
-    # if view files were installed previously, navogation links will be created
-    if prefer :frontend, 'bootstrap'
-      generate 'layout bootstrap2 -f'
-    end
+    copy_from_repo 'app/views/layouts/_navigation.html.erb', :repo => repo
 
     # >-------------------------------[ Routes ]--------------------------------<
 
@@ -2152,9 +2099,7 @@ if prefer :apps4, 'rails-bootstrap'
 
     # >-------------------------------[ Assets ]--------------------------------<
 
-    copy_from_repo 'app/assets/javascripts/application.js', :repo => repo
-    copy_from_repo 'app/assets/stylesheets/application.css.scss', :repo => repo
-    copy_from_repo 'app/assets/stylesheets/bootstrap_and_overrides.css.scss', :repo => repo
+    # no assets
 
     ### GIT ###
     git :add => '-A' if prefer :git, true
@@ -2630,11 +2575,8 @@ case RbConfig::CONFIG['host_os']
   when /linux/i
     prefs[:jsruntime] = yes_wizard? "Add 'therubyracer' JavaScript runtime (for Linux users without node.js)?" unless prefs.has_key? :jsruntime
     if prefs[:jsruntime]
-      # was it already added for bootstrap-less?
-      unless prefer :bootstrap, 'less'
-        say_wizard "recipe adding 'therubyracer' JavaScript runtime gem"
-        add_gem 'therubyracer', :group => :assets, :platform => :ruby
-      end
+      say_wizard "recipe adding 'therubyracer' JavaScript runtime gem"
+      add_gem 'therubyracer', :platform => :ruby
     end
 end
 
@@ -2716,11 +2658,7 @@ end
 # >-----------------------------[ Run 'Bundle Install' ]-------------------------------<
 
 say_wizard "Installing gems. This will take a while."
-if prefs.has_key? :bundle_path
-  run "bundle install --without production --path #{prefs[:bundle_path]}"
-else
-  run 'bundle install --without production'
-end
+run 'bundle install --without production'
 say_wizard "Updating gem paths."
 Gem.clear_paths
 # >-----------------------------[ Run 'After Bundler' Callbacks ]-------------------------------<
