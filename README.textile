@@ -6,7 +6,11 @@ It's the Rails generator on steroids. See the "Rails Composer project page":http
 
 The Rails Composer application template is built from recipes provided by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem. Need to customize the Rails Composer application template? Want to build your own application template? Use the  "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem.
 
-If you're new to Rails, see "What is Ruby on Rails?":http://railsapps.github.io/what-is-ruby-rails.html,  recommendations for a "Rails tutorial":https://tutorials.railsapps.org/rails-tutorial, and a list of top resources for "Ruby and Rails":http://railsapps.github.io/ruby-and-rails.html.
+h4. If You Are New to Rails
+
+If you're new to Rails, see "What is Ruby on Rails?":http://railsapps.github.io/what-is-ruby-rails.html, the book "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html, and recommendations for a "Rails tutorial":https://tutorials.railsapps.org/rails-tutorial.
+
+h3. !http://railsapps.github.io/images/learn-rails-cover-130x161.jpg(Learn Ruby on Rails)!:http://learn-rails.com/learn-ruby-on-rails.html
 
 h3. From the RailsApps Project
 
@@ -28,6 +32,10 @@ Check that appropriate versions of Ruby and Rails are installed in your developm
 @$ rails -v@
 
 Be sure to read the article "Installing Rails":http://railsapps.github.io/installing-rails.html to make sure your development environment is set up properly.
+
+h4. Rails 3.2 or Rails 4.0
+
+Depending on the version of Rails you use, different starter apps are available.
 
 h2. Creating a Starter App
 
@@ -81,7 +89,11 @@ h2. Choose a RailsApps Starter Application
 
 Use Rails Composer to generate any of the example applications from the "RailsApps project":http://railsapps.github.io/. You'll be able to choose your own project name when you generate the app. Generating the application gives you additional options.
 
-To build the example application, Rails must be installed in your development environment. Choices of starter applications will differ depending on whether you are using Rails 4.0 or Rails 3.2.
+To build the example application, Rails must be installed in your development environment.
+
+h4. Rails 3.2 or Rails 4.0
+
+Choices of starter applications will differ depending on whether you are using Rails 4.0 or Rails 3.2.
 
 Here's an example:
 
@@ -99,7 +111,9 @@ $ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/comp
 
 This creates a new Rails app named @myapp@ on your computer. You can use a different name if you wish.
 
-You'll see a prompt:
+h4. Rails 4.0
+
+With Rails 4.0, you'll see a prompt:
 
 <pre>
 question  Install an example application for Rails 4.0?
@@ -117,6 +131,26 @@ question  Starter apps for Rails 4.0. More to come.
 </pre>
 
 Make your choice. The Rails Composer tool may give you other options (other applications may have been added since these notes were written).
+
+h4. Rails 3.2
+
+With Rails 3.2, you'll see a prompt:
+
+<pre>
+question  Install an example application for Rails 3.2?
+          1)  I want to build my own application
+          2)  membership/subscription/saas
+          3)  rails-prelaunch-signup
+          4)  rails3-bootstrap-devise-cancan
+          5)  rails3-devise-rspec-cucumber
+          6)  rails3-mongoid-devise
+          7)  rails3-mongoid-omniauth
+          8)  rails3-subdomains
+</pre>
+
+None of these Rails 3.2 example applications are available for Rails 4.0.
+
+h4. Options
 
 The application generator template will ask you for additional preferences:
 
@@ -169,18 +203,13 @@ If you choose "I want to build my own application," you will get a wide set of c
 
 These options are for experienced developers. Expect to spend time debugging your starter application as not all options are tested or fully supported.
 
-Here's an example of what you'll see using Rails 3.2:
+Here's an example of what you'll see using Rails 4.0:
 
 <pre>
-question  Install an example application?
-        1)  I want to build my own application
-        2)  membership/subscription/saas (Stripe or Recurly)
-        3)  rails-prelaunch-signup
-        4)  rails3-bootstrap-devise-cancan
-        5)  rails3-devise-rspec-cucumber
-        6)  rails3-mongoid-devise
-        7)  rails3-mongoid-omniauth
-        8)  rails3-subdomains
+question  Install an example application for Rails 4.0?
+      1)  Build a RailsApps starter application
+      2)  Build a contributed application
+      3)  I want to build my own application
 
 question  Web server for development?
       1)  WEBrick (default)
@@ -208,28 +237,31 @@ question  Template engine?
 question  Unit testing?
       1)  Test::Unit
       2)  RSpec
+      3)  MiniTest
 
 question  Integration testing?
       1)  None
       2)  RSpec with Capybara
       3)  Cucumber with Capybara
       4)  Turnip with Capybara
+      5)  MiniTest with Capybara
+
+question  Continuous testing?
+      1)  None
+      2)  Guard
 
 question  Fixture replacement?
       1)  None
       2)  Factory Girl
       3)  Machinist
+      4)  Fabrication
 
 question  Front-end framework?
       1)  None
-      2)  Twitter Bootstrap
-      3)  Zurb Foundation
-      4)  Skeleton
-      5)  Just normalize CSS for consistent styling
-
-question  Twitter Bootstrap version?
-      1)  Twitter Bootstrap (Less)
-      2)  Twitter Bootstrap (Sass)
+      2)  Zurb Foundation 4.0
+      3)  Twitter Bootstrap 3.0
+      4)  Twitter Bootstrap 2.3
+      5)  Simple CSS
 
 question  Add support for sending email?
       1)  None
@@ -263,9 +295,12 @@ question  Install a starter app?
       4)  Home Page, User Accounts, Admin Dashboard
 
 extras  Add 'therubyracer' JavaScript runtime (for Linux users without node.js)? (y/n)
-extras  Set a robots.txt file to ban spiders? (y/n) n
-extras  Create a project-specific rvm gemset and .rvmrc? (y/n) n
+extras  Set a robots.txt file to ban spiders? (y/n)
 extras  Create a GitHub repository? (y/n)
+extras  Use application.yml file for environment variables? (y/n)
+extras  Reduce assets logger noise during development? (y/n)
+extras  Improve error reporting with 'better_errors' during development? (y/n)
+extras  Use or create a project-specific rvm gemset? (y/n)
 </pre>
 
 h2. Run the Application
