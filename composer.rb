@@ -315,6 +315,12 @@ if prefer :git, true
   git :init
   git :add => '-A'
   git :commit => '-qm "rails_apps_composer: initial commit"'
+else
+  after_everything do
+    say_wizard "removing .gitignore and .gitkeep files"
+    git_files = Dir[File.join('**','.gitkeep')] + Dir[File.join('**','.gitignore')]
+    File.unlink git_files
+  end
 end
 # >----------------------------- recipes/git.rb ------------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -1507,7 +1513,7 @@ after_bundler do
     generate 'devise user' # create the User model
     if prefer :orm, 'mongoid'
       ## DEVISE AND MONGOID
-      copy_from_repo 'app/models/user.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-devise/master/'
+      copy_from_repo 'app/models/user.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-devise/master/' unless rails_4?
       if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
         gsub_file 'app/models/user.rb', /:registerable,/, ":registerable, :confirmable,"
         gsub_file 'app/models/user.rb', /# field :confirmation_token/, "field :confirmation_token"
@@ -1800,24 +1806,29 @@ after_bundler do
       generate 'layout foundation4 -f'
   end
 
-  # specialized navigation partials
-  if prefer :authorization, 'cancan'
-    case prefs[:authentication]
-      when 'devise'
-        copy_from_repo 'app/views/layouts/_navigation-cancan.html.erb', :prefs => 'cancan'
-      when 'omniauth'
-        copy_from 'https://raw.github.com/RailsApps/rails-composer/master/files/app/views/layouts/_navigation-cancan-omniauth.html.erb', 'app/views/layouts/_navigation.html.erb'
+  ### GIT ###
+  git :add => '-A' if prefer :git, true
+  git :commit => '-qm "rails_apps_composer: front-end framework"' if prefer :git, true
+end # after_bundler
+
+after_everything do
+  say_wizard "recipe running after everything"
+  # create navigation links using the rails_layout gem
+  generate 'navigation -f'
+  # replace with specialized navigation partials
+  if prefer :authentication, 'omniauth'
+    if prefer :authorization, 'cancan'
+      copy_from 'https://raw.github.com/RailsApps/rails-composer/master/files/app/views/layouts/_navigation-cancan-omniauth.html.erb', 'app/views/layouts/_navigation.html.erb'
+    else
+      copy_from_repo 'app/views/layouts/_navigation-omniauth.html.erb', :prefs => 'omniauth'
     end
-  else
-    copy_from_repo 'app/views/layouts/_navigation-devise.html.erb', :prefs => 'devise'
-    copy_from_repo 'app/views/layouts/_navigation-omniauth.html.erb', :prefs => 'omniauth'
   end
   copy_from_repo 'app/views/layouts/_navigation-subdomains_app.html.erb', :prefs => 'subdomains_app'
 
   ### GIT ###
   git :add => '-A' if prefer :git, true
-  git :commit => '-qm "rails_apps_composer: front-end framework"' if prefer :git, true
-end # after_bundler
+  git :commit => '-qm "rails_apps_composer: navigation links"' if prefer :git, true
+end # after_everything
 # >--------------------------- recipes/frontend.rb ---------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
@@ -2029,7 +2040,8 @@ if prefer :apps4, 'learn-rails'
     copy_from_repo 'app/views/user_mailer/contact_email.html.erb', :repo => repo
     copy_from_repo 'app/views/user_mailer/contact_email.text.erb', :repo => repo
     copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
-    copy_from_repo 'app/views/layouts/_navigation.html.erb', :repo => repo
+    # create navigation links using the rails_layout gem
+    generate 'navigation -f'
 
     # >-------------------------------[ Routes ]--------------------------------<
 
@@ -2089,7 +2101,8 @@ if prefer :apps4, 'rails-bootstrap'
 
     copy_from_repo 'app/views/pages/about.html.erb', :repo => repo
     copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
-    copy_from_repo 'app/views/layouts/_navigation.html.erb', :repo => repo
+    # create navigation links using the rails_layout gem
+    generate 'navigation -f'
 
     # >-------------------------------[ Routes ]--------------------------------<
 
