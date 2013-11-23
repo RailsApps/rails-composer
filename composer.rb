@@ -400,7 +400,7 @@ case prefs[:apps4]
     prefs[:unit_test] = false
     prefs[:integration] = false
     prefs[:fixtures] = false
-    prefs[:frontend] = 'foundation4'
+    prefs[:frontend] = 'foundation5'
     prefs[:email] = 'gmail'
     prefs[:authentication] = false
     prefs[:devise_modules] = false
@@ -673,8 +673,10 @@ end
 
 ## Front-end Framework
 if recipes.include? 'frontend'
-  prefs[:frontend] = multiple_choice "Front-end framework?", [["None", "none"], ["Zurb Foundation 4.0", "foundation4"],
-    ["Twitter Bootstrap 3.0", "bootstrap3"], ["Twitter Bootstrap 2.3", "bootstrap2"], ["Simple CSS", "simple"]] unless prefs.has_key? :frontend
+  prefs[:frontend] = multiple_choice "Front-end framework?", [["None", "none"],
+    ["Zurb Foundation 5.0", "foundation5"], ["Zurb Foundation 4.0", "foundation4"],
+    ["Twitter Bootstrap 3.0", "bootstrap3"], ["Twitter Bootstrap 2.3", "bootstrap2"],
+    ["Simple CSS", "simple"]] unless prefs.has_key? :frontend
 end
 
 ## Email
@@ -798,7 +800,8 @@ after_everything do
   # Front-end Framework
   gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Twitter Bootstrap 2.3 (Sass)" if prefer :frontend, 'bootstrap2'
   gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Twitter Bootstrap 3.0 (Sass)" if prefer :frontend, 'bootstrap3'
-  gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Zurb Foundation" if prefer :frontend, 'foundation4'
+  gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Zurb Foundation 4" if prefer :frontend, 'foundation4'
+  gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Zurb Foundation 5" if prefer :frontend, 'foundation5'
 
   # Form Builder
   gsub_file "README.textile", /Form Builder: None/, "Form Builder: SimpleForm" if prefer :form_builder, 'simple_form'
@@ -942,12 +945,14 @@ case prefs[:frontend]
     add_gem 'bootstrap-sass', '>= 3.0.0.0'
   when 'foundation4'
     if rails_4?
-      add_gem 'zurb-foundation'
+      add_gem 'zurb-foundation', '~> 4.3.2'
       add_gem 'compass-rails', '~> 2.0.alpha.0'
     else
-      add_gem 'zurb-foundation', :group => assets_group
+      add_gem 'zurb-foundation', '~> 4.3.2', :group => assets_group
       add_gem 'compass-rails', '~> 1.0.3', :group => assets_group
     end
+  when 'foundation5'
+    add_gem 'foundation-rails'
 end
 
 ## Email
@@ -1804,6 +1809,8 @@ after_bundler do
       generate 'layout bootstrap3 -f'
     when 'foundation4'
       generate 'layout foundation4 -f'
+    when 'foundation5'
+      generate 'layout foundation5 -f'
   end
 
   ### GIT ###
