@@ -400,7 +400,7 @@ case prefs[:apps4]
     prefs[:unit_test] = false
     prefs[:integration] = false
     prefs[:fixtures] = false
-    prefs[:frontend] = 'foundation5'
+    prefs[:frontend] = 'foundation4'
     prefs[:email] = 'gmail'
     prefs[:authentication] = false
     prefs[:devise_modules] = false
@@ -946,7 +946,7 @@ case prefs[:frontend]
   when 'foundation4'
     if rails_4?
       add_gem 'zurb-foundation', '~> 4.3.2'
-      add_gem 'compass-rails', '~> 2.0.alpha.0'
+      add_gem 'compass-rails', '~> 1.1.2'
     else
       add_gem 'zurb-foundation', '~> 4.3.2', :group => assets_group
       add_gem 'compass-rails', '~> 1.0.3', :group => assets_group
