@@ -416,7 +416,7 @@ case prefs[:apps4]
     prefs[:unit_test] = false
     prefs[:integration] = false
     prefs[:fixtures] = false
-    prefs[:frontend] = 'bootstrap2'
+    prefs[:frontend] = 'bootstrap3'
     prefs[:email] = 'none'
     prefs[:authentication] = false
     prefs[:devise_modules] = false
