@@ -172,9 +172,16 @@ The application generator template will ask you for additional preferences:
  question  Continuous testing?
        1)  None
        2)  Guard
+ question  Front-end framework?
+       1)  None
+       2)  Zurb Foundation 5.0
+       3)  Zurb Foundation 4.0
+       4)  Twitter Bootstrap 3.0
+       5)  Twitter Bootstrap 2.3
+       6)  Simple CSS
    extras  Set a robots.txt file to ban spiders? (y/n)
-   extras  Use or create a project-specific rvm gemset? (y/n)
    extras  Create a GitHub repository? (y/n)
+   extras  Use or create a project-specific rvm gemset? (y/n)
 </pre>
 
 h4. Web Servers
@@ -187,16 +194,21 @@ h4. Template Engine
 
 The example application uses the default "ERB" Rails template engine. Optionally, you can use another template engine, such as Haml or Slim. See instructions for "Haml and Rails":http://railsapps.github.io/rails-haml.html.
 
-h4. Other Choices
+h4. Continuous Testing
 
-If you are a beginner, you won't need "continuous testing." If you like to use "Guard":https://github.com/guard/guard, you can select it.
+You won't need "continuous testing" if you are a beginner. Select "none."
+
+h4. Front-end Framework
+
+If you choose a front-end framework, you'll get an application layout file, plus navigation and flash messages, styled with a default theme.
+
+h4. Other Choices
 
 Set a robots.txt file to ban spiders if you want to keep your new site out of Google search results.
 
-It is a good idea to use "RVM":https://rvm.io/, the Ruby Version Manager, and create a project-specific rvm gemset (not available on Windows). See "Installing Rails":http://railsapps.github.io/installing-rails.html.
-
 If you choose to create a GitHub repository, the generator will prompt you for a GitHub username and password.
 
+It is a good idea to use "RVM":https://rvm.io/, the Ruby Version Manager, and create a project-specific rvm gemset (not available on Windows). See "Installing Rails":http://railsapps.github.io/installing-rails.html.
 h2. Build Your Own Application
 
 If you choose "I want to build my own application," you will get a wide set of choices.
