@@ -400,7 +400,6 @@ case prefs[:apps4]
     prefs[:unit_test] = false
     prefs[:integration] = false
     prefs[:fixtures] = false
-    prefs[:frontend] = 'foundation4'
     prefs[:email] = 'gmail'
     prefs[:authentication] = false
     prefs[:devise_modules] = false
@@ -660,7 +659,7 @@ case prefs[:database]
 end
 
 ## Template Engine
-prefs[:templates] = multiple_choice "Template engine?", [["ERB", "erb"], ["Haml", "haml"], ["Slim (experimental)", "slim"]] unless prefs.has_key? :templates
+prefs[:templates] = multiple_choice "Template engine?", [["ERB", "erb"], ["Haml", "haml"], ["Slim", "slim"]] unless prefs.has_key? :templates
 
 ## Testing Framework
 if recipes.include? 'testing'
@@ -890,10 +889,8 @@ if prefer :templates, 'haml'
   add_gem 'html2haml', :group => :development
 end
 if prefer :templates, 'slim'
-  add_gem 'slim'
+  add_gem 'slim-rails'
   add_gem 'haml2slim', :group => :development
-  # Haml is needed for conversion of HTML to Slim
-  add_gem 'haml-rails', :group => :development
   add_gem 'html2haml', :group => :development
 end
 
@@ -2607,6 +2604,11 @@ after_everything do
     public/index.html
     app/assets/images/rails.png
   }.each { |file| remove_file file }
+  # remove temporary Haml gems from Gemfile when Slim is selected
+  if prefer :templates, 'slim'
+    gsub_file 'Gemfile', /  gem 'haml2slim'\n/, "\n"
+    gsub_file 'Gemfile', /  gem 'html2haml'\n/, "\n"
+  end
   # remove commented lines and multiple blank lines from Gemfile
   # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
   gsub_file 'Gemfile', /#.*\n/, "\n"
