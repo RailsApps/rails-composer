@@ -364,7 +364,9 @@ when "4"
     when 'railsapps'
       prefs[:apps4] = multiple_choice "Starter apps for Rails 4.0. More to come.",
         [["learn-rails", "learn-rails"],
-        ["rails-bootstrap", "rails-bootstrap"]]
+        ["rails-bootstrap", "rails-bootstrap"],
+        ["rails-foundation", "rails-foundation"],
+        ["rails-devise", "rails-devise"]]
     when 'contributed_app'
       prefs[:apps4] = multiple_choice "No contributed applications are available.",
         [["continue", "none"]]
@@ -421,6 +423,34 @@ case prefs[:apps4]
     prefs[:devise_modules] = false
     prefs[:authorization] = false
     prefs[:starter_app] = false
+    prefs[:form_builder] = 'simple_form'
+    prefs[:quiet_assets] = true
+    prefs[:local_env_file] = true
+    prefs[:better_errors] = true
+  when 'rails-foundation'
+    prefs[:git] = true
+    prefs[:database] = 'default'
+    prefs[:unit_test] = false
+    prefs[:integration] = false
+    prefs[:fixtures] = false
+    prefs[:frontend] = 'foundation5'
+    prefs[:email] = 'none'
+    prefs[:authentication] = false
+    prefs[:devise_modules] = false
+    prefs[:authorization] = false
+    prefs[:starter_app] = false
+    prefs[:form_builder] = 'simple_form'
+    prefs[:quiet_assets] = true
+    prefs[:local_env_file] = true
+    prefs[:better_errors] = true
+  when 'rails-devise'
+    prefs[:git] = true
+    prefs[:unit_test] = false
+    prefs[:integration] = false
+    prefs[:fixtures] = false
+    prefs[:authentication] = 'devise'
+    prefs[:authorization] = false
+    prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'simple_form'
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = true
@@ -680,8 +710,11 @@ end
 
 ## Email
 if recipes.include? 'email'
-  prefs[:email] = multiple_choice "Add support for sending email?", [["None", "none"], ["Gmail","gmail"], ["SMTP","smtp"],
-    ["SendGrid","sendgrid"], ["Mandrill","mandrill"]] unless prefs.has_key? :email
+  unless prefs.has_key? :email
+    say_wizard "The Devise 'forgot password' feature requires email." if prefer :authentication, 'devise'
+    prefs[:email] = multiple_choice "Add support for sending email?", [["None", "none"], ["Gmail","gmail"], ["SMTP","smtp"],
+      ["SendGrid","sendgrid"], ["Mandrill","mandrill"]]
+  end
 else
   prefs[:email] = 'none'
 end
@@ -1399,11 +1432,23 @@ after_bundler do
   say_wizard "recipe running after 'bundle install'"
   unless prefer :email, 'none'
     if rails_4?
-      send_email_text = <<-TEXT
+      dev_email_text = <<-TEXT
+  # ActionMailer Config
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.raise_delivery_errors = true
   # Send email in development mode.
   config.action_mailer.perform_deliveries = true
 TEXT
-      inject_into_file 'config/environments/development.rb', send_email_text, :after => "config.assets.debug = true"
+      prod_email_text = <<-TEXT
+  # ActionMailer Config
+  config.action_mailer.default_url_options = { :host => 'example.com' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = false
+TEXT
+      inject_into_file 'config/environments/development.rb', dev_email_text, :after => "config.assets.debug = true"
+      inject_into_file 'config/environments/production.rb', prod_email_text, :after => "config.active_support.deprecation = :notify"
     else
       ### DEVELOPMENT
       gsub_file 'config/environments/development.rb', /# Don't care if the mailer can't send/, '# ActionMailer Config'
@@ -1986,6 +2031,8 @@ say_recipe 'apps4'
 # Application template recipe for the rails_apps_composer. Change the recipe here:
 # https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/apps4.rb
 
+### LEARN-RAILS ####
+
 if prefer :apps4, 'learn-rails'
 
   # >-------------------------------[ Gems ]--------------------------------<
@@ -2065,7 +2112,9 @@ if prefer :apps4, 'learn-rails'
   end # after_bundler
 end # learn-rails
 
-if prefer :apps4, 'rails-bootstrap'
+### RAILS-BOOTSTRAP or RAILS-FOUNDATION ####
+
+if (prefer :apps4, 'rails-bootstrap') || (prefer :apps4, 'rails-foundation')
 
   # >-------------------------------[ Gems ]--------------------------------<
 
@@ -2075,7 +2124,8 @@ if prefer :apps4, 'rails-bootstrap'
 
   after_everything do
     say_wizard "recipe running after 'bundle install'"
-    repo = 'https://raw.github.com/RailsApps/rails-bootstrap/master/'
+    repo = 'https://raw.github.com/RailsApps/rails-bootstrap/master/' if prefer :apps4, 'rails-bootstrap'
+    repo = 'https://raw.github.com/RailsApps/rails-foundation/master/' if prefer :apps4, 'rails-foundation'
 
     # >-------------------------------[ Clean up starter app ]--------------------------------<
 
@@ -2121,8 +2171,11 @@ if prefer :apps4, 'rails-bootstrap'
     # no assets
 
     ### GIT ###
-    git :add => '-A' if prefer :git, true
-    git :commit => '-qm "rails_apps_composer: rails-bootstrap app"' if prefer :git, true
+    if prefer :git, true
+      git :add => '-A'
+      git :commit => '-qm "rails_apps_composer: rails-bootstrap app"' if prefer :apps4, 'rails-bootstrap'
+      git :commit => '-qm "rails_apps_composer: rails-foundation app"' if prefer :apps4, 'rails-foundation'
+    end
   end # after_bundler
 end # rails-bootstrap
 # >---------------------------- recipes/apps4.rb -----------------------------end<
