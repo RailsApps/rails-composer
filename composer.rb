@@ -1846,15 +1846,24 @@ after_bundler do
   # set up a front-end framework using the rails_layout gem
   case prefs[:frontend]
     when 'simple'
-      generate 'layout simple -f'
+      generate 'layout:install simple -f'
     when 'bootstrap2'
-      generate 'layout bootstrap2 -f'
+      generate 'layout:install bootstrap2 -f'
     when 'bootstrap3'
-      generate 'layout bootstrap3 -f'
+      generate 'layout:install bootstrap3 -f'
     when 'foundation4'
-      generate 'layout foundation4 -f'
+      generate 'layout:install foundation4 -f'
     when 'foundation5'
-      generate 'layout foundation5 -f'
+      generate 'layout:install foundation5 -f'
+  end
+  # generate Devise views with appropriate styling
+  if prefer :authentication, 'devise'
+    case prefs[:frontend]
+      when 'bootstrap3'
+        generate 'layout:devise bootstrap3 -f'
+      when 'foundation5'
+        generate 'layout:devise foundation5 -f'
+    end
   end
 
   ### GIT ###
@@ -1865,7 +1874,7 @@ end # after_bundler
 after_everything do
   say_wizard "recipe running after everything"
   # create navigation links using the rails_layout gem
-  generate 'navigation -f'
+  generate 'layout:navigation -f'
   # replace with specialized navigation partials
   if prefer :authentication, 'omniauth'
     if prefer :authorization, 'cancan'
@@ -2094,7 +2103,7 @@ if prefer :apps4, 'learn-rails'
     copy_from_repo 'app/views/user_mailer/contact_email.text.erb', :repo => repo
     copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
     # create navigation links using the rails_layout gem
-    generate 'navigation -f'
+    generate 'layout:navigation -f'
 
     # >-------------------------------[ Routes ]--------------------------------<
 
@@ -2158,7 +2167,7 @@ if (prefer :apps4, 'rails-bootstrap') || (prefer :apps4, 'rails-foundation')
     copy_from_repo 'app/views/pages/about.html.erb', :repo => repo
     copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
     # create navigation links using the rails_layout gem
-    generate 'navigation -f'
+    generate 'layout:navigation -f'
 
     # >-------------------------------[ Routes ]--------------------------------<
 
