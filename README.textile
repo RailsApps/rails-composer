@@ -207,6 +207,7 @@ Set a robots.txt file to ban spiders if you want to keep your new site out of Go
 If you choose to create a GitHub repository, the generator will prompt you for a GitHub username and password.
 
 It is a good idea to use "RVM":https://rvm.io/, the Ruby Version Manager, and create a project-specific rvm gemset (not available on Windows). See "Installing Rails":http://railsapps.github.io/installing-rails.html.
+
 h2. Build Your Own Application
 
 If you choose "I want to build my own application," you will get a wide set of choices.
