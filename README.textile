@@ -21,10 +21,10 @@ h2. Starter apps
 Here are some of the starter apps you can build for Rails 4.0.
 
 |_. Rails 4.0 |_. Tutorial |_. Comments |
-| "learn-rails":https://github.io/RailsApps/learn-rails | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | book and example app for beginners |
-| "rails-bootstrap":https://github.io/RailsApps/rails-bootstrap/ | "Tutorial":https://tutorials.railsapps.org/rails-bootstrap | Bootstrap front-end framework |
-| "rails-foundation":https://github.io/RailsApps/rails-foundation/ | see "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | Foundation front-end framework |
-| "Devise and Rails":https://github.io/RailsApps/rails-bootstrap/ | no tutorial (yet) | authentication |
+| "learn-rails":https://github.io/RailsApps/learn-rails | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | book for beginners |
+| "rails-foundation":https://github.io/RailsApps/rails-foundation/ | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | Foundation front-end framework |
+| "rails-bootstrap":https://github.io/RailsApps/rails-bootstrap/ | "Rails and Bootstrap Tutorial":https://tutorials.railsapps.org/rails-bootstrap | Bootstrap front-end framework |
+| "rails-devise":https://github.io/RailsApps/rails-devise/ | no tutorial (yet) | authentication with Devise |
 
 h2. Dependencies
 
