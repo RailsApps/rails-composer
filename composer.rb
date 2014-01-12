@@ -450,8 +450,7 @@ case prefs[:apps4]
     prefs[:fixtures] = false
     prefs[:authentication] = 'devise'
     prefs[:authorization] = false
-    prefs[:starter_app] = 'users_app'
-    prefs[:form_builder] = 'simple_form'
+    prefs[:starter_app] = false
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = true
     prefs[:better_errors] = true
@@ -1687,13 +1686,13 @@ RUBY
   ### USERS_CONTROLLER ###
   case prefs[:starter_app]
     when 'users_app'
-      if prefer :authentication, 'devise'
+      if (prefer :authentication, 'devise') and (not prefer :apps4, 'rails-devise')
         copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
       elsif prefer :authentication, 'omniauth'
         copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
       end
     when 'admin_app'
-      if prefer :authentication, 'devise'
+      if (prefer :authentication, 'devise') and (not prefer :apps4, 'rails-devise')
         copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-bootstrap-devise-cancan/master/'
       elsif prefer :authentication, 'omniauth'
         copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
@@ -1740,7 +1739,7 @@ say_recipe 'views'
 after_bundler do
   say_wizard "recipe running after 'bundle install'"
   ### DEVISE ###
-  if prefer :authentication, 'devise'
+  if (prefer :authentication, 'devise') and (not prefer :apps4, 'rails-devise')
     copy_from_repo 'app/views/devise/shared/_links.html.erb'
     unless prefer :form_builder, 'simple_form'
       copy_from_repo 'app/views/devise/registrations/edit.html.erb'
@@ -1805,7 +1804,7 @@ after_bundler do
   ### USER_ACCOUNTS ###
   if ['users_app','admin_app'].include? prefs[:starter_app]
     ## DEVISE
-    if prefer :authentication, 'devise'
+    if (prefer :authentication, 'devise') and (not prefer :apps4, 'rails-devise')
       copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
       ## Rails 4.0 doesn't allow two 'root' routes
       gsub_file 'config/routes.rb', /authenticated :user do\n.*\n.*\n  /, '' if rails_4?
@@ -1981,11 +1980,21 @@ FILE
     end
   end
   ## DEVISE-DEFAULT
-  if prefer :authentication, 'devise'
+  if (prefer :authentication, 'devise') and (not prefer :apps4, 'rails-devise')
     append_file 'db/seeds.rb' do <<-FILE
 puts 'DEFAULT USERS'
 user = User.find_or_create_by_email :name => ENV['ADMIN_NAME'].dup, :email => ENV['ADMIN_EMAIL'].dup, :password => ENV['ADMIN_PASSWORD'].dup, :password_confirmation => ENV['ADMIN_PASSWORD'].dup
 puts 'user: ' << user.name
+FILE
+    end
+    # Mongoid doesn't have a 'find_or_create_by' method
+    gsub_file 'db/seeds.rb', /find_or_create_by_email/, 'create!' if prefer :orm, 'mongoid'
+  end
+  if prefer :apps4, 'rails-devise'
+    append_file 'db/seeds.rb' do <<-FILE
+puts 'DEFAULT USERS'
+user = User.find_or_create_by_email :email => ENV['ADMIN_EMAIL'].dup, :password => ENV['ADMIN_PASSWORD'].dup, :password_confirmation => ENV['ADMIN_PASSWORD'].dup
+puts 'user: ' << user.email
 FILE
     end
     # Mongoid doesn't have a 'find_or_create_by' method
@@ -2187,6 +2196,67 @@ if (prefer :apps4, 'rails-bootstrap') || (prefer :apps4, 'rails-foundation')
     end
   end # after_bundler
 end # rails-bootstrap
+
+### RAILS-DEVISE ####
+
+if prefer :apps4, 'rails-devise'
+
+  # >-------------------------------[ after_bundler ]--------------------------------<
+
+  after_bundler do
+    say_wizard "recipe running after 'bundle install'"
+    repo = 'https://raw.github.com/RailsApps/rails-devise/master/'
+
+    # >-------------------------------[ Init ]--------------------------------<
+
+    copy_from_repo 'config/application.yml', :repo => repo
+    remove_file 'config/application.example.yml'
+    copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
+
+    # >-------------------------------[ Controllers ]--------------------------------<
+
+    copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/users_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/registrations_controller.rb', :repo => repo
+
+    # >-------------------------------[ Views ]--------------------------------<
+
+    copy_from_repo 'app/views/home/index.html.erb', :repo => repo
+    copy_from_repo 'app/views/users/index.html.erb', :repo => repo
+    copy_from_repo 'app/views/users/show.html.erb', :repo => repo
+
+    # >-------------------------------[ Routes ]--------------------------------<
+
+    copy_from_repo 'config/routes.rb', :repo => repo
+    ### CORRECT APPLICATION NAME ###
+    gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
+
+  end
+
+  # >-------------------------------[ after_everything ]--------------------------------<
+
+  after_everything do
+    say_wizard "recipe running after 'bundle install'"
+
+    # >-------------------------------[ Clean up starter app ]--------------------------------<
+
+    # remove commented lines and multiple blank lines from Gemfile
+    # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
+    gsub_file 'Gemfile', /#.*\n/, "\n"
+    gsub_file 'Gemfile', /\n^\s*\n/, "\n"
+    # remove commented lines and multiple blank lines from config/routes.rb
+    gsub_file 'config/routes.rb', /  #.*\n/, "\n"
+    gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
+    # GIT
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: clean up starter app"' if prefer :git, true
+
+    ### GIT ###
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: learn-rails app"' if prefer :git, true
+
+  end # after_bundler
+end # rails-devise
 # >---------------------------- recipes/apps4.rb -----------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
