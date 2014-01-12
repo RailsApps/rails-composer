@@ -16,6 +16,16 @@ h4. If You Are New to Rails
 
 If you're new to Rails, see "What is Ruby on Rails?":http://railsapps.github.io/what-is-ruby-rails.html, the book "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html, and recommendations for a "Rails tutorial":https://tutorials.railsapps.org/rails-tutorial.
 
+h2. Starter apps
+
+Here are some of the starter apps you can build for Rails 4.0.
+
+|_. Rails 4.0 |_. Tutorial |_. Comments |
+| "learn-rails":https://github.io/RailsApps/learn-rails | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | book and example app for beginners |
+| "rails-bootstrap":https://github.io/RailsApps/rails-bootstrap/ | "Tutorial":https://tutorials.railsapps.org/rails-bootstrap | Bootstrap front-end framework |
+| "rails-foundation":https://github.io/RailsApps/rails-foundation/ | see "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | Foundation front-end framework |
+| "Devise and Rails":https://github.io/RailsApps/rails-bootstrap/ | no tutorial (yet) | authentication |
+
 h2. Dependencies
 
 Before running the Rails Composer tool, you need to install:
