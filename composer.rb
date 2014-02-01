@@ -100,7 +100,7 @@ def add_gem(*all) Gemfile.add(*all); end
 @prefs = {}
 @gems = []
 @diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["controllers", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["apps4", "controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"]]
-@diagnostics_prefs = [{:railsapps=>"rails-recurly-subscription-saas", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails-stripe-membership-saas", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails-stripe-membership-saas", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"mandrill", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails-prelaunch-signup", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"mandrill", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails3-bootstrap-devise-cancan", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails3-bootstrap-devise-cancan", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form", :local_env_file=>true, :continuous_testing=>"none"}, {:railsapps=>"rails3-devise-rspec-cucumber", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-devise", :database=>"mongodb", :orm=>"mongoid", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-omniauth", :database=>"mongodb", :orm=>"mongoid", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-subdomains", :database=>"mongodb", :orm=>"mongoid", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"subdomains_app", :form_builder=>"none"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"rspec-capybara", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"invitable", :authorization=>"cancan", :form_builder=>"simple_form", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"test_unit", :integration=>"none", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"less", :email=>"sendgrid", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}]
+@diagnostics_prefs = [{:railsapps=>"rails-recurly-subscription-saas", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails-stripe-membership-saas", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails-stripe-membership-saas", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"mandrill", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails-prelaunch-signup", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"mandrill", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails3-bootstrap-devise-cancan", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails3-bootstrap-devise-cancan", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form", :local_env_file=>"figaro", :continuous_testing=>"none"}, {:railsapps=>"rails3-devise-rspec-cucumber", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-devise", :database=>"mongodb", :orm=>"mongoid", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-omniauth", :database=>"mongodb", :orm=>"mongoid", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-subdomains", :database=>"mongodb", :orm=>"mongoid", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"subdomains_app", :form_builder=>"none"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"rspec-capybara", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"invitable", :authorization=>"cancan", :form_builder=>"simple_form", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"test_unit", :integration=>"none", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"less", :email=>"sendgrid", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}]
 diagnostics = {}
 
 # >-------------------------- templates/helpers.erb --------------------------start<
@@ -392,7 +392,7 @@ case prefs[:apps4]
     prefs[:starter_app] = false
     prefs[:form_builder] = false
     prefs[:quiet_assets] = false
-    prefs[:local_env_file] = false
+    prefs[:local_env_file] = 'none'
     prefs[:better_errors] = false
     prefs[:ban_spiders] = false
     prefs[:continuous_testing] = false
@@ -409,7 +409,7 @@ case prefs[:apps4]
     prefs[:starter_app] = false
     prefs[:form_builder] = 'simple_form'
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = true
+    prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
   when 'rails-bootstrap'
     prefs[:git] = true
@@ -425,7 +425,7 @@ case prefs[:apps4]
     prefs[:starter_app] = false
     prefs[:form_builder] = 'simple_form'
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = true
+    prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
   when 'rails-foundation'
     prefs[:git] = true
@@ -441,7 +441,7 @@ case prefs[:apps4]
     prefs[:starter_app] = false
     prefs[:form_builder] = 'simple_form'
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = true
+    prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
   when 'rails-devise'
     prefs[:git] = true
@@ -452,7 +452,7 @@ case prefs[:apps4]
     prefs[:authorization] = false
     prefs[:starter_app] = false
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = true
+    prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
 end
 
@@ -478,7 +478,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'admin_app'
     prefs[:form_builder] = 'simple_form'
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = true
+    prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
   when 'rails-recurly-subscription-saas'
     prefs[:git] = true
@@ -494,7 +494,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'admin_app'
     prefs[:form_builder] = 'simple_form'
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = true
+    prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
   when 'rails-prelaunch-signup'
     prefs[:git] = true
@@ -510,7 +510,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'admin_app'
     prefs[:form_builder] = 'simple_form'
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = true
+    prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
     if prefer :git, true
       prefs[:prelaunch_branch] = multiple_choice "Git branch for the prelaunch app?",
@@ -542,7 +542,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'admin_app'
     prefs[:form_builder] = 'simple_form'
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = true
+    prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
   when 'rails3-devise-rspec-cucumber'
     prefs[:git] = true
@@ -558,7 +558,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = true
+    prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
   when 'rails3-devise-rspec-cucumber-fabrication'
     prefs[:git] = true
@@ -574,7 +574,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = true
+    prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
   when 'rails3-mongoid-devise'
     prefs[:git] = true
@@ -591,7 +591,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = true
+    prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
   when 'rails3-mongoid-omniauth'
     prefs[:git] = true
@@ -608,7 +608,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'users_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = true
+    prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
   when 'rails3-subdomains'
     prefs[:git] = true
@@ -625,7 +625,7 @@ case prefs[:railsapps]
     prefs[:starter_app] = 'subdomains_app'
     prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = true
+    prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
 end
 # >-------------------------- recipes/railsapps.rb ---------------------------end<
@@ -796,61 +796,71 @@ after_everything do
   # add placeholder READMEs and humans.txt file
   copy_from_repo 'public/humans.txt'
   copy_from_repo 'README'
-  copy_from_repo 'README.textile'
+  copy_from_repo 'README.md'
   gsub_file "README", /App_Name/, "#{app_name.humanize.titleize}"
-  gsub_file "README.textile", /App_Name/, "#{app_name.humanize.titleize}"
+  gsub_file "README.md", /App_Name/, "#{app_name.humanize.titleize}"
 
   # Diagnostics
-  gsub_file "README.textile", /recipes that are known/, "recipes that are NOT known" if diagnostics[:recipes] == 'fail'
-  gsub_file "README.textile", /preferences that are known/, "preferences that are NOT known" if diagnostics[:prefs] == 'fail'
-  gsub_file "README.textile", /RECIPES/, recipes.sort.inspect
-  gsub_file "README.textile", /PREFERENCES/, prefs.inspect
-  gsub_file "README", /RECIPES/, recipes.sort.inspect
-  gsub_file "README", /PREFERENCES/, prefs.inspect
+  gsub_file "README.md", /recipes that are known/, "recipes that are NOT known" if diagnostics[:recipes] == 'fail'
+  gsub_file "README.md", /preferences that are known/, "preferences that are NOT known" if diagnostics[:prefs] == 'fail'
+  print_recipes = recipes.sort.map { |r| "\n* #{r}" }.join('')
+  print_preferences = prefs.map { |k, v| "\n* #{k}: #{v}" }.join('')
+  gsub_file "README.md", /RECIPES/, print_recipes
+  gsub_file "README.md", /PREFERENCES/, print_preferences
+  gsub_file "README", /RECIPES/, print_recipes
+  gsub_file "README", /PREFERENCES/, print_preferences
 
   # Ruby on Rails
-  gsub_file "README.textile", /\* Ruby/, "* Ruby version #{RUBY_VERSION}"
-  gsub_file "README.textile", /\* Rails/, "* Rails version #{Rails::VERSION::STRING}"
+  gsub_file "README.md", /\* Ruby/, "* Ruby version #{RUBY_VERSION}"
+  gsub_file "README.md", /\* Rails/, "* Rails version #{Rails::VERSION::STRING}"
 
   # Database
-  gsub_file "README.textile", /SQLite/, "PostgreSQL" if prefer :database, 'postgresql'
-  gsub_file "README.textile", /SQLite/, "MySQL" if prefer :database, 'mysql'
-  gsub_file "README.textile", /SQLite/, "MongoDB" if prefer :database, 'mongodb'
-  gsub_file "README.textile", /ActiveRecord/, "the Mongoid ORM" if prefer :orm, 'mongoid'
+  gsub_file "README.md", /SQLite/, "PostgreSQL" if prefer :database, 'postgresql'
+  gsub_file "README.md", /SQLite/, "MySQL" if prefer :database, 'mysql'
+  gsub_file "README.md", /SQLite/, "MongoDB" if prefer :database, 'mongodb'
+  gsub_file "README.md", /ActiveRecord/, "the Mongoid ORM" if prefer :orm, 'mongoid'
 
   # Template Engine
-  gsub_file "README.textile", /ERB/, "Haml" if prefer :templates, 'haml'
-  gsub_file "README.textile", /ERB/, "Slim" if prefer :templates, 'slim'
+  gsub_file "README.md", /ERB/, "Haml" if prefer :templates, 'haml'
+  gsub_file "README.md", /ERB/, "Slim" if prefer :templates, 'slim'
 
   # Testing Framework
-  gsub_file "README.textile", /Test::Unit/, "RSpec" if prefer :unit_test, 'rspec'
-  gsub_file "README.textile", /RSpec/, "RSpec and Cucumber" if prefer :integration, 'cucumber'
-  gsub_file "README.textile", /RSpec/, "RSpec and Factory Girl" if prefer :fixtures, 'factory_girl'
-  gsub_file "README.textile", /RSpec/, "RSpec and Machinist" if prefer :fixtures, 'machinist'
+  gsub_file "README.md", /Test::Unit/, "RSpec" if prefer :unit_test, 'rspec'
+  gsub_file "README.md", /RSpec/, "RSpec and Cucumber" if prefer :integration, 'cucumber'
+  gsub_file "README.md", /RSpec/, "RSpec and Factory Girl" if prefer :fixtures, 'factory_girl'
+  gsub_file "README.md", /RSpec/, "RSpec and Machinist" if prefer :fixtures, 'machinist'
 
   # Front-end Framework
-  gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Twitter Bootstrap 2.3 (Sass)" if prefer :frontend, 'bootstrap2'
-  gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Twitter Bootstrap 3.0 (Sass)" if prefer :frontend, 'bootstrap3'
-  gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Zurb Foundation 4" if prefer :frontend, 'foundation4'
-  gsub_file "README.textile", /Front-end Framework: None/, "Front-end Framework: Zurb Foundation 5" if prefer :frontend, 'foundation5'
+  gsub_file "README.md", /Front-end Framework: None/, "Front-end Framework: Twitter Bootstrap 2.3 (Sass)" if prefer :frontend, 'bootstrap2'
+  gsub_file "README.md", /Front-end Framework: None/, "Front-end Framework: Twitter Bootstrap 3.0 (Sass)" if prefer :frontend, 'bootstrap3'
+  gsub_file "README.md", /Front-end Framework: None/, "Front-end Framework: Zurb Foundation 4" if prefer :frontend, 'foundation4'
+  gsub_file "README.md", /Front-end Framework: None/, "Front-end Framework: Zurb Foundation 5" if prefer :frontend, 'foundation5'
 
   # Form Builder
-  gsub_file "README.textile", /Form Builder: None/, "Form Builder: SimpleForm" if prefer :form_builder, 'simple_form'
+  gsub_file "README.md", /Form Builder: None/, "Form Builder: SimpleForm" if prefer :form_builder, 'simple_form'
 
   # Email
   unless prefer :email, 'none'
-    gsub_file "README.textile", /Gmail/, "SMTP" if prefer :email, 'smtp'
-    gsub_file "README.textile", /Gmail/, "SendGrid" if prefer :email, 'sendgrid'
-    gsub_file "README.textile", /Gmail/, "Mandrill" if prefer :email, 'mandrill'
+    gsub_file "README.md", /Gmail/, "SMTP" if prefer :email, 'smtp'
+    gsub_file "README.md", /Gmail/, "SendGrid" if prefer :email, 'sendgrid'
+    gsub_file "README.md", /Gmail/, "Mandrill" if prefer :email, 'mandrill'
+    gsub_file "README.md", /Email delivery is disabled in development./, "Email delivery is configured via MailCatcher in development." if prefer :mailcatcher, true
+    insert_into_file 'README.md', "\nEmail rendering in development enabled via MailView.", :after => /Email delivery is.*\n/ if prefer :mail_view, true
   else
-    gsub_file "README.textile", /h2. Email/, ""
-    gsub_file "README.textile", /The application is configured to send email using a Gmail account./, ""
+    gsub_file "README.md", /Email/, ""
+    gsub_file "README.md", /-----/, ""
+    gsub_file "README.md", /The application is configured to send email using a Gmail account./, ""
+    gsub_file "README.md", /Email delivery is disabled in development./, ""
   end
 
   # Authentication and Authorization
-  gsub_file "README.textile", /Authentication: None/, "Authentication: Devise" if prefer :authentication, 'devise'
-  gsub_file "README.textile", /Authentication: None/, "Authentication: OmniAuth" if prefer :authentication, 'omniauth'
-  gsub_file "README.textile", /Authorization: None/, "Authorization: CanCan" if prefer :authorization, 'cancan'
+  gsub_file "README.md", /Authentication: None/, "Authentication: Devise" if prefer :authentication, 'devise'
+  gsub_file "README.md", /Authentication: None/, "Authentication: OmniAuth" if prefer :authentication, 'omniauth'
+  gsub_file "README.md", /Authorization: None/, "Authorization: CanCan" if prefer :authorization, 'cancan'
+
+  # Admin
+  gsub_file "README.md", /Admin: None/, "Admin: ActiveAdmin" if prefer :admin, 'activeadmin'
+  gsub_file "README.md", /Admin: None/, "Admin: RailsAdmin" if prefer :admin, 'rails_admin'
 
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: add README files"' if prefer :git, true
@@ -935,7 +945,7 @@ if prefer :unit_test, 'rspec'
   add_gem 'database_cleaner', '1.0.1', :group => :test
   if prefer :orm, 'mongoid'
     if rails_4?
-      add_gem 'mongoid-rspec', '>= 1.6.0', github: 'evansagge/mongoid-rspec', :group => :test
+      add_gem 'mongoid-rspec', '>= 1.10.0', :group => :test
     else
       add_gem 'mongoid-rspec', :group => :test
     end
@@ -1049,6 +1059,7 @@ after_bundler do
     if prefer :database, 'postgresql'
       begin
         pg_username = prefs[:pg_username] || ask_wizard("Username for PostgreSQL?(leave blank to use the app name)")
+        pg_host = prefs[:pg_username] || ask_wizard("Host for PostgreSQL in database.yml? (leave blank to use default socket connection)")
         if pg_username.blank?
           say_wizard "Creating a user named '#{app_name}' for PostgreSQL"
           run "createuser --createdb #{app_name}" if prefer :database, 'postgresql'
@@ -1058,6 +1069,10 @@ after_bundler do
           pg_password = prefs[:pg_password] || ask_wizard("Password for PostgreSQL user #{pg_username}?")
           gsub_file "config/database.yml", /password:/, "password: #{pg_password}"
           say_wizard "set config/database.yml for username/password #{pg_username}/#{pg_password}"
+        end
+        if pg_host.present?
+          gsub_file "config/database.yml", /#host: localhost/, "host: #{pg_host}"
+          gsub_file "config/database.yml", /test:/, "test:\n  host: #{pg_host}"
         end
       rescue StandardError => e
         raise "unable to create a user for PostgreSQL, reason: #{e}"
@@ -1116,7 +1131,7 @@ after_bundler do
     end
   end
   ## Figaro Gem
-  if prefs[:local_env_file]
+  if prefer :local_env_file, 'figaro'
     generate 'figaro:install'
     gsub_file 'config/application.yml', /# PUSHER_.*\n/, ''
     gsub_file 'config/application.yml', /# STRIPE_.*\n/, ''
@@ -1130,6 +1145,27 @@ after_bundler do
 # makes 'Your_Gmail_Username' available as ENV["GMAIL_USERNAME"]
 
 FILE
+    end
+  end
+  ## Foreman Gem
+  if prefer :local_env_file, 'foreman'
+    create_file '.env' do <<-FILE
+# Add account credentials and API keys here.
+# This file should be listed in .gitignore to keep your settings secret!
+# Each entry sets a local environment variable and overrides ENV variables in the Unix shell.
+# For example, setting:
+# GMAIL_USERNAME=Your_Gmail_Username
+# makes 'Your_Gmail_Username' available as ENV["GMAIL_USERNAME"]
+
+FILE
+    end
+    create_file 'Procfile', 'web: bundle exec rails server -p $PORT' if prefer :prod_webserver, 'thin'
+    create_file 'Procfile', 'web: bundle exec unicorn -p $PORT' if prefer :prod_webserver, 'unicorn'
+    create_file 'Procfile', 'web: bundle exec puma -p $PORT' if prefer :prod_webserver, 'puma'
+    if (prefs[:dev_webserver] != prefs[:prod_webserver])
+      create_file 'Procfile.dev', 'web: bundle exec rails server -p $PORT' if prefer :dev_webserver, 'thin'
+      create_file 'Procfile.dev', 'web: bundle exec unicorn -p $PORT' if prefer :dev_webserver, 'unicorn'
+      create_file 'Procfile.dev', 'web: bundle exec puma -p $PORT' if prefer :dev_webserver, 'puma'
     end
   end
   ## Git
@@ -1437,7 +1473,7 @@ after_bundler do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
   # Send email in development mode.
-  config.action_mailer.perform_deliveries = true
+  config.action_mailer.perform_deliveries = false
 TEXT
       prod_email_text = <<-TEXT
   # ActionMailer Config
@@ -1630,16 +1666,9 @@ RUBY
       insert_into_file 'app/models/user.rb', "  attr_accessible :role_ids, :as => :admin\n", :before => "  attr_accessible"
     end
     unless prefer :orm, 'mongoid'
-      generate 'rolify:role Role User'
+      generate 'rolify Role User'
     else
-      generate 'rolify:role Role User mongoid'
-      # correct the generation of rolify 3.1 with mongoid
-      # the call to `rolify` should be *after* the inclusion of mongoid
-      # (see https://github.com/EppO/rolify/issues/61)
-      # This isn't needed for rolify>=3.2.0.beta4, but should cause no harm
-      gsub_file 'app/models/user.rb',
-          /^\s*(rolify.*?)$\s*(include Mongoid::Document.*?)$/,
-          "  \\2\n  extend Rolify\n  \\1\n"
+      generate 'rolify Role User --orm=mongoid'
     end
   end
   ### GIT ###
@@ -1918,8 +1947,9 @@ after_everything do
     when 'mandrill'
       credentials = "MANDRILL_USERNAME: Your_Username\nMANDRILL_APIKEY: Your_API_Key\n"
   end
-  append_file 'config/application.yml', credentials if prefs[:local_env_file]
-  if prefs[:local_env_file]
+  append_file 'config/application.yml', credentials if prefer :local_env_file, 'figaro'
+  append_file '.env', credentials.gsub(': ', '=') if prefer :local_env_file, 'foreman'
+  if prefer :local_env_file, 'figaro'
     ## DEFAULT USER
     unless prefer :starter_app, false
       append_file 'config/application.yml' do <<-FILE
@@ -1941,18 +1971,47 @@ FILE
     if (prefer :authorization, 'cancan')
       append_file 'config/application.yml', "ROLES: [admin, user, VIP]\n"
     end
+  elsif prefer :local_env_file, 'foreman'
+    ## DEFAULT USER
+    unless prefer :starter_app, false
+      append_file '.env' do <<-FILE
+ADMIN_NAME=First User
+ADMIN_EMAIL=user@example.com
+ADMIN_PASSWORD=changeme
+FILE
+      end
+    end
+    ## AUTHENTICATION
+    if prefer :authentication, 'omniauth'
+      append_file '.env' do <<-FILE
+OMNIAUTH_PROVIDER_KEY=Your_OmniAuth_Provider_Key
+OMNIAUTH_PROVIDER_SECRET=Your_OmniAuth_Provider_Secret
+FILE
+      end
+    end
+    ## AUTHORIZATION
+    if (prefer :authorization, 'cancan')
+      append_file '.env', "ROLES=[admin, user, VIP]\n"
+    end
   end
   ### SUBDOMAINS ###
   copy_from_repo 'config/application.yml', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
   ### APPLICATION.EXAMPLE.YML ###
-  if prefs[:local_env_file]
+  if prefer :local_env_file, 'figaro'
     copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
+  elsif prefer :local_env_file, 'foreman'
+    copy_file destination_root + '/.env', destination_root + '/.env.example'
   end
   ### DATABASE SEED ###
-  if prefs[:local_env_file]
+  if prefer :local_env_file, 'figaro'
     append_file 'db/seeds.rb' do <<-FILE
 # Environment variables (ENV['...']) can be set in the file config/application.yml.
 # See http://railsapps.github.io/rails-environment-variables.html
+FILE
+    end
+  elsif prefer :local_env_file, 'foreman'
+    append_file 'db/seeds.rb' do <<-FILE
+# Environment variables (ENV['...']) can be set in the file .env file.
 FILE
     end
   end
@@ -2009,7 +2068,11 @@ FILE
   end
   ## DEVISE-INVITABLE
   if prefer :devise_modules, 'invitable'
-    run 'bundle exec rake db:migrate'
+    if prefer :local_env_file, 'foreman'
+      run 'foreman run bundle exec rake db:migrate'
+    else
+      run 'bundle exec rake db:migrate'
+    end
     generate 'devise_invitable user'
   end
   ### APPLY DATABASE SEED ###
@@ -2017,18 +2080,32 @@ FILE
     unless prefer :database, 'default'
       ## ACTIVE_RECORD
       say_wizard "applying migrations and seeding the database"
-      run 'bundle exec rake db:migrate'
-      run 'bundle exec rake db:test:prepare'
+      if prefer :local_env_file, 'foreman'
+        run 'foreman run bundle exec rake db:migrate'
+        run 'foreman run bundle exec rake db:test:prepare'
+      else
+        run 'bundle exec rake db:migrate'
+        run 'bundle exec rake db:test:prepare'
+      end
     end
   else
     ## MONGOID
     say_wizard "dropping database, creating indexes and seeding the database"
-    run 'bundle exec rake db:drop'
-    run 'bundle exec rake db:mongoid:create_indexes'
+    if prefer :local_env_file, 'foreman'
+      run 'foreman run bundle exec rake db:drop'
+      run 'foreman run bundle exec rake db:mongoid:create_indexes'
+    else
+      run 'bundle exec rake db:drop'
+      run 'bundle exec rake db:mongoid:create_indexes'
+    end
   end
   unless prefs[:skip_seeds]
     unless prefer :railsapps, 'rails-recurly-subscription-saas'
-      run 'bundle exec rake db:seed'
+      if prefer :local_env_file, 'foreman'
+        run 'foreman run bundle exec rake db:seed'
+      else
+        run 'bundle exec rake db:seed'
+      end
     end
   end
   ### GIT ###
@@ -2607,7 +2684,7 @@ say_recipe 'extras'
 config = {}
 config['ban_spiders'] = yes_wizard?("Set a robots.txt file to ban spiders?") if true && true unless config.key?('ban_spiders') || prefs.has_key?(:ban_spiders)
 config['github'] = yes_wizard?("Create a GitHub repository?") if true && true unless config.key?('github') || prefs.has_key?(:github)
-config['local_env_file'] = yes_wizard?("Use application.yml file for environment variables?") if true && true unless config.key?('local_env_file') || prefs.has_key?(:local_env_file)
+config['local_env_file'] = multiple_choice("Use file for environment variables?", [["None", "none"], ["Use application.yml with Figaro", "figaro"], ["Use .env with Foreman", "foreman"]]) if true && true unless config.key?('local_env_file') || prefs.has_key?(:local_env_file)
 config['quiet_assets'] = yes_wizard?("Reduce assets logger noise during development?") if true && true unless config.key?('quiet_assets') || prefs.has_key?(:quiet_assets)
 config['better_errors'] = yes_wizard?("Improve error reporting with 'better_errors' during development?") if true && true unless config.key?('better_errors') || prefs.has_key?(:better_errors)
 @configs[@current_recipe] = config
@@ -2692,11 +2769,19 @@ end
 
 ## LOCAL_ENV.YML FILE
 if config['local_env_file']
-  prefs[:local_env_file] = true
+  case config['local_env_file']
+  when 'figaro'
+    prefs[:local_env_file] = 'figaro'
+  when 'foreman'
+    prefs[:local_env_file] = 'foreman'
+  end
 end
-if prefs[:local_env_file]
-  say_wizard "recipe creating application.yml file for environment variables"
+if prefer :local_env_file, 'figaro'
+  say_wizard "recipe creating application.yml file for environment variables with figaro"
   add_gem 'figaro'
+elsif prefer :local_env_file, 'foreman'
+  say_wizard "recipe creating .env file for development environment variables with foreman"
+  add_gem 'foreman', :group => :development
 end
 
 ## BETTER ERRORS
@@ -2838,23 +2923,7 @@ say_wizard "Running 'after everything' callbacks."
 @after_everything_blocks.each{|b| config = @configs[b[0]] || {}; @current_recipe = b[0]; puts @current_recipe; b[1].call}
 
 @current_recipe = nil
-if diagnostics[:recipes] == 'success'
-  say_wizard("WOOT! The recipes you've selected are known to work together.")
-  say_wizard("If they don't, open an issue for rails_apps_composer on GitHub.")
-else
-  say_wizard("\033[1m\033[36m" + "WARNING! The recipes you've selected might not work together." + "\033[0m")
-  say_wizard("Help us out by reporting whether this combination works or fails.")
-  say_wizard("Please open an issue for rails_apps_composer on GitHub.")
-  say_wizard("Your new application will contain diagnostics in its README file.")
-end
-if diagnostics[:prefs] == 'success'
-  say_wizard("WOOT! The preferences you've selected are known to work together.")
-  say_wizard("If they don't, open an issue for rails_apps_composer on GitHub.")
-else
-  say_wizard("\033[1m\033[36m" + "WARNING! The preferences you've selected might not work together." + "\033[0m")
-  say_wizard("Help us out by reporting whether this combination works or fails.")
-  say_wizard("Please open an issue for rails_apps_composer on GitHub.")
-  say_wizard("Your new application will contain diagnostics in its README file.")
-end
+say_wizard("Your new application will contain diagnostics in its README file.")
+say_wizard("When reporting an issue on GitHub, include the README diagnostics.")
 say_wizard "Finished running the rails_apps_composer app template."
 say_wizard "Your new Rails app is ready. Time to run 'bundle install'."
