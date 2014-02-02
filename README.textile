@@ -224,6 +224,8 @@ If you choose "I want to build my own application," you will get a wide set of c
 
 These options are for experienced developers. Expect to spend time debugging your starter application as not all options are tested or fully supported.
 
+You'll have a choice of databases. If you choose something other than SQLite, the database server must be running.
+
 Here's an example of what you'll see using Rails 4.0:
 
 <pre>
