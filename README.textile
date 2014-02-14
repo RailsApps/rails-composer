@@ -25,6 +25,7 @@ Here are some of the starter apps you can build for Rails 4.0.
 | "rails-foundation":https://github.com/RailsApps/rails-foundation/ | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | Foundation front-end framework |
 | "rails-bootstrap":https://github.com/RailsApps/rails-bootstrap/ | "Rails and Bootstrap Tutorial":https://tutorials.railsapps.org/rails-bootstrap | Bootstrap front-end framework |
 | "rails-devise":https://github.com/RailsApps/rails-devise| no tutorial (yet) | authentication with Devise |
+| "rails-omniauth":https://github.com/RailsApps/rails-omniauth| no tutorial (yet) | authentication with OmniAuth |
 
 h2. Dependencies
 
@@ -136,6 +137,7 @@ question  Starter apps for Rails 4.0. More to come.
       2)  rails-bootstrap
       3)  rails-foundation
       4)  rails-devise
+      5)  rails-omniauth
 </pre>
 
 Make your choice. The Rails Composer tool may give you other options (other applications may have been added since these notes were written).
@@ -329,7 +331,12 @@ question  Install a starter app?
 extras  Add 'therubyracer' JavaScript runtime (for Linux users without node.js)? (y/n)
 extras  Set a robots.txt file to ban spiders? (y/n)
 extras  Create a GitHub repository? (y/n)
-extras  Use application.yml file for environment variables? (y/n)
+
+question  Use file for environment variables?
+      1)  None
+      2)  Use application.yml with Figaro
+      3)  Use .env with Foreman
+
 extras  Reduce assets logger noise during development? (y/n)
 extras  Improve error reporting with 'better_errors' during development? (y/n)
 extras  Use or create a project-specific rvm gemset? (y/n)
