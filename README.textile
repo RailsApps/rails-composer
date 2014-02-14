@@ -168,11 +168,15 @@ The application generator template will ask you for additional preferences:
        2)  Thin
        3)  Unicorn
        4)  Puma
+       5)  Phusion Passenger (Apache/Nginx)
+       6)  Phusion Passenger (Standalone)
  question  Web server for production?
        1)  Same as development
        2)  Thin
        3)  Unicorn
        4)  Puma
+       5)  Phusion Passenger (Apache/Nginx)
+       6)  Phusion Passenger (Standalone)
  question  Template engine?
        1)  ERB
        2)  Haml
@@ -239,12 +243,16 @@ question  Web server for development?
       2)  Thin
       3)  Unicorn
       4)  Puma
+      5)  Phusion Passenger (Apache/Nginx)
+      6)  Phusion Passenger (Standalone)
 
 question  Web server for production?
       1)  Same as development
       2)  Thin
       3)  Unicorn
       4)  Puma
+      5)  Phusion Passenger (Apache/Nginx)
+      6)  Phusion Passenger (Standalone)
 
 question  Database used in development?
       1)  SQLite
@@ -364,6 +372,12 @@ For the Puma web server:
 @$ rails server puma@
 
 See the app at "http://localhost:3000/":http://localhost:3000.
+
+For Phusion Passenger (Apache or Nginx integration mode), please refer to "the official documentation":https://www.phusionpassenger.com/documentation_and_support.
+
+For Phusion Passenger (Standalone):
+
+@$ passenger start@
 
 h4. Login
 
