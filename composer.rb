@@ -366,7 +366,8 @@ when "4"
         [["learn-rails", "learn-rails"],
         ["rails-bootstrap", "rails-bootstrap"],
         ["rails-foundation", "rails-foundation"],
-        ["rails-devise", "rails-devise"]]
+        ["rails-devise", "rails-devise"],
+        ["rails-omniauth", "rails-omniauth"]]
     when 'contributed_app'
       prefs[:apps4] = multiple_choice "No contributed applications are available.",
         [["continue", "none"]]
@@ -451,6 +452,19 @@ case prefs[:apps4]
     prefs[:authentication] = 'devise'
     prefs[:authorization] = false
     prefs[:starter_app] = false
+    prefs[:quiet_assets] = true
+    prefs[:local_env_file] = 'figaro'
+    prefs[:better_errors] = true
+  when 'rails-omniauth'
+    prefs[:git] = true
+    prefs[:unit_test] = false
+    prefs[:integration] = false
+    prefs[:fixtures] = false
+    prefs[:email] = 'none'
+    prefs[:authentication] = 'omniauth'
+    prefs[:authorization] = 'none'
+    prefs[:starter_app] = false
+    prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
@@ -910,6 +924,7 @@ else
   add_gem 'unicorn', :group => [:development, :test] if prefer :dev_webserver, 'unicorn'
   add_gem 'unicorn-rails', :group => [:development, :test] if prefer :dev_webserver, 'unicorn'
   add_gem 'puma', :group => [:development, :test] if prefer :dev_webserver, 'puma'
+  add_gem 'passenger', :group => [:development, :test] if prefer :dev_webserver, 'passenger_standalone'
   add_gem 'thin', :group => :production if prefer :prod_webserver, 'thin'
   add_gem 'unicorn', :group => :production if prefer :prod_webserver, 'unicorn'
   add_gem 'puma', :group => :production if prefer :prod_webserver, 'puma'
@@ -1554,7 +1569,7 @@ TEXT
 \n
   config.action_mailer.smtp_settings = {
     address: "smtp.sendgrid.net",
-    port: 25,
+    port: 587,
     domain: ENV["DOMAIN_NAME"],
     authentication: "plain",
     user_name: ENV["SENDGRID_USERNAME"],
@@ -1570,7 +1585,7 @@ TEXT
   \n
     config.action_mailer.smtp_settings = {
       :address   => "smtp.mandrillapp.com",
-      :port      => 25,
+      :port      => 587,
       :user_name => ENV["MANDRILL_USERNAME"],
       :password  => ENV["MANDRILL_APIKEY"]
     }
@@ -1649,19 +1664,16 @@ RUBY
   end
   ### OMNIAUTH ###
   if prefer :authentication, 'omniauth'
-    repo = 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+    repo = 'https://raw.github.com/RailsApps/rails-omniauth/master/'
     copy_from_repo 'config/initializers/omniauth.rb', :repo => repo
     gsub_file 'config/initializers/omniauth.rb', /twitter/, prefs[:omniauth_provider] unless prefer :omniauth_provider, 'twitter'
-    generate 'model User name:string email:string provider:string uid:string' unless prefer :orm, 'mongoid'
-    run 'bundle exec rake db:migrate' unless prefer :orm, 'mongoid'
-    copy_from_repo 'app/models/user.rb', :repo => repo  # copy the User model (Mongoid version)
-    unless prefer :orm, 'mongoid'
-      ## OMNIAUTH AND ACTIVE RECORD
-      gsub_file 'app/models/user.rb', /class User/, 'class User < ActiveRecord::Base'
-      gsub_file 'app/models/user.rb', /^\s*include Mongoid::Document\n/, ''
-      gsub_file 'app/models/user.rb', /^\s*field.*\n/, ''
-      gsub_file 'app/models/user.rb', /^\s*# run 'rake db:mongoid:create_indexes' to create indexes\n/, ''
-      gsub_file 'app/models/user.rb', /^\s*index\(\{ email: 1 \}, \{ unique: true, background: true \}\)\n/, ''
+    if prefer :orm, 'mongoid'
+      repo = 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+      copy_from_repo 'app/models/user.rb', :repo => repo
+    else
+      generate 'model User name:string email:string provider:string uid:string'
+      run 'bundle exec rake db:migrate'
+      copy_from_repo 'app/models/user.rb', :repo => repo
     end
   end
   ### SUBDOMAINS ###
@@ -1703,8 +1715,7 @@ after_bundler do
   say_wizard "recipe running after 'bundle install'"
   ### APPLICATION_CONTROLLER ###
   if prefer :authentication, 'omniauth'
-    #copy_from_repo 'app/controllers/application_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
-    copy_from_repo 'app/controllers/application_controller-omniauth.rb', :prefs => 'omniauth'
+    copy_from_repo 'app/controllers/application_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails-omniauth/master/'
   end
   if prefer :authorization, 'cancan'
     inject_into_file 'app/controllers/application_controller.rb', :before => "\nend" do <<-RUBY
@@ -1717,10 +1728,7 @@ RUBY
   end
   ### HOME_CONTROLLER ###
   if ['home_app','users_app','admin_app','subdomains_app'].include? prefs[:starter_app]
-    generate(:controller, "home index")
-  end
-  if ['users_app','admin_app','subdomains_app'].include? prefs[:starter_app]
-    gsub_file 'app/controllers/home_controller.rb', /def index/, "def index\n    @users = User.all"
+    generate(:controller, "home")
   end
   ### USERS_CONTROLLER ###
   case prefs[:starter_app]
@@ -1728,13 +1736,21 @@ RUBY
       if (prefer :authentication, 'devise') and (not prefer :apps4, 'rails-devise')
         copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
       elsif prefer :authentication, 'omniauth'
-        copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+        if rails_4?
+          copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails-omniauth/master/'
+        else
+          copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+        end
       end
     when 'admin_app'
       if (prefer :authentication, 'devise') and (not prefer :apps4, 'rails-devise')
         copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-bootstrap-devise-cancan/master/'
       elsif prefer :authentication, 'omniauth'
-        copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+        if rails_4?
+          copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails-omniauth/master/'
+        else
+          copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+        end
       end
     when 'subdomains_app'
       copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/'
@@ -1749,7 +1765,7 @@ RUBY
   ### SESSIONS_CONTROLLER ###
   if prefer :authentication, 'omniauth'
     filename = 'app/controllers/sessions_controller.rb'
-    copy_from_repo filename, :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+    copy_from_repo filename, :repo => 'https://raw.github.com/RailsApps/rails-omniauth/master/'
     gsub_file filename, /twitter/, prefs[:omniauth_provider] unless prefer :omniauth_provider, 'twitter'
     if prefer :authorization, 'cancan'
       inject_into_file filename, "    user.add_role :admin if User.count == 1 # make the first user an admin\n", :after => "session[:user_id] = user.id\n"
@@ -1811,7 +1827,7 @@ after_bundler do
     copy_from_repo 'app/views/users/show.html.erb'
     copy_from_repo 'app/views/users/show-subdomains_app.html.erb', :prefs => 'subdomains_app'
     ## EDIT
-    copy_from_repo 'app/views/users/edit-omniauth.html.erb', :prefs => 'omniauth'
+    copy_from_repo 'app/views/users/edit.html.erb', :repo => 'https://raw.github.com/RailsApps/rails-omniauth/master/'
   end
   ### PROFILES ###
   copy_from_repo 'app/views/profiles/show-subdomains_app.html.erb', :prefs => 'subdomains_app'
@@ -1852,8 +1868,11 @@ after_bundler do
     end
     ## OMNIAUTH
     if prefer :authentication, 'omniauth'
-      copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
-      gsub_file 'config/routes.rb', /match/, 'get' if rails_4?
+      if rails_4?
+        copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails-omniauth/master/'
+      else
+        copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+      end
     end
   end
   ### SUBDOMAINS ###
@@ -1914,13 +1933,6 @@ after_everything do
   # create navigation links using the rails_layout gem
   generate 'layout:navigation -f'
   # replace with specialized navigation partials
-  if prefer :authentication, 'omniauth'
-    if prefer :authorization, 'cancan'
-      copy_from 'https://raw.github.com/RailsApps/rails-composer/master/files/app/views/layouts/_navigation-cancan-omniauth.html.erb', 'app/views/layouts/_navigation.html.erb'
-    else
-      copy_from_repo 'app/views/layouts/_navigation-omniauth.html.erb', :prefs => 'omniauth'
-    end
-  end
   copy_from_repo 'app/views/layouts/_navigation-subdomains_app.html.erb', :prefs => 'subdomains_app'
 
   ### GIT ###
@@ -2344,6 +2356,73 @@ if prefer :apps4, 'rails-devise'
 
   end # after_bundler
 end # rails-devise
+
+### RAILS-OMNIAUTH ####
+
+if prefer :apps4, 'rails-omniauth'
+
+  # >-------------------------------[ after_bundler ]--------------------------------<
+
+  after_bundler do
+    say_wizard "recipe running after 'bundle install'"
+    repo = 'https://raw.github.com/RailsApps/rails-omniauth/master/'
+
+    # >-------------------------------[ Init ]--------------------------------<
+
+    copy_from_repo 'config/application.yml', :repo => repo
+    remove_file 'config/application.example.yml'
+    copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
+
+    # >-------------------------------[ Models ]--------------------------------<
+
+    copy_from_repo 'app/models/user.rb', :repo => repo
+
+    # >-------------------------------[ Controllers ]--------------------------------<
+
+    copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/sessions_controller.rb', :repo => repo
+    gsub_file 'app/controllers/sessions_controller.rb', /twitter/, prefs[:omniauth_provider]
+    copy_from_repo 'app/controllers/users_controller.rb', :repo => repo
+
+    # >-------------------------------[ Views ]--------------------------------<
+
+    copy_from_repo 'app/views/home/index.html.erb', :repo => repo
+    copy_from_repo 'app/views/users/edit.html.erb', :repo => repo
+    copy_from_repo 'app/views/users/index.html.erb', :repo => repo
+    copy_from_repo 'app/views/users/show.html.erb', :repo => repo
+
+    # >-------------------------------[ Routes ]--------------------------------<
+
+    copy_from_repo 'config/routes.rb', :repo => repo
+    ### CORRECT APPLICATION NAME ###
+    gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
+
+  end
+
+  # >-------------------------------[ after_everything ]--------------------------------<
+
+  after_everything do
+    say_wizard "recipe running after 'bundle install'"
+
+    # >-------------------------------[ Clean up starter app ]--------------------------------<
+
+    # remove commented lines and multiple blank lines from Gemfile
+    # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
+    gsub_file 'Gemfile', /#.*\n/, "\n"
+    gsub_file 'Gemfile', /\n^\s*\n/, "\n"
+    # remove commented lines and multiple blank lines from config/routes.rb
+    gsub_file 'config/routes.rb', /  #.*\n/, "\n"
+    gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
+    # GIT
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: clean up starter app"' if prefer :git, true
+
+    ### GIT ###
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: learn-rails app"' if prefer :git, true
+
+  end # after_bundler
+end # rails-omniauth
 # >---------------------------- recipes/apps4.rb -----------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
