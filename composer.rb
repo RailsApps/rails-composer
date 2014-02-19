@@ -120,6 +120,10 @@ def rails_4?
   Rails::VERSION::MAJOR.to_s == "4"
 end
 
+def rails_4_1?
+  Rails::VERSION::MAJOR.to_s == "4" && Rails::VERSION::MINOR.to_s == "1"
+end
+
 def ask_wizard(question)
   ask "\033[1m\033[36m" + (@current_recipe || "prompt").rjust(10) + "\033[1m\033[36m" + "  #{question}\033[0m"
 end
@@ -1154,7 +1158,7 @@ after_bundler do
     end
   end
   ## Figaro Gem
-  if prefer :local_env_file, 'figaro'
+  if prefer :local_env_file, 'figaro' and not rails_4_1?
     generate 'figaro:install'
     gsub_file 'config/application.yml', /# PUSHER_.*\n/, ''
     gsub_file 'config/application.yml', /# STRIPE_.*\n/, ''
@@ -1969,9 +1973,9 @@ after_everything do
     when 'mandrill'
       credentials = "MANDRILL_USERNAME: Your_Username\nMANDRILL_APIKEY: Your_API_Key\n"
   end
-  append_file 'config/application.yml', credentials if prefer :local_env_file, 'figaro'
+  append_file 'config/application.yml', credentials if prefer :local_env_file, 'figaro' and not rails_4_1?
   append_file '.env', credentials.gsub(': ', '=') if prefer :local_env_file, 'foreman'
-  if prefer :local_env_file, 'figaro'
+  if prefer :local_env_file, 'figaro' and not rails_4_1?
     ## DEFAULT USER
     unless prefer :starter_app, false
       append_file 'config/application.yml' do <<-FILE
@@ -2019,13 +2023,13 @@ FILE
   ### SUBDOMAINS ###
   copy_from_repo 'config/application.yml', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
   ### APPLICATION.EXAMPLE.YML ###
-  if prefer :local_env_file, 'figaro'
+  if prefer :local_env_file, 'figaro' and not rails_4_1?
     copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
   elsif prefer :local_env_file, 'foreman'
     copy_file destination_root + '/.env', destination_root + '/.env.example'
   end
   ### DATABASE SEED ###
-  if prefer :local_env_file, 'figaro'
+  if prefer :local_env_file, 'figaro' and not rails_4_1?
     append_file 'db/seeds.rb' do <<-FILE
 # Environment variables (ENV['...']) can be set in the file config/application.yml.
 # See http://railsapps.github.io/rails-environment-variables.html
@@ -2865,7 +2869,7 @@ if config['local_env_file']
     prefs[:local_env_file] = 'foreman'
   end
 end
-if prefer :local_env_file, 'figaro'
+if prefer :local_env_file, 'figaro' and not rails_4_1?
   say_wizard "recipe creating application.yml file for environment variables with figaro"
   add_gem 'figaro'
 elsif prefer :local_env_file, 'foreman'
