@@ -366,12 +366,16 @@ when "4"
     ["I want to build my own application", "none"]] unless prefs.has_key? :apps4
   case prefs[:apps4]
     when 'railsapps'
-      prefs[:apps4] = multiple_choice "Starter apps for Rails 4.0. More to come.",
-        [["learn-rails", "learn-rails"],
-        ["rails-bootstrap", "rails-bootstrap"],
-        ["rails-foundation", "rails-foundation"],
-        ["rails-devise", "rails-devise"],
-        ["rails-omniauth", "rails-omniauth"]]
+      if rails_4_1?
+      prefs[:apps4] = multiple_choice "Starter apps for Rails 4.1. More to come.",
+        [["rails-devise", "rails-devise"]]
+      else
+        prefs[:apps4] = multiple_choice "Starter apps for Rails 4.0. More to come.",
+          [["learn-rails", "learn-rails"],
+          ["rails-bootstrap", "rails-bootstrap"],
+          ["rails-foundation", "rails-foundation"],
+          ["rails-omniauth", "rails-omniauth"]]
+      end
     when 'contributed_app'
       prefs[:apps4] = multiple_choice "No contributed applications are available.",
         [["continue", "none"]]
@@ -457,7 +461,7 @@ case prefs[:apps4]
     prefs[:authorization] = false
     prefs[:starter_app] = false
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = 'figaro'
+    prefs[:local_env_file] = false
     prefs[:better_errors] = true
   when 'rails-omniauth'
     prefs[:git] = true
@@ -1158,7 +1162,7 @@ after_bundler do
     end
   end
   ## Figaro Gem
-  if prefer :local_env_file, 'figaro' and not rails_4_1?
+  if prefer :local_env_file, 'figaro'
     generate 'figaro:install'
     gsub_file 'config/application.yml', /# PUSHER_.*\n/, ''
     gsub_file 'config/application.yml', /# STRIPE_.*\n/, ''
@@ -1166,7 +1170,7 @@ after_bundler do
 # Add account credentials and API keys here.
 # See http://railsapps.github.io/rails-environment-variables.html
 # This file should be listed in .gitignore to keep your settings secret!
-# Each entry sets a local environment variable and overrides ENV variables in the Unix shell.
+# Each entry sets a local environment variable.
 # For example, setting:
 # GMAIL_USERNAME: Your_Gmail_Username
 # makes 'Your_Gmail_Username' available as ENV["GMAIL_USERNAME"]
@@ -1179,7 +1183,7 @@ FILE
     create_file '.env' do <<-FILE
 # Add account credentials and API keys here.
 # This file should be listed in .gitignore to keep your settings secret!
-# Each entry sets a local environment variable and overrides ENV variables in the Unix shell.
+# Each entry sets a local environment variable.
 # For example, setting:
 # GMAIL_USERNAME=Your_Gmail_Username
 # makes 'Your_Gmail_Username' available as ENV["GMAIL_USERNAME"]
@@ -1959,77 +1963,77 @@ say_recipe 'init'
 
 after_everything do
   say_wizard "recipe running after everything"
-  ### CONFIGURATION FILE ###
-  ## EMAIL
   case prefs[:email]
     when 'none'
-      credentials = ''
+      secrets_d_email = secrets_p_email = foreman_email = ''
     when 'smtp'
-      credentials = ''
+      secrets_d_email = foreman_email = ''
     when 'gmail'
-      credentials = "GMAIL_USERNAME: Your_Username\nGMAIL_PASSWORD: Your_Password\n"
+      secrets_d_email = "  gmail_username: Your_Username\n  gmail_password: Your_Password\n"
+      secrets_p_email = "  gmail_username: <%= ENV[\"GMAIL_USERNAME\"] %>\n  gmail_password: <%= ENV[\"GMAIL_PASSWORD\"] %>\n"
+      foreman_email = "GMAIL_USERNAME=Your_Username\nGMAIL_PASSWORD=Your_Password\n"
     when 'sendgrid'
-      credentials = "SENDGRID_USERNAME: Your_Username\nSENDGRID_PASSWORD: Your_Password\n"
+      secrets_d_email = "  sendgrid_username: Your_Username\n  sendgrid_password: Your_Password\n"
+      secrets_p_email = "  sendgrid_username: <%= ENV[\"SENDGRID_USERNAME\"] %>\n  sendgrid_password: <%= ENV[\"SENDGRID_PASSWORD\"] %>\n"
+      foreman_email = "SENDGRID_USERNAME=Your_Username\nSENDGRID_PASSWORD=Your_Password\n"
     when 'mandrill'
-      credentials = "MANDRILL_USERNAME: Your_Username\nMANDRILL_APIKEY: Your_API_Key\n"
+      secrets_d_email = "  mandrill_username: Your_Username\n  mandrill_apikey: Your_API_Key\n"
+      secrets_p_email = "  mandrill_username: <%= ENV[\"MANDRILL_USERNAME\"] %>\n  mandrill_apikey: <%= ENV[\"MANDRILL_APIKEY\"] %>\n"
+      foreman_email = "MANDRILL_USERNAME=Your_Username\nMANDRILL_APIKEY=Your_API_Key\n"
   end
-  append_file 'config/application.yml', credentials if prefer :local_env_file, 'figaro' and not rails_4_1?
-  append_file '.env', credentials.gsub(': ', '=') if prefer :local_env_file, 'foreman'
-  if prefer :local_env_file, 'figaro' and not rails_4_1?
-    ## DEFAULT USER
-    unless prefer :starter_app, false
-      append_file 'config/application.yml' do <<-FILE
-ADMIN_NAME: First User
-ADMIN_EMAIL: user@example.com
-ADMIN_PASSWORD: changeme
-FILE
-      end
-    end
-    ## AUTHENTICATION
-    if prefer :authentication, 'omniauth'
-      append_file 'config/application.yml' do <<-FILE
-OMNIAUTH_PROVIDER_KEY: Your_OmniAuth_Provider_Key
-OMNIAUTH_PROVIDER_SECRET: Your_OmniAuth_Provider_Secret
-FILE
-      end
-    end
-    ## AUTHORIZATION
-    if (prefer :authorization, 'cancan')
-      append_file 'config/application.yml', "ROLES: [admin, user, VIP]\n"
-    end
-  elsif prefer :local_env_file, 'foreman'
-    ## DEFAULT USER
-    unless prefer :starter_app, false
-      append_file '.env' do <<-FILE
-ADMIN_NAME=First User
-ADMIN_EMAIL=user@example.com
-ADMIN_PASSWORD=changeme
-FILE
-      end
-    end
-    ## AUTHENTICATION
-    if prefer :authentication, 'omniauth'
-      append_file '.env' do <<-FILE
-OMNIAUTH_PROVIDER_KEY=Your_OmniAuth_Provider_Key
-OMNIAUTH_PROVIDER_SECRET=Your_OmniAuth_Provider_Secret
-FILE
-      end
-    end
-    ## AUTHORIZATION
-    if (prefer :authorization, 'cancan')
-      append_file '.env', "ROLES=[admin, user, VIP]\n"
-    end
+  figaro_email  = foreman_email.gsub('=', ': ')
+  secrets_d_devise = "  admin_name: First User\n  admin_email: user@example.com\n  admin_password: changeme\n"
+  secrets_p_devise = "  admin_name: <%= ENV[\"ADMIN_NAME\"] %>\n  admin_email: <%= ENV[\"ADMIN_EMAIL\"] %>\n  admin_password: <%= ENV[\"ADMIN_PASSWORD\"] %>\n"
+  foreman_devise = "ADMIN_NAME=First User\nADMIN_EMAIL=user@example.com\nADMIN_PASSWORD=changeme\n"
+  figaro_devise  = foreman_devise.gsub('=', ': ')
+  secrets_d_omniauth = "  omniauth_provider_key: Your_Provider_Key\n  omniauth_provider_secret: Your_Provider_Secret\n"
+  secrets_p_omniauth = "  omniauth_provider_key: <%= ENV[\"OMNIAUTH_PROVIDER_KEY\"] %>\n  omniauth_provider_secret: <%= ENV[\"OMNIAUTH_PROVIDER_SECRET\"] %>\n"
+  foreman_omniauth = "OMNIAUTH_PROVIDER_KEY: Your_Provider_Key\nOMNIAUTH_PROVIDER_SECRET: Your_Provider_Secret\n"
+  figaro_omniauth  = foreman_omniauth.gsub('=', ': ')
+  secrets_d_cancan = "  roles: [admin, user, VIP]\n" # unnecessary? CanCan will not be used with Rails 4.1?
+  secrets_p_cancan = "  roles: <%= ENV[\"ROLES\"] %>\n" # unnecessary? CanCan will not be used with Rails 4.1?
+  foreman_cancan = "ROLES=[admin, user, VIP]\n\n"
+  figaro_cancan = foreman_cancan.gsub('=', ': ')
+  ## EMAIL
+  inject_into_file 'config/secrets.yml', secrets_d_email, :after => "development:\n" if rails_4_1?
+  inject_into_file 'config/secrets.yml', secrets_p_email, :after => "production:\n" if rails_4_1?
+  append_file '.env', foreman_email if prefer :local_env_file, 'foreman'
+  append_file 'config/application.yml', figaro_email if prefer :local_env_file, 'figaro'
+  ## DEVISE
+  if prefer :authentication, 'devise'
+    inject_into_file 'config/secrets.yml', secrets_d_devise, :after => "development:\n" if rails_4_1?
+    inject_into_file 'config/secrets.yml', secrets_p_devise, :after => "production:\n" if rails_4_1?
+    append_file '.env', foreman_devise if prefer :local_env_file, 'foreman'
+    append_file 'config/application.yml', figaro_devise if prefer :local_env_file, 'figaro'
   end
-  ### SUBDOMAINS ###
+  ## OMNIAUTH
+  if prefer :authentication, 'omniauth'
+    inject_into_file 'config/secrets.yml', secrets_d_omniauth, :after => "development:\n" if rails_4_1?
+    inject_into_file 'config/secrets.yml', secrets_p_omniauth, :after => "production:\n" if rails_4_1?
+    append_file '.env', foreman_omniauth if prefer :local_env_file, 'foreman'
+    append_file 'config/application.yml', figaro_omniauth if prefer :local_env_file, 'figaro'
+  end
+  ## CANCAN
+  if (prefer :authorization, 'cancan')
+    inject_into_file 'config/secrets.yml', secrets_d_cancan, :after => "development:\n" if rails_4_1?
+    inject_into_file 'config/secrets.yml', secrets_p_cancan, :after => "production:\n" if rails_4_1?
+    append_file '.env', foreman_cancan if prefer :local_env_file, 'foreman'
+    append_file 'config/application.yml', figaro_cancan if prefer :local_env_file, 'figaro'
+  end
+  ### SUBDOMAINS (FIGARO ONLY) ###
   copy_from_repo 'config/application.yml', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
-  ### APPLICATION.EXAMPLE.YML ###
-  if prefer :local_env_file, 'figaro' and not rails_4_1?
+  ### EXAMPLE FILE FOR FOREMAN AND FIGARO ###
+  if prefer :local_env_file, 'figaro'
     copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
   elsif prefer :local_env_file, 'foreman'
     copy_file destination_root + '/.env', destination_root + '/.env.example'
   end
   ### DATABASE SEED ###
-  if prefer :local_env_file, 'figaro' and not rails_4_1?
+  if (prefer :authentication, 'devise') and (rails_4_1?)
+    copy_from_repo 'db/seeds.rb', :repo => 'https://raw.github.com/RailsApps/rails-devise/master/'
+    copy_from_repo 'app/services/create_admin_service.rb', :repo => 'https://raw.github.com/RailsApps/rails-devise/master/'
+  end
+  if prefer :local_env_file, 'figaro'
     append_file 'db/seeds.rb' do <<-FILE
 # Environment variables (ENV['...']) can be set in the file config/application.yml.
 # See http://railsapps.github.io/rails-environment-variables.html
@@ -2065,21 +2069,11 @@ FILE
     end
   end
   ## DEVISE-DEFAULT
-  if (prefer :authentication, 'devise') and (not prefer :apps4, 'rails-devise')
+  if (prefer :authentication, 'devise') and (not prefer :apps4, 'rails-devise') and (not rails_4_1?)
     append_file 'db/seeds.rb' do <<-FILE
 puts 'DEFAULT USERS'
 user = User.find_or_create_by_email :name => ENV['ADMIN_NAME'].dup, :email => ENV['ADMIN_EMAIL'].dup, :password => ENV['ADMIN_PASSWORD'].dup, :password_confirmation => ENV['ADMIN_PASSWORD'].dup
 puts 'user: ' << user.name
-FILE
-    end
-    # Mongoid doesn't have a 'find_or_create_by' method
-    gsub_file 'db/seeds.rb', /find_or_create_by_email/, 'create!' if prefer :orm, 'mongoid'
-  end
-  if prefer :apps4, 'rails-devise'
-    append_file 'db/seeds.rb' do <<-FILE
-puts 'DEFAULT USERS'
-user = User.find_or_create_by_email :email => ENV['ADMIN_EMAIL'].dup, :password => ENV['ADMIN_PASSWORD'].dup, :password_confirmation => ENV['ADMIN_PASSWORD'].dup
-puts 'user: ' << user.email
 FILE
     end
     # Mongoid doesn't have a 'find_or_create_by' method
@@ -2108,10 +2102,8 @@ FILE
       say_wizard "applying migrations and seeding the database"
       if prefer :local_env_file, 'foreman'
         run 'foreman run bundle exec rake db:migrate'
-        run 'foreman run bundle exec rake db:test:prepare'
       else
         run 'bundle exec rake db:migrate'
-        run 'bundle exec rake db:test:prepare'
       end
     end
   else
@@ -2310,12 +2302,6 @@ if prefer :apps4, 'rails-devise'
     say_wizard "recipe running after 'bundle install'"
     repo = 'https://raw.github.com/RailsApps/rails-devise/master/'
 
-    # >-------------------------------[ Init ]--------------------------------<
-
-    copy_from_repo 'config/application.yml', :repo => repo
-    remove_file 'config/application.example.yml'
-    copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
-
     # >-------------------------------[ Controllers ]--------------------------------<
 
     copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
@@ -2370,12 +2356,6 @@ if prefer :apps4, 'rails-omniauth'
   after_bundler do
     say_wizard "recipe running after 'bundle install'"
     repo = 'https://raw.github.com/RailsApps/rails-omniauth/master/'
-
-    # >-------------------------------[ Init ]--------------------------------<
-
-    copy_from_repo 'config/application.yml', :repo => repo
-    remove_file 'config/application.example.yml'
-    copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
 
     # >-------------------------------[ Models ]--------------------------------<
 
@@ -2490,7 +2470,6 @@ if prefer :railsapps, 'rails-prelaunch-signup'
     copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
     copy_from_repo 'db/seeds.rb', :repo => repo
     run 'bundle exec rake db:seed'
-    run 'bundle exec rake db:test:prepare'
 
     # >-------------------------------[ Controllers ]--------------------------------<
 
@@ -2600,7 +2579,6 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     copy_from_repo 'db/seeds.rb', :repo => repo
     copy_from_repo 'config/initializers/stripe.rb', :repo => repo
     run 'bundle exec rake db:seed'
-    run 'bundle exec rake db:test:prepare'
 
     # >-------------------------------[ Controllers ]--------------------------------<
     copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
@@ -2703,7 +2681,6 @@ if prefer :railsapps, 'rails-recurly-subscription-saas'
     copy_from_repo 'db/seeds.rb', :repo => repo
     copy_from_repo 'config/initializers/recurly.rb', :repo => repo
     run 'bundle exec rake db:seed'
-    run 'bundle exec rake db:test:prepare'
 
     # >-------------------------------[ Controllers ]--------------------------------<
     copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
@@ -2777,7 +2754,7 @@ say_recipe 'extras'
 config = {}
 config['ban_spiders'] = yes_wizard?("Set a robots.txt file to ban spiders?") if true && true unless config.key?('ban_spiders') || prefs.has_key?(:ban_spiders)
 config['github'] = yes_wizard?("Create a GitHub repository?") if true && true unless config.key?('github') || prefs.has_key?(:github)
-config['local_env_file'] = multiple_choice("Use file for environment variables?", [["None", "none"], ["Use application.yml with Figaro", "figaro"], ["Use .env with Foreman", "foreman"]]) if true && true unless config.key?('local_env_file') || prefs.has_key?(:local_env_file)
+config['local_env_file'] = multiple_choice("Add gem and file for environment variables?", [["None", "none"], ["Add .env with Foreman", "foreman"], ["Add application.yml with Figaro", "figaro"]]) if true && true unless config.key?('local_env_file') || prefs.has_key?(:local_env_file)
 config['quiet_assets'] = yes_wizard?("Reduce assets logger noise during development?") if true && true unless config.key?('quiet_assets') || prefs.has_key?(:quiet_assets)
 config['better_errors'] = yes_wizard?("Improve error reporting with 'better_errors' during development?") if true && true unless config.key?('better_errors') || prefs.has_key?(:better_errors)
 @configs[@current_recipe] = config
@@ -2869,9 +2846,13 @@ if config['local_env_file']
     prefs[:local_env_file] = 'foreman'
   end
 end
-if prefer :local_env_file, 'figaro' and not rails_4_1?
+if prefer :local_env_file, 'figaro'
   say_wizard "recipe creating application.yml file for environment variables with figaro"
-  add_gem 'figaro'
+  if rails_4_1?
+    add_gem 'figaro', :github => 'laserlemon/figaro'
+  else
+    add_gem 'figaro'
+  end
 elsif prefer :local_env_file, 'foreman'
   say_wizard "recipe creating .env file for development environment variables with foreman"
   add_gem 'foreman', :group => :development
