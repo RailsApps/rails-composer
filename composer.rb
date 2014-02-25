@@ -730,7 +730,7 @@ end
 ## Front-end Framework
 if recipes.include? 'frontend'
   prefs[:frontend] = multiple_choice "Front-end framework?", [["None", "none"],
-    ["Twitter Bootstrap 3.0", "bootstrap3"], ["Twitter Bootstrap 2.3", "bootstrap2"],
+    ["Bootstrap 3.0", "bootstrap3"], ["Bootstrap 2.3", "bootstrap2"],
     ["Zurb Foundation 5.0", "foundation5"], ["Zurb Foundation 4.0", "foundation4"],
     ["Simple CSS", "simple"]] unless prefs.has_key? :frontend
 end
@@ -859,8 +859,8 @@ after_everything do
   gsub_file "README.md", /RSpec/, "RSpec and Machinist" if prefer :fixtures, 'machinist'
 
   # Front-end Framework
-  gsub_file "README.md", /Front-end Framework: None/, "Front-end Framework: Twitter Bootstrap 2.3 (Sass)" if prefer :frontend, 'bootstrap2'
-  gsub_file "README.md", /Front-end Framework: None/, "Front-end Framework: Twitter Bootstrap 3.0 (Sass)" if prefer :frontend, 'bootstrap3'
+  gsub_file "README.md", /Front-end Framework: None/, "Front-end Framework: Bootstrap 2.3 (Sass)" if prefer :frontend, 'bootstrap2'
+  gsub_file "README.md", /Front-end Framework: None/, "Front-end Framework: Bootstrap 3.0 (Sass)" if prefer :frontend, 'bootstrap3'
   gsub_file "README.md", /Front-end Framework: None/, "Front-end Framework: Zurb Foundation 4" if prefer :frontend, 'foundation4'
   gsub_file "README.md", /Front-end Framework: None/, "Front-end Framework: Zurb Foundation 5" if prefer :frontend, 'foundation5'
 
@@ -1148,10 +1148,10 @@ after_bundler do
   if prefer :form_builder, 'simple_form'
     case prefs[:frontend]
       when 'bootstrap2'
-        say_wizard "recipe installing simple_form for use with Twitter Bootstrap"
+        say_wizard "recipe installing simple_form for use with Bootstrap"
         generate 'simple_form:install --bootstrap'
       when 'bootstrap3'
-        say_wizard "recipe installing simple_form for use with Twitter Bootstrap"
+        say_wizard "recipe installing simple_form for use with Bootstrap"
         generate 'simple_form:install --bootstrap'
       when 'foundation4'
         say_wizard "recipe installing simple_form for use with Zurb Foundation"
@@ -1921,32 +1921,11 @@ after_bundler do
     when 'foundation5'
       generate 'layout:install foundation5 -f'
   end
-  # generate Devise views with appropriate styling
-  if prefer :authentication, 'devise'
-    case prefs[:frontend]
-      when 'bootstrap3'
-        generate 'layout:devise bootstrap3 -f'
-      when 'foundation5'
-        generate 'layout:devise foundation5 -f'
-    end
-  end
 
   ### GIT ###
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: front-end framework"' if prefer :git, true
 end # after_bundler
-
-after_everything do
-  say_wizard "recipe running after everything"
-  # create navigation links using the rails_layout gem
-  generate 'layout:navigation -f'
-  # replace with specialized navigation partials
-  copy_from_repo 'app/views/layouts/_navigation-subdomains_app.html.erb', :prefs => 'subdomains_app'
-
-  ### GIT ###
-  git :add => '-A' if prefer :git, true
-  git :commit => '-qm "rails_apps_composer: navigation links"' if prefer :git, true
-end # after_everything
 # >--------------------------- recipes/frontend.rb ---------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
@@ -2129,6 +2108,23 @@ FILE
   ### GIT ###
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: set up database"' if prefer :git, true
+  ### FRONTEND (must run after database migrations) ###
+  # generate Devise views with appropriate styling
+  if prefer :authentication, 'devise'
+    case prefs[:frontend]
+      when 'bootstrap3'
+        generate 'layout:devise bootstrap3 -f'
+      when 'foundation5'
+        generate 'layout:devise foundation5 -f'
+    end
+  end
+  # create navigation links using the rails_layout gem
+  generate 'layout:navigation -f'
+  # replace with specialized navigation partials
+  copy_from_repo 'app/views/layouts/_navigation-subdomains_app.html.erb', :prefs => 'subdomains_app'
+  ### GIT ###
+  git :add => '-A' if prefer :git, true
+  git :commit => '-qm "rails_apps_composer: navigation links"' if prefer :git, true
 end # after_everything
 # >----------------------------- recipes/init.rb -----------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
