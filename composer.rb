@@ -360,8 +360,8 @@ when "3"
     ["rails3-mongoid-omniauth", "rails3-mongoid-omniauth"],
     ["rails3-subdomains", "rails3-subdomains"]] unless prefs.has_key? :railsapps
 when "4"
-  prefs[:apps4] = multiple_choice "Install an example application for Rails 4.0?",
-    [["Build a RailsApps starter application", "railsapps"],
+  prefs[:apps4] = multiple_choice "Build a starter application?",
+    [["Build a RailsApps example application", "railsapps"],
     ["Build a contributed application", "contributed_app"],
     ["I want to build my own application", "none"]] unless prefs.has_key? :apps4
   case prefs[:apps4]
@@ -730,8 +730,8 @@ end
 ## Front-end Framework
 if recipes.include? 'frontend'
   prefs[:frontend] = multiple_choice "Front-end framework?", [["None", "none"],
-    ["Zurb Foundation 5.0", "foundation5"], ["Zurb Foundation 4.0", "foundation4"],
     ["Twitter Bootstrap 3.0", "bootstrap3"], ["Twitter Bootstrap 2.3", "bootstrap2"],
+    ["Zurb Foundation 5.0", "foundation5"], ["Zurb Foundation 4.0", "foundation4"],
     ["Simple CSS", "simple"]] unless prefs.has_key? :frontend
 end
 

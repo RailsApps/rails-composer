@@ -207,10 +207,10 @@ The application generator template will ask you for additional preferences:
        2)  Guard
  question  Front-end framework?
        1)  None
-       2)  Zurb Foundation 5.0
-       3)  Zurb Foundation 4.0
-       4)  Twitter Bootstrap 3.0
-       5)  Twitter Bootstrap 2.3
+       2)  Twitter Bootstrap 3.0
+       3)  Twitter Bootstrap 2.3
+       4)  Zurb Foundation 5.0
+       5)  Zurb Foundation 4.0
        6)  Simple CSS
    extras  Set a robots.txt file to ban spiders? (y/n)
    extras  Create a GitHub repository? (y/n)
@@ -310,10 +310,10 @@ question  Fixture replacement?
 
 question  Front-end framework?
       1)  None
-      2)  Zurb Foundation 5.0
-      3)  Zurb Foundation 4.0
-      4)  Twitter Bootstrap 3.0
-      5)  Twitter Bootstrap 2.3
+      2)  Twitter Bootstrap 3.0
+      3)  Twitter Bootstrap 2.3
+      4)  Zurb Foundation 5.0
+      5)  Zurb Foundation 4.0
       6)  Simple CSS
 
 question  Add support for sending email?
