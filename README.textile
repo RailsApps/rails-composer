@@ -1,6 +1,6 @@
 h1. !http://railsapps.github.io/images/rails-36x36.jpg(Rails Composer)! Rails Composer
 
-An application template that creates a starter application for Rails 4.0 or Rails 3.2.
+An application template that creates a starter application for Rails.
 
 It's the Rails generator on steroids. See the "Rails Composer project page":http://railsapps.github.io/rails-composer.
 
@@ -18,21 +18,23 @@ If you're new to Rails, see "What is Ruby on Rails?":http://railsapps.github.io/
 
 h2. Starter apps
 
-Here are some of the starter apps you can build for Rails 4.0.
+Here are some of the starter apps you can build.
+
+|_. Rails 4.1 |_. Tutorial |_. Comments |
+| "rails-devise":https://github.com/RailsApps/rails-devise| no tutorial (yet) | authentication with Devise |
 
 |_. Rails 4.0 |_. Tutorial |_. Comments |
 | "learn-rails":https://github.com/RailsApps/learn-rails | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | book for beginners |
 | "rails-foundation":https://github.com/RailsApps/rails-foundation/ | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | Foundation front-end framework |
 | "rails-bootstrap":https://github.com/RailsApps/rails-bootstrap/ | "Rails and Bootstrap Tutorial":https://tutorials.railsapps.org/rails-bootstrap | Bootstrap front-end framework |
-| "rails-devise":https://github.com/RailsApps/rails-devise| no tutorial (yet) | authentication with Devise |
 | "rails-omniauth":https://github.com/RailsApps/rails-omniauth| no tutorial (yet) | authentication with OmniAuth |
 
 h2. Dependencies
 
 Before running the Rails Composer tool, you need to install:
 
-* The Ruby language (version 2.1.0)
-* Rails 3.2 or Rails 4.0
+* The Ruby language (version 2.1.1)
+* Rails (versions 4.1, 4.0, or 3.2)
 
 Check that appropriate versions of Ruby and Rails are installed in your development environment:
 @$ ruby -v@
@@ -40,7 +42,7 @@ Check that appropriate versions of Ruby and Rails are installed in your developm
 
 Be sure to read the article "Installing Rails":http://railsapps.github.io/installing-rails.html to make sure your development environment is set up properly.
 
-h4. Rails 3.2 or Rails 4.0
+h4. Rails Versions
 
 Depending on the version of Rails you use, different starter apps are available.
 
@@ -75,7 +77,7 @@ Here's how to generate a new Rails application using the Rails Composer tool and
 <pre>
 $ mkdir myapp
 $ cd myapp
-$ rvm use ruby-2.1.0@myapp --ruby-version --create
+$ rvm use ruby-2.1.1@myapp --ruby-version --create
 $ gem install rails
 $ rails new . -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb
 </pre>
@@ -98,8 +100,6 @@ Use Rails Composer to generate any of the example applications from the "RailsAp
 
 To build the example application, Rails must be installed in your development environment.
 
-h4. Rails 3.2 or Rails 4.0
-
 Choices of starter applications will differ depending on whether you are using Rails 4.0 or Rails 3.2.
 
 Here's an example:
@@ -118,13 +118,33 @@ $ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/comp
 
 This creates a new Rails app named @myapp@ on your computer. You can use a different name if you wish.
 
+h4. Rails 4.1
+
+With Rails 4.1, you'll see a prompt:
+
+<pre>
+question  Build a starter application for Rails?
+      1)  Build a RailsApps example application
+      2)  Build a contributed application
+      3)  I want to build my own application
+</pre>
+
+Enter "1" to select *Build a RailsApps starter application*. You'll see a prompt:
+
+<pre>
+question  Starter apps for Rails 4.1. More to come.
+      1)  rails-devise
+</pre>
+
+Make your choice. The Rails Composer tool may give you other options (other applications may have been added since these notes were written).
+
 h4. Rails 4.0
 
 With Rails 4.0, you'll see a prompt:
 
 <pre>
-question  Install an example application for Rails 4.0?
-      1)  Build a RailsApps starter application
+question  Build a starter application for Rails?
+      1)  Build a RailsApps example application
       2)  Build a contributed application
       3)  I want to build my own application
 </pre>
@@ -136,8 +156,7 @@ question  Starter apps for Rails 4.0. More to come.
       1)  learn-rails
       2)  rails-bootstrap
       3)  rails-foundation
-      4)  rails-devise
-      5)  rails-omniauth
+      4)  rails-omniauth
 </pre>
 
 Make your choice. The Rails Composer tool may give you other options (other applications may have been added since these notes were written).
@@ -147,7 +166,7 @@ h4. Rails 3.2
 With Rails 3.2, you'll see a prompt:
 
 <pre>
-question  Install an example application for Rails 3.2?
+question  Install an example application for Rails?
           1)  I want to build my own application
           2)  membership/subscription/saas
           3)  rails-prelaunch-signup
@@ -158,7 +177,7 @@ question  Install an example application for Rails 3.2?
           8)  rails3-subdomains
 </pre>
 
-None of these Rails 3.2 example applications are available for Rails 4.0.
+None of these Rails 3.2 example applications are available for newer versions of Rails.
 
 h4. Options
 
@@ -235,8 +254,8 @@ You'll have a choice of databases. If you choose something other than SQLite, th
 Here's an example of what you'll see using Rails 4.0:
 
 <pre>
-question  Install an example application for Rails 4.0?
-      1)  Build a RailsApps starter application
+question  Build a starter application for Rails?
+      1)  Build a RailsApps example application
       2)  Build a contributed application
       3)  I want to build my own application
 
@@ -332,10 +351,10 @@ extras  Add 'therubyracer' JavaScript runtime (for Linux users without node.js)?
 extras  Set a robots.txt file to ban spiders? (y/n)
 extras  Create a GitHub repository? (y/n)
 
-question  Use file for environment variables?
+question  Add gem and file for environment variables?
       1)  None
-      2)  Use application.yml with Figaro
-      3)  Use .env with Foreman
+      2)  Add .env with Foreman
+      3)  Add application.yml with Figaro
 
 extras  Reduce assets logger noise during development? (y/n)
 extras  Improve error reporting with 'better_errors' during development? (y/n)
@@ -514,7 +533,7 @@ h2. License
 
 "MIT License":http://www.opensource.org/licenses/mit-license
 
-Copyright 2012-13 Daniel Kehoe
+Copyright 2012-14 Daniel Kehoe
 
 h2. Useful Links
 
