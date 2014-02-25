@@ -129,7 +129,7 @@ question  Build a starter application?
       3)  I want to build my own application
 </pre>
 
-Enter "1" to select *Build a RailsApps starter application*. You'll see a prompt:
+Enter "1" to select *Build a starter application*. You'll see a prompt:
 
 <pre>
 question  Starter apps for Rails 4.1. More to come.
@@ -149,7 +149,7 @@ question  Build a starter application?
       3)  I want to build my own application
 </pre>
 
-Enter "1" to select *Build a RailsApps starter application*. You'll see a prompt:
+Enter "1" to select *Build a starter application*. You'll see a prompt:
 
 <pre>
 question  Starter apps for Rails 4.0. More to come.
