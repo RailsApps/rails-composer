@@ -368,13 +368,13 @@ when "4"
     when 'railsapps'
       if rails_4_1?
       prefs[:apps4] = multiple_choice "Starter apps for Rails 4.1. More to come.",
-        [["rails-devise", "rails-devise"]]
+        [["rails-devise", "rails-devise"],
+        ["rails-omniauth", "rails-omniauth"]]
       else
-        prefs[:apps4] = multiple_choice "Starter apps for Rails 4.0. More to come.",
+        prefs[:apps4] = multiple_choice "Starter apps for Rails 4.0. Use Rails 4.1 for more.",
           [["learn-rails", "learn-rails"],
           ["rails-bootstrap", "rails-bootstrap"],
-          ["rails-foundation", "rails-foundation"],
-          ["rails-omniauth", "rails-omniauth"]]
+          ["rails-foundation", "rails-foundation"]]
       end
     when 'contributed_app'
       prefs[:apps4] = multiple_choice "No contributed applications are available.",
@@ -472,9 +472,8 @@ case prefs[:apps4]
     prefs[:authentication] = 'omniauth'
     prefs[:authorization] = 'none'
     prefs[:starter_app] = false
-    prefs[:form_builder] = 'none'
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = 'figaro'
+    prefs[:local_env_file] = false
     prefs[:better_errors] = true
 end
 
@@ -1672,16 +1671,18 @@ RUBY
   end
   ### OMNIAUTH ###
   if prefer :authentication, 'omniauth'
-    repo = 'https://raw.github.com/RailsApps/rails-omniauth/master/'
-    copy_from_repo 'config/initializers/omniauth.rb', :repo => repo
+    if rails_4_1?
+      copy_from_repo 'config/initializers/omniauth.rb', :repo => 'https://raw.github.com/RailsApps/rails-omniauth/master/'
+    else
+      copy_from_repo 'config/initializers/omniauth.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+    end
     gsub_file 'config/initializers/omniauth.rb', /twitter/, prefs[:omniauth_provider] unless prefer :omniauth_provider, 'twitter'
     if prefer :orm, 'mongoid'
-      repo = 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
-      copy_from_repo 'app/models/user.rb', :repo => repo
+      copy_from_repo 'app/models/user.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
     else
       generate 'model User name:string email:string provider:string uid:string'
       run 'bundle exec rake db:migrate'
-      copy_from_repo 'app/models/user.rb', :repo => repo
+      copy_from_repo 'app/models/user.rb', :repo => 'https://raw.github.com/RailsApps/rails-omniauth/master/'
     end
   end
   ### SUBDOMAINS ###
@@ -1736,7 +1737,7 @@ RUBY
   end
   ### HOME_CONTROLLER ###
   if ['home_app','users_app','admin_app','subdomains_app'].include? prefs[:starter_app]
-    generate(:controller, "home")
+    generate 'controller home --skip-assets --skip-helper'
   end
   ### USERS_CONTROLLER ###
   case prefs[:starter_app]
@@ -2578,7 +2579,7 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
 
     # >-------------------------------[ Controllers ]--------------------------------<
     copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
-    generate 'controller content silver gold platinum --skip-stylesheets --skip-javascripts'
+    generate 'controller content silver gold platinum --skip-assets --skip-helper'
     copy_from_repo 'app/controllers/content_controller.rb', :repo => repo
     copy_from_repo 'app/controllers/registrations_controller.rb', :repo => repo
     copy_from_repo 'app/controllers/application_controller.rb', :repo => repo
@@ -2680,7 +2681,7 @@ if prefer :railsapps, 'rails-recurly-subscription-saas'
 
     # >-------------------------------[ Controllers ]--------------------------------<
     copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
-    generate 'controller content silver gold platinum --skip-stylesheets --skip-javascripts'
+    generate 'controller content silver gold platinum --skip-assets --skip-helper'
     copy_from_repo 'app/controllers/content_controller.rb', :repo => repo
     copy_from_repo 'app/controllers/registrations_controller.rb', :repo => repo
     copy_from_repo 'app/controllers/application_controller.rb', :repo => repo
