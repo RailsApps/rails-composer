@@ -22,12 +22,12 @@ Here are some of the starter apps you can build.
 
 |_. Rails 4.1 |_. Tutorial |_. Comments |
 | "rails-devise":https://github.com/RailsApps/rails-devise| no tutorial (yet) | authentication with Devise |
+| "rails-omniauth":https://github.com/RailsApps/rails-omniauth| no tutorial (yet) | authentication with OmniAuth |
 
 |_. Rails 4.0 |_. Tutorial |_. Comments |
 | "learn-rails":https://github.com/RailsApps/learn-rails | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | book for beginners |
 | "rails-foundation":https://github.com/RailsApps/rails-foundation/ | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | Foundation front-end framework |
 | "rails-bootstrap":https://github.com/RailsApps/rails-bootstrap/ | "Rails and Bootstrap Tutorial":https://tutorials.railsapps.org/rails-bootstrap | Bootstrap front-end framework |
-| "rails-omniauth":https://github.com/RailsApps/rails-omniauth| no tutorial (yet) | authentication with OmniAuth |
 
 h2. Dependencies
 
@@ -134,6 +134,7 @@ Enter "1" to select *Build a starter application*. You'll see a prompt:
 <pre>
 question  Starter apps for Rails 4.1. More to come.
       1)  rails-devise
+      2)  rails-omniauth
 </pre>
 
 Make your choice. The Rails Composer tool may give you other options (other applications may have been added since these notes were written).
@@ -152,11 +153,10 @@ question  Build a starter application?
 Enter "1" to select *Build a starter application*. You'll see a prompt:
 
 <pre>
-question  Starter apps for Rails 4.0. More to come.
+question  Starter apps for Rails 4.0. Use Rails 4.1 for more.
       1)  learn-rails
       2)  rails-bootstrap
       3)  rails-foundation
-      4)  rails-omniauth
 </pre>
 
 Make your choice. The Rails Composer tool may give you other options (other applications may have been added since these notes were written).
@@ -166,7 +166,7 @@ h4. Rails 3.2
 With Rails 3.2, you'll see a prompt:
 
 <pre>
-question  Install an example application for Rails?
+question  Install an example application for Rails 3.2?
           1)  I want to build my own application
           2)  membership/subscription/saas
           3)  rails-prelaunch-signup
