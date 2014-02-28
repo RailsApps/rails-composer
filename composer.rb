@@ -368,8 +368,9 @@ when "4"
     when 'railsapps'
       if rails_4_1?
       prefs[:apps4] = multiple_choice "Starter apps for Rails 4.1. More to come.",
-        [["rails-devise", "rails-devise"],
-        ["rails-omniauth", "rails-omniauth"]]
+        [["rails-omniauth", "rails-omniauth"],
+        ["rails-devise", "rails-devise"],
+        ["rails-devise-pundit", "rails-devise-pundit"]]
       else
         prefs[:apps4] = multiple_choice "Starter apps for Rails 4.0. Use Rails 4.1 for more.",
           [["learn-rails", "learn-rails"],
@@ -460,6 +461,17 @@ case prefs[:apps4]
     prefs[:authentication] = 'devise'
     prefs[:authorization] = false
     prefs[:starter_app] = false
+    prefs[:quiet_assets] = true
+    prefs[:local_env_file] = false
+    prefs[:better_errors] = true
+  when 'rails-devise-pundit'
+    prefs[:git] = true
+    prefs[:unit_test] = false
+    prefs[:integration] = false
+    prefs[:fixtures] = false
+    prefs[:authentication] = 'devise'
+    prefs[:authorization] = 'pundit'
+    prefs[:starter_app] = 'admin_app'
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = false
     prefs[:better_errors] = true
@@ -766,7 +778,13 @@ if recipes.include? 'models'
       prefs[:omniauth_provider] = multiple_choice "OmniAuth provider?", [["Facebook", "facebook"], ["Twitter", "twitter"], ["GitHub", "github"],
         ["LinkedIn", "linkedin"], ["Google-Oauth-2", "google_oauth2"], ["Tumblr", "tumblr"]] unless prefs.has_key? :omniauth_provider
   end
-  prefs[:authorization] = multiple_choice "Authorization?", [["None", "none"], ["CanCan with Rolify", "cancan"]] unless prefs.has_key? :authorization
+  unless prefs.has_key? :authorization
+    if rails_4_1?
+      prefs[:authorization] = multiple_choice "Authorization?", [["None", "none"], ["Pundit", "pundit"]]
+    else
+      prefs[:authorization] = multiple_choice "Authorization?", [["None", "none"], ["CanCan with Rolify", "cancan"]]
+    end
+  end
 end
 
 ## Form Builder
@@ -774,7 +792,7 @@ prefs[:form_builder] = multiple_choice "Use a form builder gem?", [["None", "non
 
 ## MVC
 if (recipes.include? 'models') && (recipes.include? 'controllers') && (recipes.include? 'views') && (recipes.include? 'routes')
-  if prefer :authorization, 'cancan'
+  if (prefer :authorization, 'cancan') or (prefer :authorization, 'pundit')
     prefs[:starter_app] = multiple_choice "Install a starter app?", [["None", "none"], ["Home Page", "home_app"],
       ["Home Page, User Accounts", "users_app"], ["Home Page, User Accounts, Admin Dashboard", "admin_app"]] unless prefs.has_key? :starter_app
   elsif prefer :authentication, 'devise'
@@ -1047,6 +1065,7 @@ if prefer :authorization, 'cancan'
   add_gem 'cancan'
   add_gem 'rolify'
 end
+add_gem 'pundit' if prefer :authorization, 'pundit'
 
 ## Form Builder
 add_gem 'simple_form' if prefer :form_builder, 'simple_form'
@@ -1688,6 +1707,10 @@ RUBY
   ### SUBDOMAINS ###
   copy_from_repo 'app/models/user.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
   ### AUTHORIZATION ###
+  if prefer :authorization, 'pundit'
+    generate 'migration AddRoleToUsers role:integer'
+    copy_from_repo 'app/models/user.rb', :repo => 'https://raw.github.com/RailsApps/rails-devise-pundit/master/'
+  end
   if prefer :authorization, 'cancan'
     generate 'cancan:ability'
     if prefer :starter_app, 'admin_app'
@@ -1726,6 +1749,9 @@ after_bundler do
   if prefer :authentication, 'omniauth'
     copy_from_repo 'app/controllers/application_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails-omniauth/master/'
   end
+  if prefer :authorization, 'pundit'
+    copy_from_repo 'app/controllers/application_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails-devise-pundit/master/'
+  end
   if prefer :authorization, 'cancan'
     inject_into_file 'app/controllers/application_controller.rb', :before => "\nend" do <<-RUBY
 \n
@@ -1760,6 +1786,10 @@ RUBY
         else
           copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
         end
+      end
+      if prefer :authorization, 'pundit'
+        copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails-devise-pundit/master/'
+        copy_from_repo 'app/policies/user_policy.rb', :repo => 'https://raw.github.com/RailsApps/rails-devise-pundit/master/'
       end
     when 'subdomains_app'
       copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/'
@@ -1836,7 +1866,15 @@ after_bundler do
     copy_from_repo 'app/views/users/show.html.erb'
     copy_from_repo 'app/views/users/show-subdomains_app.html.erb', :prefs => 'subdomains_app'
     ## EDIT
-    copy_from_repo 'app/views/users/edit.html.erb', :repo => 'https://raw.github.com/RailsApps/rails-omniauth/master/'
+    if prefer :authentication, 'omniauth'
+      copy_from_repo 'app/views/users/edit.html.erb', :repo => 'https://raw.github.com/RailsApps/rails-omniauth/master/'
+    end
+  end
+  if (prefer :authorization, 'pundit') and  (prefer :starter_app, 'admin_app')
+    repo = 'https://raw.github.com/RailsApps/rails-devise-pundit/master/'
+    copy_from_repo 'app/views/users/_user.html.erb', :repo => repo
+    copy_from_repo 'app/views/users/index.html.erb', :repo => repo
+    copy_from_repo 'app/views/users/show.html.erb', :repo => repo
   end
   ### PROFILES ###
   copy_from_repo 'app/views/profiles/show-subdomains_app.html.erb', :prefs => 'subdomains_app'
@@ -2011,7 +2049,12 @@ after_everything do
   ### DATABASE SEED ###
   if (prefer :authentication, 'devise') and (rails_4_1?)
     copy_from_repo 'db/seeds.rb', :repo => 'https://raw.github.com/RailsApps/rails-devise/master/'
-    copy_from_repo 'app/services/create_admin_service.rb', :repo => 'https://raw.github.com/RailsApps/rails-devise/master/'
+    unless prefer :authorization, 'pundit'
+      copy_from_repo 'app/services/create_admin_service.rb', :repo => 'https://raw.github.com/RailsApps/rails-devise/master/'
+    end
+  end
+  if prefer :authorization, 'pundit'
+    copy_from_repo 'app/services/create_admin_service.rb', :repo => 'https://raw.github.com/RailsApps/rails-devise-pundit/master/'
   end
   if prefer :local_env_file, 'figaro'
     append_file 'db/seeds.rb' do <<-FILE
@@ -2343,6 +2386,51 @@ if prefer :apps4, 'rails-devise'
 
   end # after_bundler
 end # rails-devise
+
+### RAILS-DEVISE-PUNDIT ####
+
+if prefer :apps4, 'rails-devise-pundit'
+
+  # >-------------------------------[ after_bundler ]--------------------------------<
+
+  after_bundler do
+    say_wizard "recipe running after 'bundle install'"
+    repo = 'https://raw.github.com/RailsApps/rails-devise-pundit/master/'
+
+    # >-------------------------------[ Controllers ]--------------------------------<
+
+    copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
+
+    # >-------------------------------[ Views ]--------------------------------<
+
+    copy_from_repo 'app/views/home/index.html.erb', :repo => repo
+
+  end
+
+  # >-------------------------------[ after_everything ]--------------------------------<
+
+  after_everything do
+    say_wizard "recipe running after 'bundle install'"
+
+    # >-------------------------------[ Clean up starter app ]--------------------------------<
+
+    # remove commented lines and multiple blank lines from Gemfile
+    # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
+    gsub_file 'Gemfile', /#.*\n/, "\n"
+    gsub_file 'Gemfile', /\n^\s*\n/, "\n"
+    # remove commented lines and multiple blank lines from config/routes.rb
+    gsub_file 'config/routes.rb', /  #.*\n/, "\n"
+    gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
+    # GIT
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: clean up starter app"' if prefer :git, true
+
+    ### GIT ###
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: learn-rails app"' if prefer :git, true
+
+  end # after_bundler
+end # rails-devise-pundit
 
 ### RAILS-OMNIAUTH ####
 
