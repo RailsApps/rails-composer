@@ -368,14 +368,14 @@ when "4"
     when 'railsapps'
       if rails_4_1?
       prefs[:apps4] = multiple_choice "Starter apps for Rails 4.1. More to come.",
-        [["rails-foundation", "rails-foundation"],
+        [["rails-bootstrap", "rails-bootstrap"],
+        ["rails-foundation", "rails-foundation"],
         ["rails-omniauth", "rails-omniauth"],
         ["rails-devise", "rails-devise"],
         ["rails-devise-pundit", "rails-devise-pundit"]]
       else
-        prefs[:apps4] = multiple_choice "Starter apps for Rails 4.0. Use Rails 4.1 for more.",
-          [["learn-rails", "learn-rails"],
-          ["rails-bootstrap", "rails-bootstrap"]]
+        prefs[:apps4] = multiple_choice "Please upgrade to Rails 4.1 for more starter apps.",
+          [["learn-rails", "learn-rails"]]
       end
     when 'contributed_app'
       prefs[:apps4] = multiple_choice "No contributed applications are available.",
@@ -433,9 +433,9 @@ case prefs[:apps4]
     prefs[:devise_modules] = false
     prefs[:authorization] = false
     prefs[:starter_app] = false
-    prefs[:form_builder] = 'simple_form'
+    prefs[:form_builder] = false
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = 'figaro'
+    prefs[:local_env_file] = false
     prefs[:better_errors] = true
   when 'rails-foundation'
     prefs[:git] = true
