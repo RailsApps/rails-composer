@@ -1985,7 +1985,7 @@ after_everything do
     when 'none'
       secrets_d_email = secrets_p_email = foreman_email = ''
     when 'smtp'
-      secrets_d_email = foreman_email = ''
+      secrets_d_email = secrets_p_email = foreman_email = ''
     when 'gmail'
       secrets_d_email = "  gmail_username: Your_Username\n  gmail_password: Your_Password\n"
       secrets_p_email = "  gmail_username: <%= ENV[\"GMAIL_USERNAME\"] %>\n  gmail_password: <%= ENV[\"GMAIL_PASSWORD\"] %>\n"
