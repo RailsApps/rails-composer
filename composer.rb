@@ -1523,8 +1523,8 @@ after_bundler do
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
-  # Send email in development mode.
-  config.action_mailer.perform_deliveries = false
+  # Send email in development mode?
+  config.action_mailer.perform_deliveries = true
 TEXT
       prod_email_text = <<-TEXT
   # ActionMailer Config
@@ -1710,6 +1710,10 @@ RUBY
   if prefer :authorization, 'pundit'
     generate 'migration AddRoleToUsers role:integer'
     copy_from_repo 'app/models/user.rb', :repo => 'https://raw.github.com/RailsApps/rails-devise-pundit/master/'
+    if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
+      gsub_file 'app/models/user.rb', /:registerable,/, ":registerable, :confirmable,"
+      generate 'migration AddConfirmableToUsers confirmation_token:string confirmed_at:datetime confirmation_sent_at:datetime unconfirmed_email:string'
+    end
   end
   if prefer :authorization, 'cancan'
     generate 'cancan:ability'
@@ -2104,7 +2108,11 @@ FILE
   end
   ## DEVISE-CONFIRMABLE
   if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
-    append_file 'db/seeds.rb', "user.confirm!\n"
+    if rails_4_1?
+      inject_into_file 'app/services/create_admin_service.rb', "        user.confirm!\n", :after => "user.password_confirmation = Rails.application.secrets.admin_password\n"
+    else
+      append_file 'db/seeds.rb', "user.confirm!\n"
+    end
   end
   if (prefer :authorization, 'cancan') && !(prefer :authentication, 'omniauth')
     append_file 'db/seeds.rb', 'user.add_role :admin'
