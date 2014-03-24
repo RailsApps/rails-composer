@@ -21,9 +21,6 @@ db/*.sqlite3
 /log/*
 /tmp/*
 
-# configuration file introduced in Rails 4.1
-/config/secrets.yml
-
 # various artifacts
 **.war
 *.rbc
