@@ -367,12 +367,12 @@ when "4"
   case prefs[:apps4]
     when 'railsapps'
       if rails_4_1?
-      prefs[:apps4] = multiple_choice "Starter apps for Rails 4.1. More to come.",
+        prefs[:apps4] = prefs[:rails_4_1_starter_app] || (multiple_choice "Starter apps for Rails 4.1. More to come.",
         [["rails-bootstrap", "rails-bootstrap"],
         ["rails-foundation", "rails-foundation"],
         ["rails-omniauth", "rails-omniauth"],
         ["rails-devise", "rails-devise"],
-        ["rails-devise-pundit", "rails-devise-pundit"]]
+        ["rails-devise-pundit", "rails-devise-pundit"]])
       else
         prefs[:apps4] = multiple_choice "Please upgrade to Rails 4.1 for more starter apps.",
           [["learn-rails", "learn-rails"]]
@@ -491,9 +491,9 @@ end
 
 case prefs[:railsapps]
   when 'saas'
-    prefs[:railsapps] = multiple_choice "Billing with Stripe or Recurly?",
+    prefs[:railsapps] = prefs[:billing] || (multiple_choice "Billing with Stripe or Recurly?",
       [["Stripe", "rails-stripe-membership-saas"],
-      ["Recurly", "rails-recurly-subscription-saas"]]
+      ["Recurly", "rails-recurly-subscription-saas"]])
 end
 
 case prefs[:railsapps]
