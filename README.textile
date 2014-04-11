@@ -21,21 +21,19 @@ h2. Starter apps
 Here are some of the starter apps you can build.
 
 |_. Rails 4.1 |_. Tutorial |_. Comments |
-| "rails-bootstrap":https://github.com/RailsApps/rails-bootstrap/ | "Rails and Bootstrap Tutorial":https://tutorials.railsapps.org/rails-bootstrap | Bootstrap front-end framework |
-| "rails-foundation":https://github.com/RailsApps/rails-foundation/ | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | Foundation front-end framework |
+| "learn-rails":https://github.com/RailsApps/learn-rails | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | from the book for beginners |
+| "rails-bootstrap":https://github.com/RailsApps/rails-bootstrap/ | "Rails and Bootstrap Tutorial":http://railsapps.github.io/twitter-bootstrap-rails.html | Bootstrap front-end framework |
+| "rails-foundation":https://github.com/RailsApps/rails-foundation/ | "Rails and Foundation Tutorial":http://railsapps.github.io/rails-foundation.html | Foundation front-end framework |
 | "rails-omniauth":https://github.com/RailsApps/rails-omniauth | no tutorial (yet) | authentication with OmniAuth |
 | "rails-devise":https://github.com/RailsApps/rails-devise | no tutorial (yet) | authentication with Devise |
 | "rails-devise-pundit":https://github.com/RailsApps/rails-devise-pundit | no tutorial (yet) | authorization with Pundit |
-
-|_. Rails 4.0 |_. Tutorial |_. Comments |
-| "learn-rails":https://github.com/RailsApps/learn-rails | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | book for beginners |
 
 h2. Dependencies
 
 Before running the Rails Composer tool, you need to install:
 
-* The Ruby language (version 2.1.1)
-* Rails (versions 4.1, 4.0, or 3.2)
+* The Ruby language (version 2.1)
+* Rails (versions 4.1 or 3.2)
 
 Check that appropriate versions of Ruby and Rails are installed in your development environment:
 @$ ruby -v@
@@ -101,7 +99,7 @@ Use Rails Composer to generate any of the example applications from the "RailsAp
 
 To build the example application, Rails must be installed in your development environment.
 
-Choices of starter applications will differ depending on whether you are using Rails 4.0 or Rails 3.2.
+Choices of starter applications will differ depending on whether you are using Rails 4.1 or Rails 3.2.
 
 Here's an example:
 
@@ -134,11 +132,12 @@ Enter "1" to select *Build a starter application*. You'll see a prompt:
 
 <pre>
 question  Starter apps for Rails 4.1. More to come.
-      1)  rails-bootstrap
-      2)  rails-foundation
-      3)  rails-omniauth
-      4)  rails-devise
-      5)  rails-devise-pundit
+      1)  learn-rails
+      2)  rails-bootstrap
+      3)  rails-foundation
+      4)  rails-omniauth
+      5)  rails-devise
+      6)  rails-devise-pundit
 </pre>
 
 Make your choice. The Rails Composer tool may give you other options (other applications may have been added since these notes were written).
@@ -154,14 +153,13 @@ question  Build a starter application?
       3)  I want to build my own application
 </pre>
 
-Enter "1" to select *Build a starter application*. You'll see a prompt:
+Enter "1" to select *Build a starter application*. You'll see a warning:
 
 <pre>
-question  Starter apps for Rails 4.0. Use Rails 4.1 for more.
-      1)  learn-rails
+railsapps  Please upgrade to Rails 4.1 to get the starter apps.
 </pre>
 
-Make your choice. The Rails Composer tool may give you other options (other applications may have been added since these notes were written).
+Then you can continue with the "Build Your Own Application" options (see below).
 
 h4. Rails 3.2
 
@@ -183,7 +181,7 @@ None of these Rails 3.2 example applications are available for newer versions of
 
 h4. Options
 
-The application generator template will ask you for additional preferences:
+The application generator template may ask you for additional preferences:
 
 <pre>
  question  Web server for development?
