@@ -368,14 +368,14 @@ when "4"
     when 'railsapps'
       if rails_4_1?
         prefs[:apps4] = prefs[:rails_4_1_starter_app] || (multiple_choice "Starter apps for Rails 4.1. More to come.",
-        [["rails-bootstrap", "rails-bootstrap"],
+        [["learn-rails", "learn-rails"],
+        ["rails-bootstrap", "rails-bootstrap"],
         ["rails-foundation", "rails-foundation"],
         ["rails-omniauth", "rails-omniauth"],
         ["rails-devise", "rails-devise"],
         ["rails-devise-pundit", "rails-devise-pundit"]])
       else
-        prefs[:apps4] = multiple_choice "Please upgrade to Rails 4.1 for more starter apps.",
-          [["learn-rails", "learn-rails"]]
+        say_wizard "Please upgrade to Rails 4.1 to get the starter apps."
       end
     when 'contributed_app'
       prefs[:apps4] = multiple_choice "No contributed applications are available.",
@@ -407,20 +407,27 @@ case prefs[:apps4]
     prefs[:ban_spiders] = false
     prefs[:continuous_testing] = false
   when 'learn-rails'
+    prefs[:dev_webserver] = 'webrick'
+    prefs[:prod_webserver] = 'same'
+    prefs[:templates] = 'erb'
     prefs[:git] = true
     prefs[:database] = 'default'
     prefs[:unit_test] = false
     prefs[:integration] = false
     prefs[:fixtures] = false
+    prefs[:frontend] = 'foundation5'
     prefs[:email] = 'gmail'
     prefs[:authentication] = false
     prefs[:devise_modules] = false
     prefs[:authorization] = false
     prefs[:starter_app] = false
     prefs[:form_builder] = 'simple_form'
+    prefs[:continuous_testing] = false
     prefs[:quiet_assets] = true
-    prefs[:local_env_file] = 'figaro'
+    prefs[:local_env_file] = 'none'
     prefs[:better_errors] = true
+    prefs[:ban_spiders] = false
+    prefs[:github] = false
   when 'rails-bootstrap'
     prefs[:git] = true
     prefs[:database] = 'default'
@@ -1108,7 +1115,7 @@ after_bundler do
     if prefer :database, 'postgresql'
       begin
         pg_username = prefs[:pg_username] || ask_wizard("Username for PostgreSQL?(leave blank to use the app name)")
-        pg_host = prefs[:pg_username] || ask_wizard("Host for PostgreSQL in database.yml? (leave blank to use default socket connection)")
+        pg_host = prefs[:pg_host] || ask_wizard("Host for PostgreSQL in database.yml? (leave blank to use default socket connection)")
         if pg_username.blank?
           say_wizard "Creating a user named '#{app_name}' for PostgreSQL"
           run "createuser --createdb #{app_name}" if prefer :database, 'postgresql'
@@ -1171,6 +1178,9 @@ after_bundler do
       when 'bootstrap3'
         say_wizard "recipe installing simple_form for use with Bootstrap"
         generate 'simple_form:install --bootstrap'
+      when 'foundation5'
+        say_wizard "recipe installing simple_form for use with Zurb Foundation"
+        generate 'simple_form:install --foundation'
       when 'foundation4'
         say_wizard "recipe installing simple_form for use with Zurb Foundation"
         generate 'simple_form:install --foundation'
@@ -1535,6 +1545,8 @@ TEXT
 TEXT
       inject_into_file 'config/environments/development.rb', dev_email_text, :after => "config.assets.debug = true"
       inject_into_file 'config/environments/production.rb', prod_email_text, :after => "config.active_support.deprecation = :notify"
+      gsub_file 'config/environments/production.rb', /'example.com'/, 'Rails.application.secrets.domain_name' if rails_4_1?
+
     else
       ### DEVELOPMENT
       gsub_file 'config/environments/development.rb', /# Don't care if the mailer can't send/, '# ActionMailer Config'
@@ -1572,9 +1584,35 @@ RUBY
       end
     end
   end
-  ### GMAIL ACCOUNT
-  if prefer :email, 'gmail'
-    gmail_configuration_text = <<-TEXT
+  if rails_4_1?
+    email_configuration_text = <<-TEXT
+\n
+  config.action_mailer.smtp_settings = {
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: Rails.application.secrets.domain_name,
+    authentication: "plain",
+    enable_starttls_auto: true,
+    user_name: Rails.application.secrets.email_provider_username,
+    password: Rails.application.secrets.email_provider_password
+  }
+TEXT
+    inject_into_file 'config/environments/development.rb', email_configuration_text, :after => "config.assets.debug = true"
+    inject_into_file 'config/environments/production.rb', email_configuration_text, :after => "config.active_support.deprecation = :notify"
+    case :email
+      when 'sendgrid'
+        gsub_file 'config/environments/development.rb', /smtp.gmail.com/, 'smtp.sendgrid.net'
+        gsub_file 'config/environments/production.rb', /smtp.gmail.com/, 'smtp.sendgrid.net'
+      when 'mandrill'
+        gsub_file 'config/environments/development.rb', /smtp.gmail.com/, 'smtp.mandrillapp.com'
+        gsub_file 'config/environments/production.rb', /smtp.gmail.com/, 'smtp.mandrillapp.com'
+        gsub_file 'config/environments/development.rb', /email_provider_password/, 'email_provider_apikey'
+        gsub_file 'config/environments/production.rb', /email_provider_password/, 'email_provider_apikey'
+    end
+  else
+    ### GMAIL ACCOUNT
+    if prefer :email, 'gmail'
+      gmail_configuration_text = <<-TEXT
 \n
   config.action_mailer.smtp_settings = {
     address: "smtp.gmail.com",
@@ -1586,12 +1624,12 @@ RUBY
     password: ENV["GMAIL_PASSWORD"]
   }
 TEXT
-    inject_into_file 'config/environments/development.rb', gmail_configuration_text, :after => "config.assets.debug = true"
-    inject_into_file 'config/environments/production.rb', gmail_configuration_text, :after => "config.active_support.deprecation = :notify"
-  end
-  ### SENDGRID ACCOUNT
-  if prefer :email, 'sendgrid'
-    sendgrid_configuration_text = <<-TEXT
+      inject_into_file 'config/environments/development.rb', gmail_configuration_text, :after => "config.assets.debug = true"
+      inject_into_file 'config/environments/production.rb', gmail_configuration_text, :after => "config.active_support.deprecation = :notify"
+    end
+    ### SENDGRID ACCOUNT
+    if prefer :email, 'sendgrid'
+      sendgrid_configuration_text = <<-TEXT
 \n
   config.action_mailer.smtp_settings = {
     address: "smtp.sendgrid.net",
@@ -1602,22 +1640,23 @@ TEXT
     password: ENV["SENDGRID_PASSWORD"]
   }
 TEXT
-    inject_into_file 'config/environments/development.rb', sendgrid_configuration_text, :after => "config.assets.debug = true"
-    inject_into_file 'config/environments/production.rb', sendgrid_configuration_text, :after => "config.active_support.deprecation = :notify"
-  end
-  ### MANDRILL ACCOUNT
-  if prefer :email, 'mandrill'
-    mandrill_configuration_text = <<-TEXT
-  \n
-    config.action_mailer.smtp_settings = {
-      :address   => "smtp.mandrillapp.com",
-      :port      => 587,
-      :user_name => ENV["MANDRILL_USERNAME"],
-      :password  => ENV["MANDRILL_APIKEY"]
-    }
-  TEXT
-    inject_into_file 'config/environments/development.rb', mandrill_configuration_text, :after => "config.assets.debug = true"
-    inject_into_file 'config/environments/production.rb', mandrill_configuration_text, :after => "config.active_support.deprecation = :notify"
+      inject_into_file 'config/environments/development.rb', sendgrid_configuration_text, :after => "config.assets.debug = true"
+      inject_into_file 'config/environments/production.rb', sendgrid_configuration_text, :after => "config.active_support.deprecation = :notify"
+    end
+    ### MANDRILL ACCOUNT
+    if prefer :email, 'mandrill'
+      mandrill_configuration_text = <<-TEXT
+\n
+  config.action_mailer.smtp_settings = {
+    :address   => "smtp.mandrillapp.com",
+    :port      => 587,
+    :user_name => ENV["MANDRILL_USERNAME"],
+    :password  => ENV["MANDRILL_APIKEY"]
+  }
+TEXT
+      inject_into_file 'config/environments/development.rb', mandrill_configuration_text, :after => "config.assets.debug = true"
+      inject_into_file 'config/environments/production.rb', mandrill_configuration_text, :after => "config.active_support.deprecation = :notify"
+    end
   end
   ### GIT
   git :add => '-A' if prefer :git, true
@@ -1987,58 +2026,52 @@ after_everything do
   say_wizard "recipe running after everything"
   case prefs[:email]
     when 'none'
-      secrets_d_email = secrets_p_email = foreman_email = ''
+      secrets_email = foreman_email = ''
     when 'smtp'
-      secrets_d_email = secrets_p_email = foreman_email = ''
+      secrets_email = foreman_email = ''
     when 'gmail'
-      secrets_d_email = "  gmail_username: Your_Username\n  gmail_password: Your_Password\n"
-      secrets_p_email = "  gmail_username: <%= ENV[\"GMAIL_USERNAME\"] %>\n  gmail_password: <%= ENV[\"GMAIL_PASSWORD\"] %>\n"
+      secrets_email = "  email_provider_username: <%= ENV[\"GMAIL_USERNAME\"] %>\n  email_provider_password: <%= ENV[\"GMAIL_PASSWORD\"] %>\n"
       foreman_email = "GMAIL_USERNAME=Your_Username\nGMAIL_PASSWORD=Your_Password\n"
     when 'sendgrid'
-      secrets_d_email = "  sendgrid_username: Your_Username\n  sendgrid_password: Your_Password\n"
-      secrets_p_email = "  sendgrid_username: <%= ENV[\"SENDGRID_USERNAME\"] %>\n  sendgrid_password: <%= ENV[\"SENDGRID_PASSWORD\"] %>\n"
+      secrets_email = "  email_provider_username: <%= ENV[\"SENDGRID_USERNAME\"] %>\n  email_provider_password: <%= ENV[\"SENDGRID_PASSWORD\"] %>\n"
       foreman_email = "SENDGRID_USERNAME=Your_Username\nSENDGRID_PASSWORD=Your_Password\n"
     when 'mandrill'
-      secrets_d_email = "  mandrill_username: Your_Username\n  mandrill_apikey: Your_API_Key\n"
-      secrets_p_email = "  mandrill_username: <%= ENV[\"MANDRILL_USERNAME\"] %>\n  mandrill_apikey: <%= ENV[\"MANDRILL_APIKEY\"] %>\n"
+      secrets_email = "  email_provider_username: <%= ENV[\"MANDRILL_USERNAME\"] %>\n  email_provider_apikey: <%= ENV[\"MANDRILL_APIKEY\"] %>\n"
       foreman_email = "MANDRILL_USERNAME=Your_Username\nMANDRILL_APIKEY=Your_API_Key\n"
   end
   figaro_email  = foreman_email.gsub('=', ': ')
-  secrets_d_devise = "  admin_name: First User\n  admin_email: user@example.com\n  admin_password: changeme\n"
-  secrets_p_devise = "  admin_name: <%= ENV[\"ADMIN_NAME\"] %>\n  admin_email: <%= ENV[\"ADMIN_EMAIL\"] %>\n  admin_password: <%= ENV[\"ADMIN_PASSWORD\"] %>\n"
+  secrets_devise = "  admin_name: <%= ENV[\"ADMIN_NAME\"] %>\n  admin_email: <%= ENV[\"ADMIN_EMAIL\"] %>\n  admin_password: <%= ENV[\"ADMIN_PASSWORD\"] %>\n"
   foreman_devise = "ADMIN_NAME=First User\nADMIN_EMAIL=user@example.com\nADMIN_PASSWORD=changeme\n"
   figaro_devise  = foreman_devise.gsub('=', ': ')
-  secrets_d_omniauth = "  omniauth_provider_key: Your_Provider_Key\n  omniauth_provider_secret: Your_Provider_Secret\n"
-  secrets_p_omniauth = "  omniauth_provider_key: <%= ENV[\"OMNIAUTH_PROVIDER_KEY\"] %>\n  omniauth_provider_secret: <%= ENV[\"OMNIAUTH_PROVIDER_SECRET\"] %>\n"
+  secrets_omniauth = "  omniauth_provider_key: <%= ENV[\"OMNIAUTH_PROVIDER_KEY\"] %>\n  omniauth_provider_secret: <%= ENV[\"OMNIAUTH_PROVIDER_SECRET\"] %>\n"
   foreman_omniauth = "OMNIAUTH_PROVIDER_KEY: Your_Provider_Key\nOMNIAUTH_PROVIDER_SECRET: Your_Provider_Secret\n"
   figaro_omniauth  = foreman_omniauth.gsub('=', ': ')
-  secrets_d_cancan = "  roles: [admin, user, VIP]\n" # unnecessary? CanCan will not be used with Rails 4.1?
-  secrets_p_cancan = "  roles: <%= ENV[\"ROLES\"] %>\n" # unnecessary? CanCan will not be used with Rails 4.1?
+  secrets_cancan = "  roles: <%= ENV[\"ROLES\"] %>\n" # unnecessary? CanCan will not be used with Rails 4.1?
   foreman_cancan = "ROLES=[admin, user, VIP]\n\n"
   figaro_cancan = foreman_cancan.gsub('=', ': ')
   ## EMAIL
-  inject_into_file 'config/secrets.yml', secrets_d_email, :after => "development:\n" if rails_4_1?
-  inject_into_file 'config/secrets.yml', secrets_p_email, :after => "production:\n" if rails_4_1?
+  inject_into_file 'config/secrets.yml', secrets_email, :after => "development:\n" if rails_4_1?
+  inject_into_file 'config/secrets.yml', secrets_email, :after => "production:\n" if rails_4_1?
   append_file '.env', foreman_email if prefer :local_env_file, 'foreman'
   append_file 'config/application.yml', figaro_email if prefer :local_env_file, 'figaro'
   ## DEVISE
   if prefer :authentication, 'devise'
-    inject_into_file 'config/secrets.yml', secrets_d_devise, :after => "development:\n" if rails_4_1?
-    inject_into_file 'config/secrets.yml', secrets_p_devise, :after => "production:\n" if rails_4_1?
+    inject_into_file 'config/secrets.yml', secrets_devise, :after => "development:\n" if rails_4_1?
+    inject_into_file 'config/secrets.yml', secrets_devise, :after => "production:\n" if rails_4_1?
     append_file '.env', foreman_devise if prefer :local_env_file, 'foreman'
     append_file 'config/application.yml', figaro_devise if prefer :local_env_file, 'figaro'
   end
   ## OMNIAUTH
   if prefer :authentication, 'omniauth'
-    inject_into_file 'config/secrets.yml', secrets_d_omniauth, :after => "development:\n" if rails_4_1?
-    inject_into_file 'config/secrets.yml', secrets_p_omniauth, :after => "production:\n" if rails_4_1?
+    inject_into_file 'config/secrets.yml', secrets_omniauth, :after => "development:\n" if rails_4_1?
+    inject_into_file 'config/secrets.yml', secrets_omniauth, :after => "production:\n" if rails_4_1?
     append_file '.env', foreman_omniauth if prefer :local_env_file, 'foreman'
     append_file 'config/application.yml', figaro_omniauth if prefer :local_env_file, 'figaro'
   end
   ## CANCAN
   if (prefer :authorization, 'cancan')
-    inject_into_file 'config/secrets.yml', secrets_d_cancan, :after => "development:\n" if rails_4_1?
-    inject_into_file 'config/secrets.yml', secrets_p_cancan, :after => "production:\n" if rails_4_1?
+    inject_into_file 'config/secrets.yml', secrets_cancan, :after => "development:\n" if rails_4_1?
+    inject_into_file 'config/secrets.yml', secrets_cancan, :after => "production:\n" if rails_4_1?
     append_file '.env', foreman_cancan if prefer :local_env_file, 'foreman'
     append_file 'config/application.yml', figaro_cancan if prefer :local_env_file, 'figaro'
   end
@@ -2233,9 +2266,7 @@ if prefer :apps4, 'learn-rails'
     copy_from_repo 'app/models/visitor.rb', :repo => repo
 
     # >-------------------------------[ Init ]--------------------------------<
-    copy_from_repo 'config/application.yml', :repo => repo
-    remove_file 'config/application.example.yml'
-    copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
+    copy_from_repo 'config/secrets.yml', :repo => repo
 
     # >-------------------------------[ Controllers ]--------------------------------<
 
@@ -2260,8 +2291,6 @@ if prefer :apps4, 'learn-rails'
     # >-------------------------------[ Routes ]--------------------------------<
 
     copy_from_repo 'config/routes.rb', :repo => repo
-    ### CORRECT APPLICATION NAME ###
-    gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
 
     # >-------------------------------[ Assets ]--------------------------------<
 
