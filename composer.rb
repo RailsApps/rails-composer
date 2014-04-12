@@ -96,7 +96,7 @@ module Gemfile
 end
 def add_gem(*all) Gemfile.add(*all); end
 
-@recipes = ["core", "git", "railsapps", "setup", "readme", "gems", "testing", "email", "models", "controllers", "views", "routes", "frontend", "init", "apps4", "prelaunch", "saas", "extras"]
+@recipes = ["core", "git", "railsapps", "setup", "readme", "gems", "testing", "email", "models", "controllers", "views", "routes", "frontend", "init", "apps4", "prelaunch", "saas", "extras", "deployment"]
 @prefs = {}
 @gems = []
 @diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["controllers", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["apps4", "controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"]]
@@ -404,6 +404,8 @@ case prefs[:apps4]
     prefs[:quiet_assets] = false
     prefs[:local_env_file] = 'none'
     prefs[:better_errors] = false
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
     prefs[:ban_spiders] = false
     prefs[:continuous_testing] = false
   when 'learn-rails'
@@ -426,6 +428,8 @@ case prefs[:apps4]
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = 'none'
     prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
     prefs[:ban_spiders] = false
     prefs[:github] = false
   when 'rails-bootstrap'
@@ -444,6 +448,8 @@ case prefs[:apps4]
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = false
     prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
   when 'rails-foundation'
     prefs[:git] = true
     prefs[:database] = 'default'
@@ -460,6 +466,8 @@ case prefs[:apps4]
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = false
     prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
   when 'rails-devise'
     prefs[:git] = true
     prefs[:unit_test] = false
@@ -471,6 +479,8 @@ case prefs[:apps4]
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = false
     prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
   when 'rails-devise-pundit'
     prefs[:git] = true
     prefs[:unit_test] = false
@@ -482,6 +492,8 @@ case prefs[:apps4]
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = false
     prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
   when 'rails-omniauth'
     prefs[:git] = true
     prefs[:unit_test] = false
@@ -494,6 +506,8 @@ case prefs[:apps4]
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = false
     prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
 end
 
 case prefs[:railsapps]
@@ -520,6 +534,8 @@ case prefs[:railsapps]
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
   when 'rails-recurly-subscription-saas'
     prefs[:git] = true
     prefs[:database] = 'sqlite'
@@ -536,6 +552,8 @@ case prefs[:railsapps]
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
   when 'rails-prelaunch-signup'
     prefs[:git] = true
     prefs[:database] = 'sqlite'
@@ -552,6 +570,8 @@ case prefs[:railsapps]
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
     if prefer :git, true
       prefs[:prelaunch_branch] = multiple_choice "Git branch for the prelaunch app?",
         [["wip (work-in-progress)", "wip"],
@@ -584,6 +604,8 @@ case prefs[:railsapps]
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
   when 'rails3-devise-rspec-cucumber'
     prefs[:git] = true
     prefs[:database] = 'sqlite'
@@ -600,6 +622,8 @@ case prefs[:railsapps]
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
   when 'rails3-devise-rspec-cucumber-fabrication'
     prefs[:git] = true
     prefs[:database] = 'sqlite'
@@ -616,6 +640,8 @@ case prefs[:railsapps]
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
   when 'rails3-mongoid-devise'
     prefs[:git] = true
     prefs[:database] = 'mongodb'
@@ -633,6 +659,8 @@ case prefs[:railsapps]
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
   when 'rails3-mongoid-omniauth'
     prefs[:git] = true
     prefs[:database] = 'mongodb'
@@ -650,6 +678,8 @@ case prefs[:railsapps]
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
   when 'rails3-subdomains'
     prefs[:git] = true
     prefs[:database] = 'mongodb'
@@ -667,6 +697,8 @@ case prefs[:railsapps]
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = 'figaro'
     prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
 end
 # >-------------------------- recipes/railsapps.rb ---------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -2881,6 +2913,7 @@ config['github'] = yes_wizard?("Create a GitHub repository?") if true && true un
 config['local_env_file'] = multiple_choice("Add gem and file for environment variables?", [["None", "none"], ["Add .env with Foreman", "foreman"], ["Add application.yml with Figaro", "figaro"]]) if true && true unless config.key?('local_env_file') || prefs.has_key?(:local_env_file)
 config['quiet_assets'] = yes_wizard?("Reduce assets logger noise during development?") if true && true unless config.key?('quiet_assets') || prefs.has_key?(:quiet_assets)
 config['better_errors'] = yes_wizard?("Improve error reporting with 'better_errors' during development?") if true && true unless config.key?('better_errors') || prefs.has_key?(:better_errors)
+config['pry'] = yes_wizard?("Use 'pry' as console replacement during development and test?") if true && true unless config.key?('pry') || prefs.has_key?(:pry)
 @configs[@current_recipe] = config
 # >---------------------------- recipes/extras.rb ----------------------------start<
 
@@ -2992,6 +3025,16 @@ if prefs[:better_errors]
   add_gem 'binding_of_caller', :group => :development, :platforms => [:mri_19, :mri_20, :mri_21, :rbx]
 end
 
+# Pry
+if config['pry']
+  prefs[:pry] = true
+end
+if prefs[:pry]
+  say_wizard "recipe adding pry-rails gem"
+  add_gem 'pry-rails', :group => [:development, :test]
+  add_gem 'pry-rescue', :group => [:development, :test]
+end
+
 ## BAN SPIDERS
 if config['ban_spiders']
   prefs[:ban_spiders] = true
@@ -3064,6 +3107,39 @@ end
 # >---------------------------- recipes/extras.rb ----------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
+# >-------------------------- templates/recipe.erb ---------------------------start<
+# >------------------------------[ deployment ]-------------------------------<
+@current_recipe = "deployment"
+@before_configs["deployment"].call if @before_configs["deployment"]
+say_recipe 'deployment'
+config = {}
+config['deployment'] = multiple_choice("Add a deployment mechanism?", [["None", "none"], ["Capistrano3", "capistrano3"]]) if true && true unless config.key?('deployment') || prefs.has_key?(:deployment)
+@configs[@current_recipe] = config
+# >-------------------------- recipes/deployment.rb --------------------------start<
+
+# Application template recipe for the rails_apps_composer. Change the recipe here:
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/deployment.rb
+
+case config['deployment']
+when 'capistrano3'
+  prefs[:deployment] = 'capistrano3'
+end
+
+if prefer :deployment, 'capistrano3'
+  say_wizard "recipe adding capistrano gems"
+  add_gem 'capistrano', '~> 3.0.1', group: :development
+  add_gem 'capistrano-rvm', '~> 0.1.1', group: :development
+  add_gem 'capistrano-bundler', group: :development
+  add_gem 'capistrano-rails', '~> 1.1.0', group: :development
+  add_gem 'capistrano-rails-console', group: :development
+  after_bundler do
+    say_wizard 'recipe capistrano file'
+    run 'bundle exec cap install'
+  end
+end
+# >-------------------------- recipes/deployment.rb --------------------------end<
+# >-------------------------- templates/recipe.erb ---------------------------end<
+
 
 # >-----------------------------[ Final Gemfile Write ]------------------------------<
 Gemfile.write
@@ -3074,6 +3150,7 @@ Gemfile.write
 redacted_prefs = prefs.clone
 redacted_prefs.delete(:ban_spiders)
 redacted_prefs.delete(:better_errors)
+redacted_prefs.delete(:pry)
 redacted_prefs.delete(:dev_webserver)
 redacted_prefs.delete(:git)
 redacted_prefs.delete(:github)
