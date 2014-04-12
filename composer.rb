@@ -2030,48 +2030,50 @@ after_everything do
     when 'smtp'
       secrets_email = foreman_email = ''
     when 'gmail'
-      secrets_email = "  email_provider_username: <%= ENV[\"GMAIL_USERNAME\"] %>\n  email_provider_password: <%= ENV[\"GMAIL_PASSWORD\"] %>\n"
-      foreman_email = "GMAIL_USERNAME=Your_Username\nGMAIL_PASSWORD=Your_Password\n"
+      secrets_email = "  email_provider_username: <%= ENV[\"GMAIL_USERNAME\"] %>\n  email_provider_password: <%= ENV[\"GMAIL_PASSWORD\"] %>\n  domain_name: <%= ENV[\"DOMAIN_NAME\"] %>"
+       foreman_email = "GMAIL_USERNAME=Your_Username\nGMAIL_PASSWORD=Your_Password\nDOMAIN_NAME=Your_Domain\n"
     when 'sendgrid'
-      secrets_email = "  email_provider_username: <%= ENV[\"SENDGRID_USERNAME\"] %>\n  email_provider_password: <%= ENV[\"SENDGRID_PASSWORD\"] %>\n"
-      foreman_email = "SENDGRID_USERNAME=Your_Username\nSENDGRID_PASSWORD=Your_Password\n"
+      secrets_email = "  email_provider_username: <%= ENV[\"SENDGRID_USERNAME\"] %>\n  email_provider_password: <%= ENV[\"SENDGRID_PASSWORD\"] %>\n  domain_name: <%= ENV[\"DOMAIN_NAME\"] %>"
+      foreman_email = "SENDGRID_USERNAME=Your_Username\nSENDGRID_PASSWORD=Your_Password\nDOMAIN_NAME=Your_Domain\n"
     when 'mandrill'
-      secrets_email = "  email_provider_username: <%= ENV[\"MANDRILL_USERNAME\"] %>\n  email_provider_apikey: <%= ENV[\"MANDRILL_APIKEY\"] %>\n"
-      foreman_email = "MANDRILL_USERNAME=Your_Username\nMANDRILL_APIKEY=Your_API_Key\n"
+      secrets_email = "  email_provider_username: <%= ENV[\"MANDRILL_USERNAME\"] %>\n  email_provider_apikey: <%= ENV[\"MANDRILL_APIKEY\"] %>\n  domain_name: <%= ENV[\"DOMAIN_NAME\"] %>"
+      foreman_email = "MANDRILL_USERNAME=Your_Username\nMANDRILL_APIKEY=Your_API_Key\nDOMAIN_NAME=Your_Domain\n"
   end
   figaro_email  = foreman_email.gsub('=', ': ')
-  secrets_devise = "  admin_name: <%= ENV[\"ADMIN_NAME\"] %>\n  admin_email: <%= ENV[\"ADMIN_EMAIL\"] %>\n  admin_password: <%= ENV[\"ADMIN_PASSWORD\"] %>\n"
+  secrets_d_devise = "  admin_name: First User\n  admin_email: user@example.com\n  admin_password: changeme"
+  secrets_p_devise = "  admin_name: <%= ENV[\"ADMIN_NAME\"] %>\n  admin_email: <%= ENV[\"ADMIN_EMAIL\"] %>\n  admin_password: <%= ENV[\"ADMIN_PASSWORD\"] %>"
   foreman_devise = "ADMIN_NAME=First User\nADMIN_EMAIL=user@example.com\nADMIN_PASSWORD=changeme\n"
   figaro_devise  = foreman_devise.gsub('=', ': ')
-  secrets_omniauth = "  omniauth_provider_key: <%= ENV[\"OMNIAUTH_PROVIDER_KEY\"] %>\n  omniauth_provider_secret: <%= ENV[\"OMNIAUTH_PROVIDER_SECRET\"] %>\n"
+  secrets_omniauth = "  omniauth_provider_key: <%= ENV[\"OMNIAUTH_PROVIDER_KEY\"] %>\n  omniauth_provider_secret: <%= ENV[\"OMNIAUTH_PROVIDER_SECRET\"] %>"
   foreman_omniauth = "OMNIAUTH_PROVIDER_KEY: Your_Provider_Key\nOMNIAUTH_PROVIDER_SECRET: Your_Provider_Secret\n"
   figaro_omniauth  = foreman_omniauth.gsub('=', ': ')
-  secrets_cancan = "  roles: <%= ENV[\"ROLES\"] %>\n" # unnecessary? CanCan will not be used with Rails 4.1?
+  secrets_cancan = "  roles: <%= ENV[\"ROLES\"] %>" # unnecessary? CanCan will not be used with Rails 4.1?
   foreman_cancan = "ROLES=[admin, user, VIP]\n\n"
   figaro_cancan = foreman_cancan.gsub('=', ': ')
   ## EMAIL
-  inject_into_file 'config/secrets.yml', secrets_email, :after => "development:\n" if rails_4_1?
-  inject_into_file 'config/secrets.yml', secrets_email, :after => "production:\n" if rails_4_1?
+  inject_into_file 'config/secrets.yml', "\n" + secrets_email, :after => "development:" if rails_4_1?
+  ### 'inject_into_file' doesn't let us inject the same text twice unless we append the extra space, why?
+  inject_into_file 'config/secrets.yml', "\n" + secrets_email + " " , :after => "production:" if rails_4_1?
   append_file '.env', foreman_email if prefer :local_env_file, 'foreman'
   append_file 'config/application.yml', figaro_email if prefer :local_env_file, 'figaro'
   ## DEVISE
   if prefer :authentication, 'devise'
-    inject_into_file 'config/secrets.yml', secrets_devise, :after => "development:\n" if rails_4_1?
-    inject_into_file 'config/secrets.yml', secrets_devise, :after => "production:\n" if rails_4_1?
+    inject_into_file 'config/secrets.yml', "\n" + secrets_d_devise, :after => "development:" if rails_4_1?
+    inject_into_file 'config/secrets.yml', "\n" + secrets_p_devise, :after => "production:" if rails_4_1?
     append_file '.env', foreman_devise if prefer :local_env_file, 'foreman'
     append_file 'config/application.yml', figaro_devise if prefer :local_env_file, 'figaro'
   end
   ## OMNIAUTH
   if prefer :authentication, 'omniauth'
-    inject_into_file 'config/secrets.yml', secrets_omniauth, :after => "development:\n" if rails_4_1?
-    inject_into_file 'config/secrets.yml', secrets_omniauth, :after => "production:\n" if rails_4_1?
+    inject_into_file 'config/secrets.yml', "\n" + secrets_omniauth, :after => "development:" if rails_4_1?
+    inject_into_file 'config/secrets.yml', "\n" + secrets_omniauth, :after => "production:" if rails_4_1?
     append_file '.env', foreman_omniauth if prefer :local_env_file, 'foreman'
     append_file 'config/application.yml', figaro_omniauth if prefer :local_env_file, 'figaro'
   end
   ## CANCAN
   if (prefer :authorization, 'cancan')
-    inject_into_file 'config/secrets.yml', secrets_cancan, :after => "development:\n" if rails_4_1?
-    inject_into_file 'config/secrets.yml', secrets_cancan, :after => "production:\n" if rails_4_1?
+    inject_into_file 'config/secrets.yml', "\n" + secrets_cancan, :after => "development:" if rails_4_1?
+    inject_into_file 'config/secrets.yml', "\n" + secrets_cancan, :after => "production:" if rails_4_1?
     append_file '.env', foreman_cancan if prefer :local_env_file, 'foreman'
     append_file 'config/application.yml', figaro_cancan if prefer :local_env_file, 'figaro'
   end
