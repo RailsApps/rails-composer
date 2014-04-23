@@ -96,10 +96,10 @@ module Gemfile
 end
 def add_gem(*all) Gemfile.add(*all); end
 
-@recipes = ["core", "git", "railsapps", "setup", "readme", "gems", "testing", "email", "models", "controllers", "views", "routes", "frontend", "init", "apps4", "prelaunch", "saas", "extras", "deployment"]
+@recipes = ["core", "git", "railsapps", "setup", "readme", "gems", "testing", "tests4", "email", "models", "controllers", "views", "routes", "frontend", "init", "apps4", "prelaunch", "saas", "extras", "deployment"]
 @prefs = {}
 @gems = []
-@diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["controllers", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["apps4", "controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"]]
+@diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["controllers", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["apps4", "controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["apps4", "controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "tests4", "views"], ["apps4", "controllers", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["apps4", "controllers", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "tests4", "views"]]
 @diagnostics_prefs = [{:railsapps=>"rails-recurly-subscription-saas", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails-stripe-membership-saas", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails-stripe-membership-saas", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"mandrill", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails-prelaunch-signup", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"mandrill", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails3-bootstrap-devise-cancan", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form"}, {:railsapps=>"rails3-bootstrap-devise-cancan", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :starter_app=>"admin_app", :form_builder=>"simple_form", :local_env_file=>"figaro", :continuous_testing=>"none"}, {:railsapps=>"rails3-devise-rspec-cucumber", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-devise", :database=>"mongodb", :orm=>"mongoid", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-mongoid-omniauth", :database=>"mongodb", :orm=>"mongoid", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"none", :starter_app=>"users_app", :form_builder=>"none"}, {:railsapps=>"rails3-subdomains", :database=>"mongodb", :orm=>"mongoid", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"none", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"none", :starter_app=>"subdomains_app", :form_builder=>"none"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"rspec-capybara", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"none", :authentication=>"omniauth", :omniauth_provider=>"twitter", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"invitable", :authorization=>"cancan", :form_builder=>"simple_form", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"rspec", :integration=>"cucumber", :fixtures=>"factory_girl", :frontend=>"bootstrap", :bootstrap=>"sass", :email=>"gmail", :authentication=>"devise", :devise_modules=>"default", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}, {:railsapps=>"none", :database=>"sqlite", :unit_test=>"test_unit", :integration=>"none", :fixtures=>"none", :frontend=>"bootstrap", :bootstrap=>"less", :email=>"sendgrid", :authentication=>"devise", :devise_modules=>"confirmable", :authorization=>"cancan", :form_builder=>"none", :starter_app=>"admin_app"}]
 diagnostics = {}
 
@@ -414,9 +414,6 @@ case prefs[:apps4]
     prefs[:templates] = 'erb'
     prefs[:git] = true
     prefs[:database] = 'default'
-    prefs[:unit_test] = false
-    prefs[:integration] = false
-    prefs[:fixtures] = false
     prefs[:frontend] = 'foundation5'
     prefs[:email] = 'gmail'
     prefs[:authentication] = false
@@ -424,7 +421,6 @@ case prefs[:apps4]
     prefs[:authorization] = false
     prefs[:starter_app] = false
     prefs[:form_builder] = 'simple_form'
-    prefs[:continuous_testing] = false
     prefs[:quiet_assets] = true
     prefs[:local_env_file] = 'none'
     prefs[:better_errors] = true
@@ -435,9 +431,6 @@ case prefs[:apps4]
   when 'rails-bootstrap'
     prefs[:git] = true
     prefs[:database] = 'default'
-    prefs[:unit_test] = false
-    prefs[:integration] = false
-    prefs[:fixtures] = false
     prefs[:frontend] = 'bootstrap3'
     prefs[:email] = 'none'
     prefs[:authentication] = false
@@ -453,9 +446,6 @@ case prefs[:apps4]
   when 'rails-foundation'
     prefs[:git] = true
     prefs[:database] = 'default'
-    prefs[:unit_test] = false
-    prefs[:integration] = false
-    prefs[:fixtures] = false
     prefs[:frontend] = 'foundation5'
     prefs[:email] = 'none'
     prefs[:authentication] = false
@@ -470,9 +460,6 @@ case prefs[:apps4]
     prefs[:deployment] = 'none'
   when 'rails-devise'
     prefs[:git] = true
-    prefs[:unit_test] = false
-    prefs[:integration] = false
-    prefs[:fixtures] = false
     prefs[:authentication] = 'devise'
     prefs[:authorization] = false
     prefs[:starter_app] = false
@@ -483,9 +470,6 @@ case prefs[:apps4]
     prefs[:deployment] = 'none'
   when 'rails-devise-pundit'
     prefs[:git] = true
-    prefs[:unit_test] = false
-    prefs[:integration] = false
-    prefs[:fixtures] = false
     prefs[:authentication] = 'devise'
     prefs[:authorization] = 'pundit'
     prefs[:starter_app] = 'admin_app'
@@ -496,9 +480,6 @@ case prefs[:apps4]
     prefs[:deployment] = 'none'
   when 'rails-omniauth'
     prefs[:git] = true
-    prefs[:unit_test] = false
-    prefs[:integration] = false
-    prefs[:fixtures] = false
     prefs[:email] = 'none'
     prefs[:authentication] = 'omniauth'
     prefs[:authorization] = 'none'
@@ -747,8 +728,13 @@ if prefs[:prod_webserver] == 'same'
 end
 
 ## Database Adapter
-prefs[:database] = multiple_choice "Database used in development?", [["SQLite", "sqlite"], ["PostgreSQL", "postgresql"],
-  ["MySQL", "mysql"], ["MongoDB", "mongodb"]] unless prefs.has_key? :database
+if rails_4_1?
+  prefs[:database] = multiple_choice "Database used in development?", [["SQLite", "sqlite"], ["PostgreSQL", "postgresql"],
+    ["MySQL", "mysql"]] unless prefs.has_key? :database
+else
+  prefs[:database] = multiple_choice "Database used in development?", [["SQLite", "sqlite"], ["PostgreSQL", "postgresql"],
+    ["MySQL", "mysql"], ["MongoDB", "mongodb"]] unless prefs.has_key? :database
+end
 case prefs[:database]
   when 'mongodb'
     unless sqlite_detected
@@ -769,12 +755,24 @@ end
 prefs[:templates] = multiple_choice "Template engine?", [["ERB", "erb"], ["Haml", "haml"], ["Slim", "slim"]] unless prefs.has_key? :templates
 
 ## Testing Framework
-if recipes.include? 'testing'
-  prefs[:unit_test] = multiple_choice "Unit testing?", [["Test::Unit", "test_unit"], ["RSpec", "rspec"], ["MiniTest", "minitest"]] unless prefs.has_key? :unit_test
-  prefs[:integration] = multiple_choice "Integration testing?", [["None", "none"], ["RSpec with Capybara", "rspec-capybara"],
-    ["Cucumber with Capybara", "cucumber"], ["Turnip with Capybara", "turnip"], ["MiniTest with Capybara", "minitest-capybara"]] unless prefs.has_key? :integration
-  prefs[:continuous_testing] = multiple_choice "Continuous testing?", [["None", "none"], ["Guard", "guard"]] unless prefs.has_key? :continuous_testing
-  prefs[:fixtures] = multiple_choice "Fixture replacement?", [["None","none"], ["Factory Girl","factory_girl"], ["Machinist","machinist"], ["Fabrication","fabrication"]] unless prefs.has_key? :fixtures
+if rails_4_1?
+  if recipes.include? 'tests4'
+    prefs[:tests] = multiple_choice "Test framework?", [["None", "none"],
+      ["RSpec with Capybara", "rspec"]] unless prefs.has_key? :tests
+    case prefs[:tests]
+      when 'rspec'
+        say_wizard "Adding DatabaseCleaner, FactoryGirl, Faker, Launchy, Selenium"
+        prefs[:continuous_testing] = multiple_choice "Continuous testing?", [["None", "none"], ["Guard", "guard"]] unless prefs.has_key? :continuous_testing
+      end
+  end
+else
+  if recipes.include? 'testing'
+    prefs[:unit_test] = multiple_choice "Unit testing?", [["Test::Unit", "test_unit"], ["RSpec", "rspec"], ["MiniTest", "minitest"]] unless prefs.has_key? :unit_test
+    prefs[:integration] = multiple_choice "Integration testing?", [["None", "none"], ["RSpec with Capybara", "rspec-capybara"],
+      ["Cucumber with Capybara", "cucumber"], ["Turnip with Capybara", "turnip"], ["MiniTest with Capybara", "minitest-capybara"]] unless prefs.has_key? :integration
+    prefs[:continuous_testing] = multiple_choice "Continuous testing?", [["None", "none"], ["Guard", "guard"]] unless prefs.has_key? :continuous_testing
+    prefs[:fixtures] = multiple_choice "Fixture replacement?", [["None","none"], ["Factory Girl","factory_girl"], ["Machinist","machinist"], ["Fabrication","fabrication"]] unless prefs.has_key? :fixtures
+  end
 end
 
 ## Front-end Framework
@@ -804,14 +802,8 @@ if recipes.include? 'models'
       if prefer :orm, 'mongoid'
         prefs[:devise_modules] = multiple_choice "Devise modules?", [["Devise with default modules","default"]] unless prefs.has_key? :devise_modules
       else
-        if rails_4?
-          prefs[:devise_modules] = multiple_choice "Devise modules?", [["Devise with default modules","default"],
-          ["Devise with Confirmable module","confirmable"],
-          ["Devise with Confirmable and Invitable modules","invitable"]] unless prefs.has_key? :devise_modules
-        else
-          prefs[:devise_modules] = multiple_choice "Devise modules?", [["Devise with default modules","default"],
-          ["Devise with Confirmable module","confirmable"]] unless prefs.has_key? :devise_modules
-        end
+        prefs[:devise_modules] = multiple_choice "Devise modules?", [["Devise with default modules","default"],
+        ["Devise with Confirmable module","confirmable"]] unless prefs.has_key? :devise_modules
       end
     when 'omniauth'
       prefs[:omniauth_provider] = multiple_choice "OmniAuth provider?", [["Facebook", "facebook"], ["Twitter", "twitter"], ["GitHub", "github"],
@@ -1026,43 +1018,63 @@ if prefer :templates, 'slim'
 end
 
 ## Testing Framework
-if prefer :unit_test, 'rspec'
-  add_gem 'rspec-rails', :group => [:development, :test]
-  add_gem 'capybara', :group => :test if prefer :integration, 'rspec-capybara'
-  add_gem 'database_cleaner', '1.0.1', :group => :test
-  if prefer :orm, 'mongoid'
-    if rails_4?
-      add_gem 'mongoid-rspec', '>= 1.10.0', :group => :test
-    else
-      add_gem 'mongoid-rspec', :group => :test
+if rails_4_1?
+  if prefer :tests, 'rspec'
+    add_gem 'rspec-rails', '>= 3.0.0.beta2', :group => [:development, :test]
+    add_gem 'factory_girl_rails', :group => [:development, :test]
+    add_gem 'faker', :group => :test
+    add_gem 'capybara', :group => :test
+    add_gem 'database_cleaner', :group => :test
+    add_gem 'launchy', :group => :test
+    add_gem 'selenium-webdriver', :group => :test
+    if prefer :continuous_testing, 'guard'
+      add_gem 'guard-bundler', :group => :development
+      add_gem 'guard-rails', :group => :development
+      add_gem 'guard-rspec', :group => :development
+      add_gem 'rb-inotify', :group => :development, :require => false
+      add_gem 'rb-fsevent', :group => :development, :require => false
+      add_gem 'rb-fchange', :group => :development, :require => false
     end
   end
-  add_gem 'email_spec', :group => :test
+else
+  if prefer :unit_test, 'rspec'
+    add_gem 'rspec-rails', :group => [:development, :test]
+    add_gem 'capybara', :group => :test if prefer :integration, 'rspec-capybara'
+    add_gem 'database_cleaner', '1.0.1', :group => :test
+    if prefer :orm, 'mongoid'
+      if rails_4?
+        add_gem 'mongoid-rspec', '>= 1.10.0', :group => :test
+      else
+        add_gem 'mongoid-rspec', :group => :test
+      end
+    end
+    add_gem 'email_spec', :group => :test
+  end
+  if prefer :unit_test, 'minitest'
+    add_gem 'minitest-spec-rails', :group => :test
+    add_gem 'minitest-wscolor', :group => :test
+    add_gem 'capybara', :group => :test if prefer :integration, 'minitest-capybara'
+  end
+  if prefer :integration, 'cucumber'
+    add_gem 'cucumber-rails', :group => :test, :require => false
+    add_gem 'database_cleaner', '1.0.1', :group => :test unless prefer :unit_test, 'rspec'
+    add_gem 'launchy', :group => :test
+    add_gem 'capybara', :group => :test
+  end
+  add_gem 'turnip', '>= 1.1.0', :group => :test if prefer :integration, 'turnip'
+  if prefer :continuous_testing, 'guard'
+    add_gem 'guard-bundler', :group => :development
+    add_gem 'guard-cucumber', :group => :development if prefer :integration, 'cucumber'
+    add_gem 'guard-rails', :group => :development
+    add_gem 'guard-rspec', :group => :development if prefer :unit_test, 'rspec'
+    add_gem 'rb-inotify', :group => :development, :require => false
+    add_gem 'rb-fsevent', :group => :development, :require => false
+    add_gem 'rb-fchange', :group => :development, :require => false
+  end
+  add_gem 'factory_girl_rails', :group => [:development, :test] if prefer :fixtures, 'factory_girl'
+  add_gem 'fabrication', :group => [:development, :test] if prefer :fixtures, 'fabrication'
+  add_gem 'machinist', :group => :test if prefer :fixtures, 'machinist'
 end
-if prefer :unit_test, 'minitest'
-  add_gem 'minitest-spec-rails', :group => :test
-  add_gem 'minitest-wscolor', :group => :test
-  add_gem 'capybara', :group => :test if prefer :integration, 'minitest-capybara'
-end
-if prefer :integration, 'cucumber'
-  add_gem 'cucumber-rails', :group => :test, :require => false
-  add_gem 'database_cleaner', '1.0.1', :group => :test unless prefer :unit_test, 'rspec'
-  add_gem 'launchy', :group => :test
-  add_gem 'capybara', :group => :test
-end
-add_gem 'turnip', '>= 1.1.0', :group => :test if prefer :integration, 'turnip'
-if prefer :continuous_testing, 'guard'
-  add_gem 'guard-bundler', :group => :development
-  add_gem 'guard-cucumber', :group => :development if prefer :integration, 'cucumber'
-  add_gem 'guard-rails', :group => :development
-  add_gem 'guard-rspec', :group => :development if prefer :unit_test, 'rspec'
-  add_gem 'rb-inotify', :group => :development, :require => false
-  add_gem 'rb-fsevent', :group => :development, :require => false
-  add_gem 'rb-fchange', :group => :development, :require => false
-end
-add_gem 'factory_girl_rails', :group => [:development, :test] if prefer :fixtures, 'factory_girl'
-add_gem 'fabrication', :group => [:development, :test] if prefer :fixtures, 'fabrication'
-add_gem 'machinist', :group => :test if prefer :fixtures, 'machinist'
 
 ## Front-end Framework
 add_gem 'rails_layout', :group => :development
@@ -1543,6 +1555,107 @@ RUBY
   end
 end # after_everything
 # >--------------------------- recipes/testing.rb ----------------------------end<
+# >-------------------------- templates/recipe.erb ---------------------------end<
+
+# >-------------------------- templates/recipe.erb ---------------------------start<
+# >--------------------------------[ tests4 ]---------------------------------<
+@current_recipe = "tests4"
+@before_configs["tests4"].call if @before_configs["tests4"]
+say_recipe 'tests4'
+@configs[@current_recipe] = config
+# >---------------------------- recipes/tests4.rb ----------------------------start<
+
+# Application template recipe for the rails_apps_composer. Change the recipe here:
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/tests4.rb
+
+after_bundler do
+  say_wizard "recipe running after 'bundle install'"
+  ### RSPEC ###
+  if prefer :tests, 'rspec'
+    say_wizard "recipe installing RSpec"
+    run 'rm -rf test/' # Removing test folder (not needed for RSpec)
+    generate 'rspec:install'
+    inject_into_file '.rspec', "--format documentation\n", :after => "--color\n"
+    gsub_file 'spec/spec_helper.rb', /ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)/, "ActiveRecord::Migration.maintain_test_schema!"
+    inject_into_file 'config/application.rb', :after => "Rails::Application\n" do <<-RUBY
+
+    config.generators do |g|
+      g.test_framework :rspec,
+        fixtures: true,
+        view_specs: false,
+        helper_specs: false,
+        routing_specs: false,
+        controller_specs: false,
+        request_specs: false
+      g.fixture_replacement :factory_girl, dir: "spec/factories"
+    end
+
+RUBY
+    end
+    ### Configure Launchy to display CSS and JavaScript
+    create_file 'spec/support/capybara.rb', "Capybara.asset_host = 'http://localhost:3000'\n"
+    ### Configure Database Cleaner to test JavaScript
+    gsub_file 'spec/spec_helper.rb', /config.use_transactional_fixtures = true/, "config.use_transactional_fixtures = false"
+    create_file 'spec/support/database_cleaner.rb' do
+    <<-RUBY
+RSpec.configure do |config|
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before(:each, :js => true) do
+    DatabaseCleaner.strategy = :truncation
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.append_after(:each) do
+    DatabaseCleaner.clean
+  end
+end
+RUBY
+    end
+    ### Configure FactoryGirl for shortcuts
+    create_file 'spec/support/factory_girl.rb' do
+    <<-RUBY
+RSpec.configure do |config|
+  config.include FactoryGirl::Syntax::Methods
+end
+RUBY
+    end
+    ## RSPEC AND DEVISE
+    if prefer :authentication, 'devise'
+      # add Devise test helpers
+      create_file 'spec/support/devise.rb' do
+      <<-RUBY
+RSpec.configure do |config|
+  config.include Devise::TestHelpers, :type => :controller
+end
+RUBY
+      end
+    end
+  end
+  ### GUARD
+  if prefer :continuous_testing, 'guard'
+    say_wizard "recipe initializing Guard"
+    run 'bundle exec guard init'
+  end
+  ### GIT ###
+  git :add => '-A' if prefer :git, true
+  git :commit => '-qm "rails_apps_composer: testing framework"' if prefer :git, true
+end # after_bundler
+
+after_everything do
+  say_wizard "recipe running after everything"
+  # copy tests from repos here
+end # after_everything
+# >---------------------------- recipes/tests4.rb ----------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
 # >-------------------------- templates/recipe.erb ---------------------------start<
