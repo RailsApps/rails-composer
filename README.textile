@@ -190,7 +190,7 @@ It is a good idea to use "RVM":https://rvm.io/, the Ruby Version Manager, and cr
 
 h2. Contributed Applications
 
-Currently, there are no contributed applications available for Rails 4.1. If you would like your favorite starter application added to Rails Composer, open an issue to let me know.
+Currently, there are no contributed applications available for Rails 4.1. If you would like to add your favorite starter application to Rails Composer, open an issue to let me know.
 
 h2. Build Your Own Application
 
