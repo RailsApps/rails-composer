@@ -1,16 +1,18 @@
 h1. !http://railsapps.github.io/images/rails-36x36.jpg(Rails Composer)! Rails Composer
 
-An application template that creates a starter application for Rails.
+An application template that creates starter applications for Rails.
 
-It's the Rails generator on steroids. See the "Rails Composer project page":http://railsapps.github.io/rails-composer.
+It's the Rails generator on steroids.
 
 The Rails Composer application template is built from recipes provided by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem. Need to customize the Rails Composer application template? Want to build your own application template? Use the  "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem.
 
 h4. !http://railsapps.github.io/images/join/join-railsapps.png(Join RailsApps)!:http://railsapps.github.io/
 
-h4. What is the RailsApps Project?
+h4. From the RailsApps Project
 
-The "RailsApps project":http://railsapps.github.io/ provides example applications that developers use as starter apps. Hundreds of developers use the apps, report problems as they arise, and propose solutions. Rails changes frequently; each application is known to work and serves as your personal "reference implementation." Each application is accompanied by a tutorial so there is no mystery code. Support for the project comes from subscribers. Please accept our invitation to "join the RailsApps project":http://railsapps.github.io/.
+The "RailsApps project":http://railsapps.github.io/ provides example applications that developers use as starter apps. Hundreds of developers use the apps, report problems as they arise, and propose solutions. Rails changes frequently; each application is known to work and serves as your personal "reference implementation."
+
+Support for the project comes from subscribers. If you use Rails Composer, please "join RailsApps":http://railsapps.github.io/ and support the project.
 
 h4. If You Are New to Rails
 
@@ -33,7 +35,7 @@ h2. Dependencies
 Before running the Rails Composer tool, you need to install:
 
 * The Ruby language (version 2.1)
-* Rails (versions 4.1 or 3.2)
+* Rails (versions 4.1)
 
 Check that appropriate versions of Ruby and Rails are installed in your development environment:
 @$ ruby -v@
@@ -41,9 +43,9 @@ Check that appropriate versions of Ruby and Rails are installed in your developm
 
 Be sure to read the article "Installing Rails":http://railsapps.github.io/installing-rails.html to make sure your development environment is set up properly.
 
-h4. Rails Versions
+h4. Rails 4.1
 
-Depending on the version of Rails you use, different starter apps are available.
+Currently, only Rails 4.1 is supported.
 
 h2. Creating a Starter App
 
@@ -56,14 +58,6 @@ $ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/comp
 Replace @myapp@ with the name of your application.
 
 The @$@ character indicates a shell prompt; don't include it when you run the command.
-
-You can use the @-T@ flag to skip Test::Unit files or the @-O@ flag to skip Active Record files:
-
-<pre>
-$ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb -T -O
-</pre>
-
-Skip Test::Unit if you plan to use RSpec for unit testing. Skip Active Record if you plan to use a NoSQL datastore with an ORM such as Mongoid.
 
 See the "Troubleshooting" section below if you see errors. In general, you'll avoid many problems if you create your application using RVM as described below.
 
@@ -81,8 +75,6 @@ $ gem install rails
 $ rails new . -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb
 </pre>
 
-You can add the @-T@ flag to skip Test::Unit files or the @-O@ flag to skip Active Record files. Skip Test::Unit if you plan to use RSpec for unit testing. Skip Active Record if you plan to use a NoSQL datastore with an ORM such as Mongoid.
-
 Instead of installing Rails into the global gemset and running @rails new@, we'll create a root directory for a new application, create a new gemset, install Rails, and then generate a starter application.
 
 When we create the gemset, the option "--ruby-version" creates *.ruby-version* and *.ruby-gemset* files in the root directory. RVM recognizes these files in an application's root directory and loads the required version of Ruby and the correct gemset whenever you enter the directory.
@@ -98,24 +90,6 @@ h2. Choose a RailsApps Starter Application
 Use Rails Composer to generate any of the example applications from the "RailsApps project":http://railsapps.github.io/. You'll be able to choose your own project name when you generate the app. Generating the application gives you additional options.
 
 To build the example application, Rails must be installed in your development environment.
-
-Choices of starter applications will differ depending on whether you are using Rails 4.1 or Rails 3.2.
-
-Here's an example:
-
-<pre>
-$ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb
-</pre>
-
-The @$@ character indicates a shell prompt; don't include it when you run the command.
-
-You can use the @-T@ flag to skip Test::Unit files or the @-O@ flag to skip Active Record files:
-
-<pre>
-$ rails new myapp -m https://raw.github.com/RailsApps/rails-composer/master/composer.rb -T -O
-</pre>
-
-This creates a new Rails app named @myapp@ on your computer. You can use a different name if you wish.
 
 h4. Rails 4.1
 
@@ -142,46 +116,9 @@ question  Starter apps for Rails 4.1. More to come.
 
 Make your choice. The Rails Composer tool may give you other options (other applications may have been added since these notes were written).
 
-h4. Rails 4.0
-
-With Rails 4.0, you'll see a prompt:
-
-<pre>
-question  Build a starter application?
-      1)  Build a RailsApps example application
-      2)  Build a contributed application
-      3)  I want to build my own application
-</pre>
-
-Enter "1" to select *Build a starter application*. You'll see a warning:
-
-<pre>
-railsapps  Please upgrade to Rails 4.1 to get the starter apps.
-</pre>
-
-Then you can continue with the "Build Your Own Application" options (see below).
-
-h4. Rails 3.2
-
-With Rails 3.2, you'll see a prompt:
-
-<pre>
-question  Install an example application for Rails 3.2?
-          1)  I want to build my own application
-          2)  membership/subscription/saas
-          3)  rails-prelaunch-signup
-          4)  rails3-bootstrap-devise-cancan
-          5)  rails3-devise-rspec-cucumber
-          6)  rails3-mongoid-devise
-          7)  rails3-mongoid-omniauth
-          8)  rails3-subdomains
-</pre>
-
-None of these Rails 3.2 example applications are available for newer versions of Rails.
-
 h4. Options
 
-The application generator template may ask you for additional preferences:
+The application generator template will ask you for additional preferences. Options vary, depending on the example application you build:
 
 <pre>
  question  Web server for development?
@@ -198,13 +135,17 @@ The application generator template may ask you for additional preferences:
        4)  Puma
        5)  Phusion Passenger (Apache/Nginx)
        6)  Phusion Passenger (Standalone)
+ question  Database used in development?
+       1)  SQLite
+       2)  PostgreSQL
+       3)  MySQL
  question  Template engine?
        1)  ERB
        2)  Haml
        3)  Slim
- question  Continuous testing?
+ question  Test framework?
        1)  None
-       2)  Guard
+       2)  RSpec with Capybara
  question  Front-end framework?
        1)  None
        2)  Bootstrap 3.0
@@ -223,13 +164,17 @@ We recommend Thin in development for speed and less noise in the log files.
 
 If you plan to deploy to Heroku, select Thin as your production webserver. Unicorn is recommended by Heroku but configuration is more complex.
 
+h4. Database
+
+Choose "SQLite" for the easiest setup. If you choose PostgreSQL or MySQL, the databases must be installed and running before you run Rails Composer.
+
 h4. Template Engine
 
-The example application uses the default "ERB" Rails template engine. Optionally, you can use another template engine, such as Haml or Slim. See instructions for "Haml and Rails":http://railsapps.github.io/rails-haml.html.
+The example applications use the default "ERB" Rails template engine. Optionally, you can use another template engine, such as Haml or Slim. See instructions for "Haml and Rails":http://railsapps.github.io/rails-haml.html.
 
-h4. Continuous Testing
+h4. Testing
 
-You won't need "continuous testing" if you are a beginner. Select "none."
+If you are a beginner, select "None."
 
 h4. Front-end Framework
 
@@ -243,15 +188,17 @@ If you choose to create a GitHub repository, the generator will prompt you for a
 
 It is a good idea to use "RVM":https://rvm.io/, the Ruby Version Manager, and create a project-specific rvm gemset (not available on Windows). See "Installing Rails":http://railsapps.github.io/installing-rails.html.
 
+h2. Contributed Applications
+
+Currently, there are no contributed applications available for Rails 4.1. If you would like your favorite starter application added to Rails Composer, open an issue to let me know.
+
 h2. Build Your Own Application
 
-If you choose "I want to build my own application," you will get a wide set of choices.
+If you choose "I want to build my own application," you will get a wide set of choices. Not all are actively supported.
 
-These options are for experienced developers. Expect to spend time debugging your starter application as not all options are tested or fully supported.
+Rails Composer is primarily a tool to build the RailsApps example applications. I actively maintain the tool to support that mission. A large community of developers contributes code that supports additional gems and favorite configurations offered with the "build your own options." However, not all contributions are actively maintained. That means not all options are tested or fully supported, so you may need to spend time debugging a "build your own application."
 
-You'll have a choice of databases. If you choose something other than SQLite, the database server must be running.
-
-Here's an example of what you'll see using Rails 4.0:
+When you choose "I want to build my own application," you will see something similar to this:
 
 <pre>
 question  Build a starter application?
@@ -279,34 +226,19 @@ question  Database used in development?
       1)  SQLite
       2)  PostgreSQL
       3)  MySQL
-      4)  MongoDB
 
 question  Template engine?
       1)  ERB
       2)  Haml
-      3)  Slim (experimental)
+      3)  Slim
 
-question  Unit testing?
-      1)  Test::Unit
-      2)  RSpec
-      3)  MiniTest
-
-question  Integration testing?
+question  Test framework?
       1)  None
       2)  RSpec with Capybara
-      3)  Cucumber with Capybara
-      4)  Turnip with Capybara
-      5)  MiniTest with Capybara
 
 question  Continuous testing?
       1)  None
       2)  Guard
-
-question  Fixture replacement?
-      1)  None
-      2)  Factory Girl
-      3)  Machinist
-      4)  Fabrication
 
 question  Front-end framework?
       1)  None
@@ -331,11 +263,10 @@ question  Authentication?
 question  Devise modules?
       1)  Devise with default modules
       2)  Devise with Confirmable module
-      3)  Devise with Confirmable and Invitable modules
 
 question  Authorization?
       1)  None
-      2)  CanCan with Rolify
+      2)  Pundit
 
 question  Use a form builder gem?
       1)  None
@@ -358,7 +289,12 @@ question  Add gem and file for environment variables?
 
 extras  Reduce assets logger noise during development? (y/n)
 extras  Improve error reporting with 'better_errors' during development? (y/n)
+extras  Use 'pry' as console replacement during development and test? (y/n)
 extras  Use or create a project-specific rvm gemset? (y/n)
+
+question  Add a deployment mechanism?
+      1)  None
+      2)  Capistrano3
 </pre>
 
 h2. Run the Application
@@ -416,15 +352,11 @@ You should delete or change any pre-configured logins before you deploy your app
 
 h2. Testing
 
-Some versions of the starter application will contain a suite of RSpec unit tests or Cucumber scenarios and step definitions.
+Some versions of the starter application will contain a suite of RSpec feature and unit tests.
 
-After installing the application, run @rake -T@ to check that rake tasks for RSpec and Cucumber are available.
+Run @rspec@ to run all RSpec tests.
 
-Run @rake spec@ to run all RSpec tests.
-
-Run @rake cucumber@ (or more simply, @cucumber@) to run all Cucumber scenarios.
-
-Please send the author a message, create an issue, or submit a pull request if you want to contribute improved RSpec or Cucumber files.
+Please send the author a message, create an issue, or submit a pull request if you want to contribute improved RSpec tests.
 
 h2. Deployment
 
@@ -513,9 +445,9 @@ Problems? Please check both "issues for the Rails Composer tool":https://github.
 
 h4. Where to Get Help
 
-Your best source for help with problems is "Stack Overflow":http://stackoverflow.com/questions/tagged/ruby-on-rails-3. Your issue may have been encountered and addressed by others.
+Your best source for help with problems is "Stack Overflow":http://stackoverflow.com/questions/tagged/railsapps. Your issue may have been encountered and addressed by others.
 
-You can also try "Rails Hotline":http://www.railshotline.com/, a free telephone hotline for Rails help staffed by volunteers.
+Use the tag "railsapps" on Stack Overflow for extra attention.
 
 h2. Contributing
 
