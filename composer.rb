@@ -254,7 +254,7 @@ say_wizard("\033[1m\033[36m" + "                             \| \|   \| \|" + "\
 say_wizard("\033[1m\033[36m" + "                             \| \|   \| \|" + "\033[0m")
 say_wizard("\033[1m\033[36m" + '' + "\033[0m")
 say_wizard("\033[1m\033[36m" + "Rails Composer, open source, supported by subscribers." + "\033[0m")
-say_wizard("\033[1m\033[36m" + "Like Rails Composer? Please join RailsApps to support development." + "\033[0m")
+say_wizard("\033[1m\033[36m" + "Please join RailsApps to support development of Rails Composer." + "\033[0m")
 say_wizard("\033[1m\033[36m" + "Need help? Ask on Stack Overflow with the tag \'railsapps.\'" + "\033[0m")
 say_wizard("Your new application will contain diagnostics in its README file.")
 
@@ -669,10 +669,6 @@ if prefer :apps4, 'learn-rails'
     # >-------------------------------[ Assets ]--------------------------------<
 
     copy_from_repo 'app/assets/javascripts/segmentio.js', :repo => repo
-
-    # >-------------------------------[ Cleanup ]--------------------------------<
-
-    gsub_file 'Gemfile', /.*gem 'rails_apps_pages'\n/, ''
 
   end
 end
@@ -2368,13 +2364,15 @@ after_everything do
   foreman_cancan = "ROLES=[admin, user, VIP]\n\n"
   figaro_cancan = foreman_cancan.gsub('=', ': ')
   ## EMAIL
-  inject_into_file 'config/secrets.yml', "\n" + "  domain_name: example.com", :after => "development:" if rails_4_1?
-  inject_into_file 'config/secrets.yml', "\n" + "  domain_name: <%= ENV[\"DOMAIN_NAME\"] %>", :after => "production:" if rails_4_1?
-  inject_into_file 'config/secrets.yml', "\n" + secrets_email, :after => "development:" if rails_4_1?
-  ### 'inject_into_file' doesn't let us inject the same text twice unless we append the extra space, why?
-  inject_into_file 'config/secrets.yml', "\n" + secrets_email + " ", :after => "production:" if rails_4_1?
-  append_file '.env', foreman_email if prefer :local_env_file, 'foreman'
-  append_file 'config/application.yml', figaro_email if prefer :local_env_file, 'figaro'
+  unless prefer :email, 'none'
+    inject_into_file 'config/secrets.yml', "\n" + "  domain_name: example.com", :after => "development:" if rails_4_1?
+    inject_into_file 'config/secrets.yml', "\n" + "  domain_name: <%= ENV[\"DOMAIN_NAME\"] %>", :after => "production:" if rails_4_1?
+    inject_into_file 'config/secrets.yml', "\n" + secrets_email, :after => "development:" if rails_4_1?
+    ### 'inject_into_file' doesn't let us inject the same text twice unless we append the extra space, why?
+    inject_into_file 'config/secrets.yml', "\n" + secrets_email + " ", :after => "production:" if rails_4_1?
+    append_file '.env', foreman_email if prefer :local_env_file, 'foreman'
+    append_file 'config/application.yml', figaro_email if prefer :local_env_file, 'figaro'
+  end
   ## DEVISE
   if prefer :authentication, 'devise'
     inject_into_file 'config/secrets.yml', "\n" + secrets_d_devise, :after => "development:" if rails_4_1?
@@ -3046,9 +3044,11 @@ after_everything do
   }.each { |file| remove_file file }
   # remove temporary Haml gems from Gemfile when Slim is selected
   if prefer :templates, 'slim'
-    gsub_file 'Gemfile', /  gem 'haml2slim'\n/, "\n"
-    gsub_file 'Gemfile', /  gem 'html2haml'\n/, "\n"
+    gsub_file 'Gemfile', /.*gem 'haml2slim'\n/, "\n"
+    gsub_file 'Gemfile', /.*gem 'html2haml'\n/, "\n"
   end
+  # remove temporary rails_apps_pages gem
+  gsub_file 'Gemfile', /.*gem 'rails_apps_pages'\n/, ''
   # remove commented lines and multiple blank lines from Gemfile
   # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
   gsub_file 'Gemfile', /#.*\n/, "\n"
