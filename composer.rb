@@ -96,7 +96,7 @@ module Gemfile
 end
 def add_gem(*all) Gemfile.add(*all); end
 
-@recipes = ["core", "git", "railsapps", "learn_rails", "rails_bootstrap", "rails_foundation", "rails_omniauth", "rails_devise", "rails_devise_pundit", "rails_signup_download", "setup", "readme", "gems", "testing", "tests4", "email", "models", "controllers", "views", "routes", "frontend", "init", "prelaunch", "saas", "extras", "deployment"]
+@recipes = ["core", "git", "railsapps", "setup", "readme", "gems", "testing", "tests4", "email", "models", "controllers", "views", "routes", "frontend", "init", "apps4", "prelaunch", "saas", "extras", "deployment"]
 @prefs = {}
 @gems = []
 @diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["controllers", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "setup", "testing", "views"], ["controllers", "email", "example", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["apps4", "controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["apps4", "controllers", "core", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "tests4", "views"], ["apps4", "controllers", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "views"], ["apps4", "controllers", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "models", "prelaunch", "railsapps", "readme", "routes", "saas", "setup", "testing", "tests4", "views"]]
@@ -373,8 +373,7 @@ when "4"
         ["rails-foundation", "rails-foundation"],
         ["rails-omniauth", "rails-omniauth"],
         ["rails-devise", "rails-devise"],
-        ["rails-devise-pundit", "rails-devise-pundit"],
-        ["rails-signup-download", "rails-signup-download"]])
+        ["rails-devise-pundit", "rails-devise-pundit"]])
       else
         say_wizard "Please upgrade to Rails 4.1 to get the starter apps."
       end
@@ -382,6 +381,114 @@ when "4"
       prefs[:apps4] = multiple_choice "No contributed applications are available.",
         [["continue", "none"]]
   end
+end
+
+case prefs[:apps4]
+  when 'simple-test'
+    prefs[:dev_webserver] = 'webrick'
+    prefs[:prod_webserver] = 'same'
+    prefs[:templates] = 'erb'
+    prefs[:git] = false
+    prefs[:github] = false
+    prefs[:database] = 'sqlite'
+    prefs[:unit_test] = false
+    prefs[:integration] = false
+    prefs[:fixtures] = false
+    prefs[:frontend] = false
+    prefs[:email] = false
+    prefs[:authentication] = false
+    prefs[:devise_modules] = false
+    prefs[:authorization] = false
+    prefs[:starter_app] = false
+    prefs[:form_builder] = false
+    prefs[:quiet_assets] = false
+    prefs[:local_env_file] = 'none'
+    prefs[:better_errors] = false
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
+    prefs[:ban_spiders] = false
+    prefs[:continuous_testing] = false
+  when 'learn-rails'
+    prefs[:dev_webserver] = 'webrick'
+    prefs[:prod_webserver] = 'same'
+    prefs[:templates] = 'erb'
+    prefs[:git] = true
+    prefs[:database] = 'default'
+    prefs[:frontend] = 'foundation5'
+    prefs[:email] = 'gmail'
+    prefs[:authentication] = false
+    prefs[:devise_modules] = false
+    prefs[:authorization] = false
+    prefs[:starter_app] = false
+    prefs[:form_builder] = 'simple_form'
+    prefs[:quiet_assets] = true
+    prefs[:local_env_file] = 'none'
+    prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
+    prefs[:ban_spiders] = false
+    prefs[:github] = false
+  when 'rails-bootstrap'
+    prefs[:git] = true
+    prefs[:database] = 'default'
+    prefs[:frontend] = 'bootstrap3'
+    prefs[:email] = 'none'
+    prefs[:authentication] = false
+    prefs[:devise_modules] = false
+    prefs[:authorization] = false
+    prefs[:starter_app] = false
+    prefs[:form_builder] = false
+    prefs[:quiet_assets] = true
+    prefs[:local_env_file] = false
+    prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
+  when 'rails-foundation'
+    prefs[:git] = true
+    prefs[:database] = 'default'
+    prefs[:frontend] = 'foundation5'
+    prefs[:email] = 'none'
+    prefs[:authentication] = false
+    prefs[:devise_modules] = false
+    prefs[:authorization] = false
+    prefs[:starter_app] = false
+    prefs[:form_builder] = false
+    prefs[:quiet_assets] = true
+    prefs[:local_env_file] = false
+    prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
+  when 'rails-devise'
+    prefs[:git] = true
+    prefs[:authentication] = 'devise'
+    prefs[:authorization] = false
+    prefs[:starter_app] = false
+    prefs[:quiet_assets] = true
+    prefs[:local_env_file] = false
+    prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
+  when 'rails-devise-pundit'
+    prefs[:git] = true
+    prefs[:authentication] = 'devise'
+    prefs[:authorization] = 'pundit'
+    prefs[:starter_app] = 'admin_app'
+    prefs[:quiet_assets] = true
+    prefs[:local_env_file] = false
+    prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
+  when 'rails-omniauth'
+    prefs[:git] = true
+    prefs[:email] = 'none'
+    prefs[:authentication] = 'omniauth'
+    prefs[:authorization] = 'none'
+    prefs[:starter_app] = false
+    prefs[:quiet_assets] = true
+    prefs[:local_env_file] = false
+    prefs[:better_errors] = true
+    prefs[:pry] = false
+    prefs[:deployment] = 'none'
 end
 
 case prefs[:railsapps]
@@ -575,328 +682,6 @@ case prefs[:railsapps]
     prefs[:deployment] = 'none'
 end
 # >-------------------------- recipes/railsapps.rb ---------------------------end<
-# >-------------------------- templates/recipe.erb ---------------------------end<
-
-# >-------------------------- templates/recipe.erb ---------------------------start<
-# >------------------------------[ learn_rails ]------------------------------<
-@current_recipe = "learn_rails"
-@before_configs["learn_rails"].call if @before_configs["learn_rails"]
-say_recipe 'learn_rails'
-@configs[@current_recipe] = config
-# >------------------------- recipes/learn_rails.rb --------------------------start<
-
-# Application template recipe for the rails_apps_composer. Change the recipe here:
-# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/learn_rails.rb
-
-if prefer :apps4, 'learn-rails'
-
-  # preferences
-  prefs[:authentication] = false
-  prefs[:authorization] = false
-  prefs[:ban_spiders] = false
-  prefs[:better_errors] = true
-  prefs[:database] = 'default'
-  prefs[:deployment] = 'none'
-  prefs[:devise_modules] = false
-  prefs[:dev_webserver] = 'webrick'
-  prefs[:email] = 'gmail'
-  prefs[:form_builder] = 'simple_form'
-  prefs[:frontend] = 'foundation5'
-  prefs[:github] = false
-  prefs[:git] = true
-  prefs[:local_env_file] = 'none'
-  prefs[:prod_webserver] = 'same'
-  prefs[:pry] = false
-  prefs[:quiet_assets] = true
-  prefs[:secrets] = ['owner_email', 'mailchimp_list_id', 'mailchimp_api_key']
-  prefs[:starter_app] = false
-  prefs[:templates] = 'erb'
-  prefs[:tests] = false
-
-  # gems
-  add_gem 'activerecord-tableless'
-  add_gem 'high_voltage'
-  add_gem 'gibbon'
-  add_gem 'google_drive'
-  gsub_file 'Gemfile', /gem 'sqlite3'\n/, ''
-  add_gem 'sqlite3', :group => :development
-  add_gem 'pg', :group => :production
-  add_gem 'thin', :group => :production
-  add_gem 'rails_12factor', :group => :production
-
-  after_everything do
-
-    repo = 'https://raw.github.com/RailsApps/learn-rails/master/'
-
-    # >-------------------------------[ Models ]--------------------------------<
-
-    copy_from_repo 'app/models/contact.rb', :repo => repo
-    copy_from_repo 'app/models/visitor.rb', :repo => repo
-
-    # >-------------------------------[ Controllers ]--------------------------------<
-
-    copy_from_repo 'app/controllers/contacts_controller.rb', :repo => repo
-    copy_from_repo 'app/controllers/visitors_controller.rb', :repo => repo
-
-    # >-------------------------------[ Mailers ]--------------------------------<
-
-    generate 'mailer UserMailer'
-    copy_from_repo 'app/mailers/user_mailer.rb', :repo => repo
-
-    # >-------------------------------[ Views ]--------------------------------<
-
-    copy_from_repo 'app/views/contacts/new.html.erb', :repo => repo
-    copy_from_repo 'app/views/pages/about.html.erb', :repo => repo
-    copy_from_repo 'app/views/user_mailer/contact_email.html.erb', :repo => repo
-    copy_from_repo 'app/views/user_mailer/contact_email.text.erb', :repo => repo
-    copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
-    # create navigation links using the rails_layout gem
-    generate 'layout:navigation -f'
-
-    # >-------------------------------[ Routes ]--------------------------------<
-
-    copy_from_repo 'config/routes.rb', :repo => repo
-
-    # >-------------------------------[ Assets ]--------------------------------<
-
-    copy_from_repo 'app/assets/javascripts/segmentio.js', :repo => repo
-
-    # >-------------------------------[ Cleanup ]--------------------------------<
-
-    gsub_file 'Gemfile', /.*gem 'rails_apps_pages'\n/, ''
-
-  end
-end
-# >------------------------- recipes/learn_rails.rb --------------------------end<
-# >-------------------------- templates/recipe.erb ---------------------------end<
-
-# >-------------------------- templates/recipe.erb ---------------------------start<
-# >----------------------------[ rails_bootstrap ]----------------------------<
-@current_recipe = "rails_bootstrap"
-@before_configs["rails_bootstrap"].call if @before_configs["rails_bootstrap"]
-say_recipe 'rails_bootstrap'
-@configs[@current_recipe] = config
-# >----------------------- recipes/rails_bootstrap.rb ------------------------start<
-
-# Application template recipe for the rails_apps_composer. Change the recipe here:
-# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/rails_bootstrap.rb
-
-if prefer :apps4, 'rails-bootstrap'
-  prefs[:authentication] = false
-  prefs[:authorization] = false
-  prefs[:better_errors] = true
-  prefs[:database] = 'default'
-  prefs[:deployment] = 'none'
-  prefs[:devise_modules] = false
-  prefs[:email] = 'none'
-  prefs[:form_builder] = false
-  prefs[:frontend] = 'bootstrap3'
-  prefs[:git] = true
-  prefs[:local_env_file] = false
-  prefs[:pry] = false
-  prefs[:quiet_assets] = true
-  prefs[:starter_app] = false
-  add_gem 'high_voltage'
-  after_everything do
-    generate 'pages:home -f'
-    generate 'pages:about -f'
-    generate 'layout:navigation -f'
-  end
-end
-# >----------------------- recipes/rails_bootstrap.rb ------------------------end<
-# >-------------------------- templates/recipe.erb ---------------------------end<
-
-# >-------------------------- templates/recipe.erb ---------------------------start<
-# >---------------------------[ rails_foundation ]----------------------------<
-@current_recipe = "rails_foundation"
-@before_configs["rails_foundation"].call if @before_configs["rails_foundation"]
-say_recipe 'rails_foundation'
-@configs[@current_recipe] = config
-# >----------------------- recipes/rails_foundation.rb -----------------------start<
-
-# Application template recipe for the rails_apps_composer. Change the recipe here:
-# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/rails_foundation.rb
-
-if prefer :apps4, 'rails-foundation'
-  prefs[:authentication] = false
-  prefs[:authorization] = false
-  prefs[:better_errors] = true
-  prefs[:database] = 'default'
-  prefs[:deployment] = 'none'
-  prefs[:devise_modules] = false
-  prefs[:email] = 'none'
-  prefs[:form_builder] = false
-  prefs[:frontend] = 'foundation5'
-  prefs[:git] = true
-  prefs[:local_env_file] = false
-  prefs[:pry] = false
-  prefs[:quiet_assets] = true
-  prefs[:starter_app] = false
-  add_gem 'high_voltage'
-  after_everything do
-    generate 'pages:home -f'
-    generate 'pages:about -f'
-    generate 'layout:navigation -f'
-  end
-end
-# >----------------------- recipes/rails_foundation.rb -----------------------end<
-# >-------------------------- templates/recipe.erb ---------------------------end<
-
-# >-------------------------- templates/recipe.erb ---------------------------start<
-# >----------------------------[ rails_omniauth ]-----------------------------<
-@current_recipe = "rails_omniauth"
-@before_configs["rails_omniauth"].call if @before_configs["rails_omniauth"]
-say_recipe 'rails_omniauth'
-@configs[@current_recipe] = config
-# >------------------------ recipes/rails_omniauth.rb ------------------------start<
-
-# Application template recipe for the rails_apps_composer. Change the recipe here:
-# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/rails_omniauth.rb
-
-if prefer :apps4, 'rails-omniauth'
-
-  prefs[:authentication] = 'omniauth'
-  prefs[:authorization] = 'none'
-  prefs[:better_errors] = true
-  prefs[:deployment] = 'none'
-  prefs[:email] = 'none'
-  prefs[:git] = true
-  prefs[:local_env_file] = false
-  prefs[:pry] = false
-  prefs[:quiet_assets] = true
-  prefs[:starter_app] = false
-
-  after_everything do
-
-    repo = 'https://raw.github.com/RailsApps/rails-omniauth/master/'
-
-    # >-------------------------------[ Models ]--------------------------------<
-
-    copy_from_repo 'app/models/user.rb', :repo => repo
-
-    # >-------------------------------[ Controllers ]--------------------------------<
-
-    copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
-    copy_from_repo 'app/controllers/sessions_controller.rb', :repo => repo
-    gsub_file 'app/controllers/sessions_controller.rb', /twitter/, prefs[:omniauth_provider]
-    copy_from_repo 'app/controllers/users_controller.rb', :repo => repo
-
-    # >-------------------------------[ Views ]--------------------------------<
-
-    copy_from_repo 'app/views/home/index.html.erb', :repo => repo
-    copy_from_repo 'app/views/users/edit.html.erb', :repo => repo
-    copy_from_repo 'app/views/users/index.html.erb', :repo => repo
-    copy_from_repo 'app/views/users/show.html.erb', :repo => repo
-
-    # >-------------------------------[ Routes ]--------------------------------<
-
-    copy_from_repo 'config/routes.rb', :repo => repo
-
-  end
-end
-# >------------------------ recipes/rails_omniauth.rb ------------------------end<
-# >-------------------------- templates/recipe.erb ---------------------------end<
-
-# >-------------------------- templates/recipe.erb ---------------------------start<
-# >-----------------------------[ rails_devise ]------------------------------<
-@current_recipe = "rails_devise"
-@before_configs["rails_devise"].call if @before_configs["rails_devise"]
-say_recipe 'rails_devise'
-@configs[@current_recipe] = config
-# >------------------------- recipes/rails_devise.rb -------------------------start<
-
-# Application template recipe for the rails_apps_composer. Change the recipe here:
-# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/rails_devise.rb
-
-if prefer :apps4, 'rails-devise'
-  prefs[:authentication] = 'devise'
-  prefs[:authorization] = false
-  prefs[:better_errors] = true
-  prefs[:deployment] = 'none'
-  prefs[:git] = true
-  prefs[:local_env_file] = false
-  prefs[:pry] = false
-  prefs[:quiet_assets] = true
-  prefs[:starter_app] = false
-  after_everything do
-    generate 'pages:users -f'
-  end
-end
-# >------------------------- recipes/rails_devise.rb -------------------------end<
-# >-------------------------- templates/recipe.erb ---------------------------end<
-
-# >-------------------------- templates/recipe.erb ---------------------------start<
-# >--------------------------[ rails_devise_pundit ]--------------------------<
-@current_recipe = "rails_devise_pundit"
-@before_configs["rails_devise_pundit"].call if @before_configs["rails_devise_pundit"]
-say_recipe 'rails_devise_pundit'
-@configs[@current_recipe] = config
-# >--------------------- recipes/rails_devise_pundit.rb ----------------------start<
-
-# Application template recipe for the rails_apps_composer. Change the recipe here:
-# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/rails_devise_pundit.rb
-
-if prefer :apps4, 'rails-devise-pundit'
-  prefs[:authentication] = 'devise'
-  prefs[:authorization] = 'pundit'
-  prefs[:better_errors] = true
-  prefs[:deployment] = 'none'
-  prefs[:git] = true
-  prefs[:local_env_file] = false
-  prefs[:pry] = false
-  prefs[:quiet_assets] = true
-  prefs[:starter_app] = false
-  after_everything do
-    generate 'pages:authorized -f'
-  end
-end
-# >--------------------- recipes/rails_devise_pundit.rb ----------------------end<
-# >-------------------------- templates/recipe.erb ---------------------------end<
-
-# >-------------------------- templates/recipe.erb ---------------------------start<
-# >-------------------------[ rails_signup_download ]-------------------------<
-@current_recipe = "rails_signup_download"
-@before_configs["rails_signup_download"].call if @before_configs["rails_signup_download"]
-say_recipe 'rails_signup_download'
-@configs[@current_recipe] = config
-# >-------------------- recipes/rails_signup_download.rb ---------------------start<
-
-# Application template recipe for the rails_apps_composer. Change the recipe here:
-# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/rails_signup_download.rb
-
-if prefer :apps4, 'rails-signup-download'
-  prefs[:authentication] = 'devise'
-  prefs[:authorization] = 'pundit'
-  prefs[:better_errors] = true
-  prefs[:deployment] = 'none'
-  prefs[:devise_modules] = false
-  prefs[:form_builder] = false
-  prefs[:git] = true
-  prefs[:local_env_file] = false
-  prefs[:pry] = false
-  prefs[:quiet_assets] = true
-  prefs[:starter_app] = false
-  after_everything do
-    generate 'pages:authorized -f'
-
-    repo = 'https://raw.github.com/RailsApps/rails-signup-download/master/'
-
-    # >-------------------------------[ Controllers ]--------------------------------<
-
-    copy_from_repo 'app/controllers/products_controller.rb', :repo => repo
-
-    # >-------------------------------[ Views ]--------------------------------<
-
-    copy_from_repo 'app/views/visitors/index.html.erb', :repo => repo
-    copy_from_repo 'app/views/products/product.pdf', :repo => repo
-
-    # >-------------------------------[ Routes ]--------------------------------<
-
-    copy_from_repo 'config/routes.rb', :repo => repo
-
-  end
-end
-# >-------------------- recipes/rails_signup_download.rb ---------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
 # >-------------------------- templates/recipe.erb ---------------------------start<
@@ -1220,9 +1005,6 @@ gsub_file 'Gemfile', /gem 'pg'.*/, ''
 add_gem 'pg' if prefer :database, 'postgresql'
 gsub_file 'Gemfile', /gem 'mysql2'.*/, ''
 add_gem 'mysql2' if prefer :database, 'mysql'
-
-## Gem to set up controllers, views, and routing in the 'apps4' recipe
-add_gem 'rails_apps_pages', :group => :development if prefs[:apps4]
 
 ## Template Engine
 if prefer :templates, 'haml'
@@ -1806,7 +1588,7 @@ end # after_bundler
 
 after_everything do
   say_wizard "recipe running after everything"
-  if (prefer :authentication, 'devise') && (prefer :tests, 'rspec')
+  if prefer :authentication, 'devise'
     generate 'testing:configure devise -f'
   end
 end # after_everything
@@ -2324,25 +2106,19 @@ say_recipe 'init'
 
 after_everything do
   say_wizard "recipe running after everything"
-  prefs[:secrets].each do |secret|
-    env_var = "  #{secret}: <%= ENV[\"#{secret.upcase}\"] %>"
-    inject_into_file 'config/secrets.yml', "\n" + env_var, :after => "development:" if rails_4_1?
-    ### 'inject_into_file' doesn't let us inject the same text twice unless we append the extra space, why?
-    inject_into_file 'config/secrets.yml', "\n" + env_var + " ", :after => "production:" if rails_4_1?
-  end
   case prefs[:email]
     when 'none'
       secrets_email = foreman_email = ''
     when 'smtp'
       secrets_email = foreman_email = ''
     when 'gmail'
-      secrets_email = "  email_provider_username: <%= ENV[\"GMAIL_USERNAME\"] %>\n  email_provider_password: <%= ENV[\"GMAIL_PASSWORD\"] %>"
-      foreman_email = "GMAIL_USERNAME=Your_Username\nGMAIL_PASSWORD=Your_Password\nDOMAIN_NAME=example.com\n"
+      secrets_email = "  email_provider_username: <%= ENV[\"GMAIL_USERNAME\"] %>\n  email_provider_password: <%= ENV[\"GMAIL_PASSWORD\"] %>\n  domain_name: example.com %>"
+       foreman_email = "GMAIL_USERNAME=Your_Username\nGMAIL_PASSWORD=Your_Password\nDOMAIN_NAME=example.com\n"
     when 'sendgrid'
-      secrets_email = "  email_provider_username: <%= ENV[\"SENDGRID_USERNAME\"] %>\n  email_provider_password: <%= ENV[\"SENDGRID_PASSWORD\"] %>"
+      secrets_email = "  email_provider_username: <%= ENV[\"SENDGRID_USERNAME\"] %>\n  email_provider_password: <%= ENV[\"SENDGRID_PASSWORD\"] %>\n  domain_name: example.com %>"
       foreman_email = "SENDGRID_USERNAME=Your_Username\nSENDGRID_PASSWORD=Your_Password\nDOMAIN_NAME=example.com\n"
     when 'mandrill'
-      secrets_email = "  email_provider_username: <%= ENV[\"MANDRILL_USERNAME\"] %>\n  email_provider_apikey: <%= ENV[\"MANDRILL_APIKEY\"] %>"
+      secrets_email = "  email_provider_username: <%= ENV[\"MANDRILL_USERNAME\"] %>\n  email_provider_apikey: <%= ENV[\"MANDRILL_APIKEY\"] %>\n  domain_name: example.com %>"
       foreman_email = "MANDRILL_USERNAME=Your_Username\nMANDRILL_APIKEY=Your_API_Key\nDOMAIN_NAME=example.com\n"
   end
   figaro_email  = foreman_email.gsub('=', ': ')
@@ -2357,8 +2133,6 @@ after_everything do
   foreman_cancan = "ROLES=[admin, user, VIP]\n\n"
   figaro_cancan = foreman_cancan.gsub('=', ': ')
   ## EMAIL
-  inject_into_file 'config/secrets.yml', "\n" + "  domain_name: example.com", :after => "development:" if rails_4_1?
-  inject_into_file 'config/secrets.yml', "\n" + "  domain_name: <%= ENV[\"DOMAIN_NAME\"] %>", :after => "production:" if rails_4_1?
   inject_into_file 'config/secrets.yml', "\n" + secrets_email, :after => "development:" if rails_4_1?
   ### 'inject_into_file' doesn't let us inject the same text twice unless we append the extra space, why?
   inject_into_file 'config/secrets.yml', "\n" + secrets_email + " ", :after => "production:" if rails_4_1?
@@ -2524,6 +2298,324 @@ FILE
   git :commit => '-qm "rails_apps_composer: navigation links"' if prefer :git, true
 end # after_everything
 # >----------------------------- recipes/init.rb -----------------------------end<
+# >-------------------------- templates/recipe.erb ---------------------------end<
+
+# >-------------------------- templates/recipe.erb ---------------------------start<
+# >---------------------------------[ apps4 ]---------------------------------<
+@current_recipe = "apps4"
+@before_configs["apps4"].call if @before_configs["apps4"]
+say_recipe 'apps4'
+@configs[@current_recipe] = config
+# >---------------------------- recipes/apps4.rb -----------------------------start<
+
+# Application template recipe for the rails_apps_composer. Change the recipe here:
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/apps4.rb
+
+### LEARN-RAILS ####
+
+if prefer :apps4, 'learn-rails'
+
+  # >-------------------------------[ Gems ]--------------------------------<
+
+  add_gem 'activerecord-tableless'
+  add_gem 'high_voltage'
+  add_gem 'gibbon'
+  add_gem 'google_drive'
+  gsub_file 'Gemfile', /gem 'sqlite3'\n/, ''
+  add_gem 'sqlite3', :group => :development
+  add_gem 'pg', :group => :production
+  add_gem 'thin', :group => :production
+  add_gem 'rails_12factor', :group => :production
+
+  # >-------------------------------[ after_everything ]--------------------------------<
+
+  after_everything do
+    say_wizard "recipe running after 'bundle install'"
+    repo = 'https://raw.github.com/RailsApps/learn-rails/master/'
+
+    # >-------------------------------[ Clean up starter app ]--------------------------------<
+
+    # remove commented lines and multiple blank lines from Gemfile
+    # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
+    gsub_file 'Gemfile', /#.*\n/, "\n"
+    gsub_file 'Gemfile', /\n^\s*\n/, "\n"
+    # remove commented lines and multiple blank lines from config/routes.rb
+    gsub_file 'config/routes.rb', /  #.*\n/, "\n"
+    gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
+    # GIT
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: clean up starter app"' if prefer :git, true
+
+    # >-------------------------------[ Models ]--------------------------------<
+
+    copy_from_repo 'app/models/contact.rb', :repo => repo
+    copy_from_repo 'app/models/visitor.rb', :repo => repo
+
+    # >-------------------------------[ Init ]--------------------------------<
+    copy_from_repo 'config/secrets.yml', :repo => repo
+
+    # >-------------------------------[ Controllers ]--------------------------------<
+
+    copy_from_repo 'app/controllers/contacts_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/visitors_controller.rb', :repo => repo
+
+    # >-------------------------------[ Mailers ]--------------------------------<
+
+    generate 'mailer UserMailer'
+    copy_from_repo 'app/mailers/user_mailer.rb', :repo => repo
+
+    # >-------------------------------[ Views ]--------------------------------<
+
+    copy_from_repo 'app/views/contacts/new.html.erb', :repo => repo
+    copy_from_repo 'app/views/pages/about.html.erb', :repo => repo
+    copy_from_repo 'app/views/user_mailer/contact_email.html.erb', :repo => repo
+    copy_from_repo 'app/views/user_mailer/contact_email.text.erb', :repo => repo
+    copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
+    # create navigation links using the rails_layout gem
+    generate 'layout:navigation -f'
+
+    # >-------------------------------[ Routes ]--------------------------------<
+
+    copy_from_repo 'config/routes.rb', :repo => repo
+
+    # >-------------------------------[ Assets ]--------------------------------<
+
+    copy_from_repo 'app/assets/javascripts/segmentio.js', :repo => repo
+
+    ### GIT ###
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: learn-rails app"' if prefer :git, true
+  end # after_bundler
+end # learn-rails
+
+### RAILS-BOOTSTRAP or RAILS-FOUNDATION ####
+
+if (prefer :apps4, 'rails-bootstrap') || (prefer :apps4, 'rails-foundation')
+
+  # >-------------------------------[ Gems ]--------------------------------<
+
+  add_gem 'high_voltage'
+
+  # >-------------------------------[ after_everything ]--------------------------------<
+
+  after_everything do
+    say_wizard "recipe running after 'bundle install'"
+    repo = 'https://raw.github.com/RailsApps/rails-bootstrap/master/' if prefer :apps4, 'rails-bootstrap'
+    repo = 'https://raw.github.com/RailsApps/rails-foundation/master/' if prefer :apps4, 'rails-foundation'
+
+    # >-------------------------------[ Clean up starter app ]--------------------------------<
+
+    # remove commented lines and multiple blank lines from Gemfile
+    # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
+    gsub_file 'Gemfile', /#.*\n/, "\n"
+    gsub_file 'Gemfile', /\n^\s*\n/, "\n"
+    # remove commented lines and multiple blank lines from config/routes.rb
+    gsub_file 'config/routes.rb', /  #.*\n/, "\n"
+    gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
+    # GIT
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: clean up starter app"' if prefer :git, true
+
+    # >-------------------------------[ Models ]--------------------------------<
+
+    # no models
+
+    # >-------------------------------[ Init ]--------------------------------<
+    copy_from_repo 'config/application.yml', :repo => repo
+    remove_file 'config/application.example.yml'
+    copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'
+
+    # >-------------------------------[ Controllers ]--------------------------------<
+
+    copy_from_repo 'app/controllers/visitors_controller.rb', :repo => repo
+
+    # >-------------------------------[ Views ]--------------------------------<
+
+    copy_from_repo 'app/views/pages/about.html.erb', :repo => repo
+    copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
+    # create navigation links using the rails_layout gem
+    generate 'layout:navigation -f'
+
+    # >-------------------------------[ Routes ]--------------------------------<
+
+    copy_from_repo 'config/routes.rb', :repo => repo
+    ### CORRECT APPLICATION NAME ###
+    gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
+
+    # >-------------------------------[ Assets ]--------------------------------<
+
+    # no assets
+
+    ### GIT ###
+    if prefer :git, true
+      git :add => '-A'
+      git :commit => '-qm "rails_apps_composer: rails-bootstrap app"' if prefer :apps4, 'rails-bootstrap'
+      git :commit => '-qm "rails_apps_composer: rails-foundation app"' if prefer :apps4, 'rails-foundation'
+    end
+  end # after_bundler
+end # rails-bootstrap
+
+### RAILS-DEVISE ####
+
+if prefer :apps4, 'rails-devise'
+
+  # >-------------------------------[ after_bundler ]--------------------------------<
+
+  after_bundler do
+    say_wizard "recipe running after 'bundle install'"
+    repo = 'https://raw.github.com/RailsApps/rails-devise/master/'
+
+    # >-------------------------------[ Controllers ]--------------------------------<
+
+    copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/users_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/registrations_controller.rb', :repo => repo
+
+    # >-------------------------------[ Views ]--------------------------------<
+
+    copy_from_repo 'app/views/home/index.html.erb', :repo => repo
+    copy_from_repo 'app/views/users/index.html.erb', :repo => repo
+    copy_from_repo 'app/views/users/show.html.erb', :repo => repo
+
+    # >-------------------------------[ Routes ]--------------------------------<
+
+    copy_from_repo 'config/routes.rb', :repo => repo
+    ### CORRECT APPLICATION NAME ###
+    gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
+
+  end
+
+  # >-------------------------------[ after_everything ]--------------------------------<
+
+  after_everything do
+    say_wizard "recipe running after 'bundle install'"
+
+    # >-------------------------------[ Clean up starter app ]--------------------------------<
+
+    # remove commented lines and multiple blank lines from Gemfile
+    # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
+    gsub_file 'Gemfile', /#.*\n/, "\n"
+    gsub_file 'Gemfile', /\n^\s*\n/, "\n"
+    # remove commented lines and multiple blank lines from config/routes.rb
+    gsub_file 'config/routes.rb', /  #.*\n/, "\n"
+    gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
+    # GIT
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: clean up starter app"' if prefer :git, true
+
+    ### GIT ###
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: learn-rails app"' if prefer :git, true
+
+  end # after_bundler
+end # rails-devise
+
+### RAILS-DEVISE-PUNDIT ####
+
+if prefer :apps4, 'rails-devise-pundit'
+
+  # >-------------------------------[ after_bundler ]--------------------------------<
+
+  after_bundler do
+    say_wizard "recipe running after 'bundle install'"
+    repo = 'https://raw.github.com/RailsApps/rails-devise-pundit/master/'
+
+    # >-------------------------------[ Controllers ]--------------------------------<
+
+    copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
+
+    # >-------------------------------[ Views ]--------------------------------<
+
+    copy_from_repo 'app/views/home/index.html.erb', :repo => repo
+
+  end
+
+  # >-------------------------------[ after_everything ]--------------------------------<
+
+  after_everything do
+    say_wizard "recipe running after 'bundle install'"
+
+    # >-------------------------------[ Clean up starter app ]--------------------------------<
+
+    # remove commented lines and multiple blank lines from Gemfile
+    # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
+    gsub_file 'Gemfile', /#.*\n/, "\n"
+    gsub_file 'Gemfile', /\n^\s*\n/, "\n"
+    # remove commented lines and multiple blank lines from config/routes.rb
+    gsub_file 'config/routes.rb', /  #.*\n/, "\n"
+    gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
+    # GIT
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: clean up starter app"' if prefer :git, true
+
+    ### GIT ###
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: learn-rails app"' if prefer :git, true
+
+  end # after_bundler
+end # rails-devise-pundit
+
+### RAILS-OMNIAUTH ####
+
+if prefer :apps4, 'rails-omniauth'
+
+  # >-------------------------------[ after_bundler ]--------------------------------<
+
+  after_bundler do
+    say_wizard "recipe running after 'bundle install'"
+    repo = 'https://raw.github.com/RailsApps/rails-omniauth/master/'
+
+    # >-------------------------------[ Models ]--------------------------------<
+
+    copy_from_repo 'app/models/user.rb', :repo => repo
+
+    # >-------------------------------[ Controllers ]--------------------------------<
+
+    copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/sessions_controller.rb', :repo => repo
+    gsub_file 'app/controllers/sessions_controller.rb', /twitter/, prefs[:omniauth_provider]
+    copy_from_repo 'app/controllers/users_controller.rb', :repo => repo
+
+    # >-------------------------------[ Views ]--------------------------------<
+
+    copy_from_repo 'app/views/home/index.html.erb', :repo => repo
+    copy_from_repo 'app/views/users/edit.html.erb', :repo => repo
+    copy_from_repo 'app/views/users/index.html.erb', :repo => repo
+    copy_from_repo 'app/views/users/show.html.erb', :repo => repo
+
+    # >-------------------------------[ Routes ]--------------------------------<
+
+    copy_from_repo 'config/routes.rb', :repo => repo
+    ### CORRECT APPLICATION NAME ###
+    gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
+
+  end
+
+  # >-------------------------------[ after_everything ]--------------------------------<
+
+  after_everything do
+    say_wizard "recipe running after 'bundle install'"
+
+    # >-------------------------------[ Clean up starter app ]--------------------------------<
+
+    # remove commented lines and multiple blank lines from Gemfile
+    # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
+    gsub_file 'Gemfile', /#.*\n/, "\n"
+    gsub_file 'Gemfile', /\n^\s*\n/, "\n"
+    # remove commented lines and multiple blank lines from config/routes.rb
+    gsub_file 'config/routes.rb', /  #.*\n/, "\n"
+    gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
+    # GIT
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: clean up starter app"' if prefer :git, true
+
+    ### GIT ###
+    git :add => '-A' if prefer :git, true
+    git :commit => '-qm "rails_apps_composer: learn-rails app"' if prefer :git, true
+
+  end # after_bundler
+end # rails-omniauth
+# >---------------------------- recipes/apps4.rb -----------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
 # >-------------------------- templates/recipe.erb ---------------------------start<
