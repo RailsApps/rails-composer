@@ -2273,8 +2273,10 @@ after_bundler do
   ### SUBDOMAINS ###
   copy_from_repo 'lib/subdomain.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
   copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
-  ### CORRECT APPLICATION NAME ###
-  gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
+  unless rails_4_1?
+    # correct application name
+    gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
+  end
   ### GIT ###
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: routes"' if prefer :git, true
