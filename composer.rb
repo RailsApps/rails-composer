@@ -254,8 +254,8 @@ say_wizard("\033[1m\033[36m" + "                             \| \|   \| \|" + "\
 say_wizard("\033[1m\033[36m" + "                             \| \|   \| \|" + "\033[0m")
 say_wizard("\033[1m\033[36m" + '' + "\033[0m")
 say_wizard("\033[1m\033[36m" + "Rails Composer, open source, supported by subscribers." + "\033[0m")
-say_wizard("\033[1m\033[36m" + "Please join RailsApps to support development of Rails Composer." + "\033[0m")
-say_wizard("\033[1m\033[36m" + "Need help? Ask on Stack Overflow with the tag \'railsapps.\'" + "\033[0m")
+say_wizard("\033[1m\033[36m" + "Please join RailsApps and support development of Rails Composer." + "\033[0m")
+say_wizard("Need help? Ask on Stack Overflow with the tag \'railsapps.\'")
 say_wizard("Your new application will contain diagnostics in its README file.")
 
 if diagnostics_recipes.sort.include? recipes.sort
@@ -3049,8 +3049,9 @@ after_everything do
     gsub_file 'Gemfile', /.*gem 'haml2slim'\n/, "\n"
     gsub_file 'Gemfile', /.*gem 'html2haml'\n/, "\n"
   end
-  # remove temporary rails_apps_pages gem
+  # remove gems used to assist rails_apps_composer
   gsub_file 'Gemfile', /.*gem 'rails_apps_pages'\n/, ''
+  gsub_file 'Gemfile', /.*gem 'rails_apps_testing'\n/, ''
   # remove commented lines and multiple blank lines from Gemfile
   # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
   gsub_file 'Gemfile', /#.*\n/, "\n"
