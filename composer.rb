@@ -371,8 +371,8 @@ when "3"
 when "4"
   prefs[:apps4] = multiple_choice "Build a starter application?",
     [["Build a RailsApps example application", "railsapps"],
-    ["Build a contributed application", "contributed_app"],
-    ["I want to build my own application", "none"]] unless prefs.has_key? :apps4
+    ["Contributed applications (none available)", "contributed_app"],
+    ["Custom application (experimental)", "none"]] unless prefs.has_key? :apps4
   case prefs[:apps4]
     when 'railsapps'
       if rails_4_1?
@@ -389,7 +389,7 @@ when "4"
       end
     when 'contributed_app'
       prefs[:apps4] = multiple_choice "No contributed applications are available.",
-        [["continue", "none"]]
+        [["continue", "railsapps"]]
   end
 end
 
