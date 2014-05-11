@@ -2024,6 +2024,7 @@ RUBY
         gsub_file 'app/models/user.rb', /:registerable,/, ":registerable, :confirmable,"
         generate 'migration AddConfirmableToUsers confirmation_token:string confirmed_at:datetime confirmation_sent_at:datetime unconfirmed_email:string'
       end
+      run 'bundle exec rake db:migrate'
     end
     ## DEVISE AND CUCUMBER
     if prefer :integration, 'cucumber'
