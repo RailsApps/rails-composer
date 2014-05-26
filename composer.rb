@@ -899,6 +899,11 @@ if prefer :apps4, 'rails-signup-download'
 
     copy_from_repo 'config/routes.rb', :repo => repo
 
+    # >-------------------------------[ Tests ]--------------------------------<
+
+    copy_from_repo 'spec/features/users/product_acquisition_spec.rb', :repo => repo
+    copy_from_repo 'spec/controllers/products_controller_spec.rb', :repo => repo
+
   end
 end
 # >-------------------- recipes/rails_signup_download.rb ---------------------end<
@@ -1986,7 +1991,7 @@ after_bundler do
   ### DEVISE ###
   if prefer :authentication, 'devise'
     # prevent logging of password_confirmation
-    gsub_file 'config/application.rb', /:password/, ':password, :password_confirmation'
+    gsub_file 'config/initializers/filter_parameter_logging.rb', /:password/, ':password, :password_confirmation'
     generate 'devise:install'
     generate 'devise_invitable:install' if prefer :devise_modules, 'invitable'
     generate 'devise user' # create the User model
@@ -2382,6 +2387,7 @@ after_everything do
     inject_into_file 'config/secrets.yml', "\n" + secrets_p_devise, :after => "production:" if rails_4_1?
     append_file '.env', foreman_devise if prefer :local_env_file, 'foreman'
     append_file 'config/application.yml', figaro_devise if prefer :local_env_file, 'figaro'
+    gsub_file 'config/initializers/devise.rb', /'please-change-me-at-config-initializers-devise@example.com'/, "'no-reply@' + Rails.application.secrets.domain_name"
   end
   ## OMNIAUTH
   if prefer :authentication, 'omniauth'
