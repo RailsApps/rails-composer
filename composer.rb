@@ -2383,6 +2383,7 @@ after_everything do
   end
   ## DEVISE
   if prefer :authentication, 'devise'
+    inject_into_file 'config/secrets.yml', "\n" + '  domain_name: example.com' + " ", :after => "test:" if rails_4_1?
     inject_into_file 'config/secrets.yml', "\n" + secrets_d_devise, :after => "development:" if rails_4_1?
     inject_into_file 'config/secrets.yml', "\n" + secrets_p_devise, :after => "production:" if rails_4_1?
     append_file '.env', foreman_devise if prefer :local_env_file, 'foreman'
