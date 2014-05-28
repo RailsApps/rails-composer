@@ -98,8 +98,8 @@ With Rails 4.1, you'll see a prompt:
 <pre>
 question  Build a starter application?
       1)  Build a RailsApps example application
-      2)  Build a contributed application
-      3)  I want to build my own application
+      2)  Contributed applications
+      3)  Custom application
 </pre>
 
 Enter "1" to select *Build a starter application*. You'll see a prompt:
@@ -470,17 +470,18 @@ Copyright 2012-14 Daniel Kehoe
 h2. Useful Links
 
 |_. Getting Started |_. Articles |_. Tutorials |
-| "Learn Rails":http://learn-rails.com/ | "Bootstrap and Rails":http://railsapps.github.io/twitter-bootstrap-rails.html | "Rails and Bootstrap":http://railsapps.github.io/rails-bootstrap/ |
-| "Ruby and Rails":http://railsapps.github.io/ruby-and-rails.html | "Analytics for Rails":http://railsapps.github.io/rails-google-analytics.html | |
-| "What is Ruby on Rails?":http://railsapps.github.io/what-is-ruby-rails.html | "Heroku and Rails":http://railsapps.github.io/rails-heroku-tutorial.html | "Devise with CanCan and Bootstrap":https://tutorials.railsapps.org/rails3-bootstrap-devise-cancan |
-| "Rails Tutorial":https://tutorials.railsapps.org/rails-tutorial | "JavaScript and Rails":http://railsapps.github.io/rails-javascript-include-external.html | "Rails Membership Site with Stripe":https://tutorials.railsapps.org/rails-stripe-membership-saas |
-| "Installing Rails":http://railsapps.github.io/installing-rails.html | "Rails Environment Variables":http://railsapps.github.io/rails-environment-variables.html | "Rails Subscription Site with Recurly":https://tutorials.railsapps.org/rails-recurly-subscription-saas |
-| "Updating Rails":http://railsapps.github.io/updating-rails.html | "Git and Rails":http://railsapps.github.io/rails-git.html | "Startup Prelaunch Signup Application":http://railsapps.github.io/tutorial-rails-prelaunch-signup.html |
-| "Rails Composer":http://railsapps.github.io/rails-composer/ | "Email and Rails":http://railsapps.github.io/rails-send-email.html | "Devise with RSpec and Cucumber":http://railsapps.github.io/tutorial-rails-devise-rspec-cucumber.html |
-| "Rails Examples":http://railsapps.github.io/ | "Haml and Rails":http://railsapps.github.io/rails-haml.html | "Devise with Mongoid":http://railsapps.github.io/tutorial-rails-mongoid-devise.html |
-| "Rails Starter Apps":http://railsapps.github.io/rails-examples-tutorials.html | "Rails Application Layout":http://railsapps.github.io/rails-default-application-layout.html | "OmniAuth with Mongoid":http://railsapps.github.io/tutorial-rails-mongoid-omniauth.html |
-| | "HTML5 Boilerplate for Rails":http://railsapps.github.io/rails-html5-boilerplate.html | "Subdomains with Devise":http://railsapps.github.io/tutorial-rails-subdomains.html |
-| | "Example Gemfiles for Rails":http://railsapps.github.io/rails-3-2-example-gemfile.html | |
-| | "Rails Application Templates":http://railsapps.github.io/rails-application-templates.html | |
+| "Ruby on Rails":http://railsapps.github.io/ruby-and-rails.html |                                     "Analytics for Rails":http://railsapps.github.io/rails-google-analytics.html |                 "Rails Bootstrap":http://railsapps.github.io/twitter-bootstrap-rails.html |
+| "What is Ruby on Rails?":http://railsapps.github.io/what-is-ruby-rails.html |                        "Heroku and Rails":http://railsapps.github.io/rails-heroku-tutorial.html |                     "Rails Foundation":http://railsapps.github.io/rails-foundation.html |
+| "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html |                              "JavaScript and Rails":http://railsapps.github.io/rails-javascript-include-external.html |     "RSpec Tutorial":http://railsapps.github.io/rspec.html |
+| "Rails Tutorial":https://tutorials.railsapps.org/rails-tutorial |                                    "Rails Environment Variables":http://railsapps.github.io/rails-environment-variables.html |    "Rails Devise Tutorial":http://railsapps.github.io/tutorial-rails-devise.html |
+| "Ruby on Rails Tutorial for Beginners":http://learn-rails.com/ruby-on-rails-tutorial-for-beginners | "Git and GitHub with Rails":http://railsapps.github.io/rails-git.html |                        "Devise RSpec":http://railsapps.github.io/tutorial-rails-devise-rspec-cucumber.html |
+| "Install Ruby on Rails":http://railsapps.github.io/installing-rails.html |                           "Send Email with Rails":http://railsapps.github.io/rails-send-email.html |                     "Devise Bootstrap":http://railsapps.github.io/tutorial-rails-bootstrap-devise-cancan.html |
+| "Install Ruby on Rails - Mac OS X":http://railsapps.github.io/installrubyonrails-mac.html |          "Haml and Rails":http://railsapps.github.io/rails-haml.html |                                  "Rails Membership Site with Stripe":https://tutorials.railsapps.org/rails-stripe-membership-saas |
+| "Install Ruby on Rails - Ubuntu":http://railsapps.github.io/installrubyonrails-ubuntu.html |         "Rails Application Layout":http://railsapps.github.io/rails-default-application-layout.html |  "Rails Subscription Site with Recurly":https://tutorials.railsapps.org/rails-recurly-subscription-saas |
+| "Ruby on Rails - Nitrous.io":http://railsapps.github.io/rubyonrails-nitrous-io.html |                "HTML5 Boilerplate for Rails":http://railsapps.github.io/rails-html5-boilerplate.html |        "Startup Prelaunch Signup Application":https://tutorials.railsapps.org/rails-prelaunch-signup |
+| "Update Rails":http://railsapps.github.io/updating-rails.html |                                      "Example Gemfiles for Rails":http://railsapps.github.io/rails-3-2-example-gemfile.html |
+| "Rails Composer":http://railsapps.github.io/rails-composer/ |                                        "Rails Application Templates":http://railsapps.github.io/rails-application-templates.html |
+| "Rails Examples":http://railsapps.github.io/ |                                                       "Rails Product Planning":http://railsapps.github.io/rails-product-planning.html |
+| "Rails Starter Apps":http://railsapps.github.io/rails-examples-tutorials.html |                      "Rails Project Management":http://railsapps.github.io/rails-project-management.html |
 
 !https://cruel-carlota.pagodabox.com/9a7ed11e8570e461c585a7afd3722d71(githalytics.com alpha)!
