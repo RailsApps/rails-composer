@@ -389,7 +389,7 @@ when "4"
       end
     when 'contributed_app'
       prefs[:apps4] = multiple_choice "No contributed applications are available.",
-        [["continue", "railsapps"]]
+        [["create custom application", "railsapps"]]
   end
 end
 
@@ -2279,7 +2279,10 @@ after_bundler do
   ### SUBDOMAINS ###
   copy_from_repo 'lib/subdomain.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
   copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
-  unless rails_4_1?
+  if rails_4_1?
+    # replaces application name copied from rails3-devise-rspec-cucumber repo
+    gsub_file 'config/routes.rb', /^.*.routes.draw do/, "Rails.application.routes.draw do"
+  else
     # correct application name
     gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
   end
@@ -2372,10 +2375,10 @@ after_everything do
   foreman_cancan = "ROLES=[admin, user, VIP]\n\n"
   figaro_cancan = foreman_cancan.gsub('=', ': ')
   ## EMAIL
+  inject_into_file 'config/secrets.yml', "\n" + "  domain_name: example.com", :after => "development:" if rails_4_1?
+  inject_into_file 'config/secrets.yml', "\n" + "  domain_name: <%= ENV[\"DOMAIN_NAME\"] %>", :after => "production:" if rails_4_1?
+  inject_into_file 'config/secrets.yml', "\n" + secrets_email, :after => "development:" if rails_4_1?
   unless prefer :email, 'none'
-    inject_into_file 'config/secrets.yml', "\n" + "  domain_name: example.com", :after => "development:" if rails_4_1?
-    inject_into_file 'config/secrets.yml', "\n" + "  domain_name: <%= ENV[\"DOMAIN_NAME\"] %>", :after => "production:" if rails_4_1?
-    inject_into_file 'config/secrets.yml', "\n" + secrets_email, :after => "development:" if rails_4_1?
     ### 'inject_into_file' doesn't let us inject the same text twice unless we append the extra space, why?
     inject_into_file 'config/secrets.yml', "\n" + secrets_email + " ", :after => "production:" if rails_4_1?
     append_file '.env', foreman_email if prefer :local_env_file, 'foreman'
