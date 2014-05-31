@@ -770,28 +770,17 @@ if prefer :apps4, 'rails-omniauth'
   prefs[:pry] = false
   prefs[:quiet_assets] = true
   prefs[:starter_app] = false
+  add_gem 'high_voltage'
 
   after_everything do
-
+    generate 'pages:users -f'
+    generate 'pages:about -f'
+    generate 'layout:navigation -f'
     repo = 'https://raw.github.com/RailsApps/rails-omniauth/master/'
 
     # >-------------------------------[ Models ]--------------------------------<
 
     copy_from_repo 'app/models/user.rb', :repo => repo
-
-    # >-------------------------------[ Controllers ]--------------------------------<
-
-    copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
-    copy_from_repo 'app/controllers/sessions_controller.rb', :repo => repo
-    gsub_file 'app/controllers/sessions_controller.rb', /twitter/, prefs[:omniauth_provider]
-    copy_from_repo 'app/controllers/users_controller.rb', :repo => repo
-
-    # >-------------------------------[ Views ]--------------------------------<
-
-    copy_from_repo 'app/views/home/index.html.erb', :repo => repo
-    copy_from_repo 'app/views/users/edit.html.erb', :repo => repo
-    copy_from_repo 'app/views/users/index.html.erb', :repo => repo
-    copy_from_repo 'app/views/users/show.html.erb', :repo => repo
 
     # >-------------------------------[ Routes ]--------------------------------<
 
