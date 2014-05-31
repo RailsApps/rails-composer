@@ -24,10 +24,10 @@ Here are some of the starter apps you can build.
 
 |_. Rails 4.1 |_. Tutorial |_. Comments |
 | "learn-rails":https://github.com/RailsApps/learn-rails | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | from the book for beginners |
-| "rails-bootstrap":https://github.com/RailsApps/rails-bootstrap/ | "Rails and Bootstrap Tutorial":http://railsapps.github.io/twitter-bootstrap-rails.html | Bootstrap front-end framework |
-| "rails-foundation":https://github.com/RailsApps/rails-foundation/ | "Rails and Foundation Tutorial":http://railsapps.github.io/rails-foundation.html | Foundation front-end framework |
+| "rails-bootstrap":https://github.com/RailsApps/rails-bootstrap/ | "Rails and Bootstrap":http://railsapps.github.io/twitter-bootstrap-rails.html | Bootstrap front-end framework |
+| "rails-foundation":https://github.com/RailsApps/rails-foundation/ | "Rails and Foundation":http://railsapps.github.io/rails-foundation.html | Foundation front-end framework |
 | "rails-omniauth":https://github.com/RailsApps/rails-omniauth | no tutorial (yet) | authentication with OmniAuth |
-| "rails-devise":https://github.com/RailsApps/rails-devise | no tutorial (yet) | authentication with Devise |
+| "rails-devise":https://github.com/RailsApps/rails-devise | "Rails Devise Tutorial":http://railsapps.github.io/rails-devise/ | authentication with Devise |
 | "rails-devise-pundit":https://github.com/RailsApps/rails-devise-pundit | no tutorial (yet) | authorization with Pundit |
 
 h2. Dependencies
