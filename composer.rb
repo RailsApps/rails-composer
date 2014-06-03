@@ -1238,7 +1238,7 @@ end
 if rails_4_1?
   if prefer :tests, 'rspec'
     add_gem 'rails_apps_testing', :group => :development
-    add_gem 'rspec-rails', '>= 3.0.0.beta2', :group => [:development, :test]
+    add_gem 'rspec-rails', :group => [:development, :test]
     add_gem 'factory_girl_rails', :group => [:development, :test]
     add_gem 'faker', :group => :test
     add_gem 'capybara', :group => :test
@@ -1979,8 +1979,10 @@ after_bundler do
   say_wizard "recipe running after 'bundle install'"
   ### DEVISE ###
   if prefer :authentication, 'devise'
-    # prevent logging of password_confirmation
-    gsub_file 'config/initializers/filter_parameter_logging.rb', /:password/, ':password, :password_confirmation'
+    if rails_4_1?
+      # prevent logging of password_confirmation
+      gsub_file 'config/initializers/filter_parameter_logging.rb', /:password/, ':password, :password_confirmation'
+    end
     generate 'devise:install'
     generate 'devise_invitable:install' if prefer :devise_modules, 'invitable'
     generate 'devise user' # create the User model

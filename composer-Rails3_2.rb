@@ -770,28 +770,17 @@ if prefer :apps4, 'rails-omniauth'
   prefs[:pry] = false
   prefs[:quiet_assets] = true
   prefs[:starter_app] = false
+  add_gem 'high_voltage'
 
   after_everything do
-
+    generate 'pages:users -f'
+    generate 'pages:about -f'
+    generate 'layout:navigation -f'
     repo = 'https://raw.github.com/RailsApps/rails-omniauth/master/'
 
     # >-------------------------------[ Models ]--------------------------------<
 
     copy_from_repo 'app/models/user.rb', :repo => repo
-
-    # >-------------------------------[ Controllers ]--------------------------------<
-
-    copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
-    copy_from_repo 'app/controllers/sessions_controller.rb', :repo => repo
-    gsub_file 'app/controllers/sessions_controller.rb', /twitter/, prefs[:omniauth_provider]
-    copy_from_repo 'app/controllers/users_controller.rb', :repo => repo
-
-    # >-------------------------------[ Views ]--------------------------------<
-
-    copy_from_repo 'app/views/home/index.html.erb', :repo => repo
-    copy_from_repo 'app/views/users/edit.html.erb', :repo => repo
-    copy_from_repo 'app/views/users/index.html.erb', :repo => repo
-    copy_from_repo 'app/views/users/show.html.erb', :repo => repo
 
     # >-------------------------------[ Routes ]--------------------------------<
 
@@ -1249,7 +1238,7 @@ end
 if rails_4_1?
   if prefer :tests, 'rspec'
     add_gem 'rails_apps_testing', :group => :development
-    add_gem 'rspec-rails', '>= 3.0.0.beta2', :group => [:development, :test]
+    add_gem 'rspec-rails', :group => [:development, :test]
     add_gem 'factory_girl_rails', :group => [:development, :test]
     add_gem 'faker', :group => :test
     add_gem 'capybara', :group => :test
@@ -1990,8 +1979,10 @@ after_bundler do
   say_wizard "recipe running after 'bundle install'"
   ### DEVISE ###
   if prefer :authentication, 'devise'
-    # prevent logging of password_confirmation
-    gsub_file 'config/initializers/filter_parameter_logging.rb', /:password/, ':password, :password_confirmation'
+    if rails_4_1?
+      # prevent logging of password_confirmation
+      gsub_file 'config/initializers/filter_parameter_logging.rb', /:password/, ':password, :password_confirmation'
+    end
     generate 'devise:install'
     generate 'devise_invitable:install' if prefer :devise_modules, 'invitable'
     generate 'devise user' # create the User model
