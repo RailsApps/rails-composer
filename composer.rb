@@ -1808,6 +1808,9 @@ after_everything do
   if (prefer :authentication, 'devise') && (prefer :tests, 'rspec')
     generate 'testing:configure devise -f'
   end
+  if (prefer :authentication, 'omniauth') && (prefer :tests, 'rspec')
+    generate 'testing:configure omniauth -f'
+  end
 end # after_everything
 # >---------------------------- recipes/tests4.rb ----------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
