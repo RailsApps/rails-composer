@@ -1788,20 +1788,17 @@ say_recipe 'tests4'
 
 after_bundler do
   say_wizard "recipe running after 'bundle install'"
-  ### RSPEC ###
   if prefer :tests, 'rspec'
     say_wizard "recipe installing RSpec"
     generate 'testing:configure rspec -f'
   end
-  ### GUARD ###
   if prefer :continuous_testing, 'guard'
     say_wizard "recipe initializing Guard"
     run 'bundle exec guard init'
   end
-  ### GIT ###
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: testing framework"' if prefer :git, true
-end # after_bundler
+end
 
 after_everything do
   say_wizard "recipe running after everything"
@@ -1811,7 +1808,10 @@ after_everything do
   if (prefer :authentication, 'omniauth') && (prefer :tests, 'rspec')
     generate 'testing:configure omniauth -f'
   end
-end # after_everything
+  if (prefer :authorization, 'pundit') && (prefer :tests, 'rspec')
+    generate 'testing:configure pundit -f'
+  end
+end
 # >---------------------------- recipes/tests4.rb ----------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
