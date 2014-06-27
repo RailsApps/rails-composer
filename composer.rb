@@ -93,7 +93,7 @@ module Gemfile
 end
 def add_gem(*all) Gemfile.add(*all); end
 
-@recipes = ["core", "git", "railsapps", "learn_rails", "rails_bootstrap", "rails_foundation", "rails_omniauth", "rails_devise", "rails_devise_pundit", "rails_signup_download", "setup", "readme", "gems", "tests", "email", "devise", "omniauth", "roles", "frontend", "pages", "init", "extras", "deployment"]
+@recipes = ["core", "git", "railsapps", "learn_rails", "rails_bootstrap", "rails_foundation", "rails_omniauth", "rails_devise", "rails_devise_pundit", "rails_signup_download", "setup", "locale", "readme", "gems", "tests", "email", "devise", "omniauth", "roles", "frontend", "pages", "init", "extras", "deployment"]
 @prefs = {}
 @gems = []
 @diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "tests"], ["apps4", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "tests"], ["apps4", "core", "deployment", "devise", "email", "extras", "frontend", "gems", "git", "init", "omniauth", "pundit", "railsapps", "readme", "setup", "tests"]]
@@ -416,6 +416,7 @@ if prefer :apps4, 'learn-rails'
   prefs[:templates] = 'erb'
   prefs[:tests] = false
   prefs[:pages] = 'none'
+  prefs[:locale] = 'none'
 
   # gems
   add_gem 'activerecord-tableless'
@@ -496,6 +497,7 @@ if prefer :apps4, 'rails-bootstrap'
   prefs[:pry] = false
   prefs[:quiet_assets] = true
   prefs[:pages] = 'about'
+  prefs[:locale] = 'none'
 end
 # >----------------------- recipes/rails_bootstrap.rb ------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -526,6 +528,7 @@ if prefer :apps4, 'rails-foundation'
   prefs[:pry] = false
   prefs[:quiet_assets] = true
   prefs[:pages] = 'about'
+  prefs[:locale] = 'none'
 end
 # >----------------------- recipes/rails_foundation.rb -----------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -552,6 +555,7 @@ if prefer :apps4, 'rails-omniauth'
   prefs[:pry] = false
   prefs[:quiet_assets] = true
   prefs[:pages] = 'about+users'
+  prefs[:locale] = 'none'
 end
 # >------------------------ recipes/rails_omniauth.rb ------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -577,6 +581,7 @@ if prefer :apps4, 'rails-devise'
   prefs[:pry] = false
   prefs[:quiet_assets] = true
   prefs[:pages] = 'users'
+  prefs[:locale] = 'none'
 end
 # >------------------------- recipes/rails_devise.rb -------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -602,6 +607,7 @@ if prefer :apps4, 'rails-devise-pundit'
   prefs[:pry] = false
   prefs[:quiet_assets] = true
   prefs[:pages] = 'users'
+  prefs[:locale] = 'none'
 end
 # >--------------------- recipes/rails_devise_pundit.rb ----------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -629,6 +635,7 @@ if prefer :apps4, 'rails-signup-download'
   prefs[:pry] = false
   prefs[:quiet_assets] = true
   prefs[:pages] = 'users'
+  prefs[:locale] = 'none'
   stage_three do
     say_wizard "recipe stage three"
     repo = 'https://raw.github.com/RailsApps/rails-signup-download/master/'
@@ -742,7 +749,8 @@ if (recipes.include? 'devise') || (recipes.include? 'omniauth')
   case prefs[:authentication]
     when 'devise'
       prefs[:devise_modules] = multiple_choice "Devise modules?", [["Devise with default modules","default"],
-      ["Devise with Confirmable module","confirmable"]] unless prefs.has_key? :devise_modules
+      ["Devise with Confirmable module","confirmable"],
+      ["Devise with Confirmable and Invitable modules","invitable"]] unless prefs.has_key? :devise_modules
     when 'omniauth'
       prefs[:omniauth_provider] = multiple_choice "OmniAuth provider?", [["Facebook", "facebook"], ["Twitter", "twitter"], ["GitHub", "github"],
         ["LinkedIn", "linkedin"], ["Google-Oauth-2", "google_oauth2"], ["Tumblr", "tumblr"]] unless prefs.has_key? :omniauth_provider
@@ -765,6 +773,34 @@ end
 create_file "README", "RECIPES\n#{recipes.sort.inspect}\n"
 append_file "README", "PREFERENCES\n#{prefs.inspect}"
 # >---------------------------- recipes/setup.rb -----------------------------end<
+# >-------------------------- templates/recipe.erb ---------------------------end<
+
+# >-------------------------- templates/recipe.erb ---------------------------start<
+# >--------------------------------[ locale ]---------------------------------<
+@current_recipe = "locale"
+@before_configs["locale"].call if @before_configs["locale"]
+say_recipe 'locale'
+@configs[@current_recipe] = config
+# >---------------------------- recipes/locale.rb ----------------------------start<
+
+unless prefs[:locale]
+  prefs[:locale] = ask_wizard('Set a locale? Enter nothing for English, or es, de, etc:')
+  prefs[:locale] = 'none' unless prefs[:locale].present?
+end
+
+unless prefer :locale, 'none'
+  add_gem 'devise-i18n' if prefer :authentication, 'devise'
+end
+
+stage_two do
+  unless prefer :locale, 'none'
+    gsub_file 'config/application.rb', /# config.i18n.default_locale.*$/, "config.i18n.default_locale = :#{prefs[:locale]}"
+    locale_filename = "config/locales/#{prefs[:locale]}.yml"
+    create_file locale_filename
+    append_to_file locale_filename, "#{prefs[:locale]}:"
+  end
+end
+# >---------------------------- recipes/locale.rb ----------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
 # >-------------------------- templates/recipe.erb ---------------------------start<
@@ -1285,7 +1321,7 @@ stage_two do
     repo = 'https://raw.github.com/RailsApps/rails-omniauth/master/'
     copy_from_repo 'config/initializers/omniauth.rb', :repo => repo
     gsub_file 'config/initializers/omniauth.rb', /twitter/, prefs[:omniauth_provider] unless prefer :omniauth_provider, 'twitter'
-    generate 'model User name:string email:string provider:string uid:string'
+    generate 'model User name:string provider:string uid:string'
     run 'bundle exec rake db:migrate'
     copy_from_repo 'app/models/user.rb', :repo => 'https://raw.github.com/RailsApps/rails-omniauth/master/'
     copy_from_repo 'app/controllers/application_controller.rb', :repo => repo
