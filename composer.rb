@@ -1328,6 +1328,7 @@ stage_two do
     filename = 'app/controllers/sessions_controller.rb'
     copy_from_repo filename, :repo => repo
     gsub_file filename, /twitter/, prefs[:omniauth_provider] unless prefer :omniauth_provider, 'twitter'
+    copy_from_repo 'config/routes.rb', :repo => repo
   end
   ### GIT ###
   git :add => '-A' if prefer :git, true
