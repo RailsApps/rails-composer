@@ -256,23 +256,20 @@ else
   diagnostics[:recipes] = 'fail'
 end
 
-# this application template only supports Rails version 3.1 and newer
+# this application template only supports Rails version 4.1 and newer
 case Rails::VERSION::MAJOR.to_s
 when "3"
-  case Rails::VERSION::MINOR.to_s
-  when "0"
-    say_wizard "You are using Rails version #{Rails::VERSION::STRING} which is not supported. Try 3.1 or newer."
-    raise StandardError.new "Rails #{Rails::VERSION::STRING} is not supported. Try 3.1 or newer."
-  end
+    say_wizard "You are using Rails version #{Rails::VERSION::STRING} which is not supported. Use Rails 4.1 or newer."
+    raise StandardError.new "Rails #{Rails::VERSION::STRING} is not supported. Use Rails 4.1 or newer."
 when "4"
-  say_wizard "You are using Rails version #{Rails::VERSION::STRING}."
   case Rails::VERSION::MINOR.to_s
   when "0"
-    say_wizard "Please upgrade to Rails 4.1 or newer."
+    say_wizard "You are using Rails version #{Rails::VERSION::STRING} which is not supported. Use Rails 4.1 or newer."
+    raise StandardError.new "Rails #{Rails::VERSION::STRING} is not supported. Use Rails 4.1 or newer."
   end
 else
-  say_wizard "You are using Rails version #{Rails::VERSION::STRING} which is not supported."
-  raise StandardError.new "Rails #{Rails::VERSION::STRING} is not supported."
+  say_wizard "You are using Rails version #{Rails::VERSION::STRING} which is not supported. Use Rails 4.1 or newer."
+  raise StandardError.new "Rails #{Rails::VERSION::STRING} is not supported. Use Rails 4.1 or newer."
 end
 
 # >---------------------------[ Autoload Modules/Classes ]-----------------------------<
@@ -1194,6 +1191,13 @@ stage_three do
   say_wizard "recipe stage three"
   if (prefer :authentication, 'devise') && (prefer :tests, 'rspec')
     generate 'testing:configure devise -f'
+    if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
+      inject_into_file 'spec/factories/users.rb', '    confirmed_at Time.now', :after => 'factory :user do'
+      default_url = '  config.action_mailer.default_url_options = { :host => Rails.application.secrets.domain_name }'
+      inject_into_file 'config/environments/test.rb', default_url, :after => "delivery_method = :test\n"
+      gsub_file 'spec/features/users/user_edit_spec.rb', /successfully./, 'successfully,'
+      gsub_file 'spec/features/visitors/sign_up_spec.rb', /Welcome! You have signed up successfully./, 'A message with a confirmation'
+    end
   end
   if (prefer :authentication, 'omniauth') && (prefer :tests, 'rspec')
     generate 'testing:configure omniauth -f'
@@ -1253,7 +1257,7 @@ TEXT
 TEXT
     inject_into_file 'config/environments/development.rb', email_configuration_text, :after => "config.assets.debug = true"
     inject_into_file 'config/environments/production.rb', email_configuration_text, :after => "config.active_support.deprecation = :notify"
-    case :email
+    case prefs[:email]
       when 'sendgrid'
         gsub_file 'config/environments/development.rb', /smtp.gmail.com/, 'smtp.sendgrid.net'
         gsub_file 'config/environments/production.rb', /smtp.gmail.com/, 'smtp.sendgrid.net'
