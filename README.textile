@@ -4,21 +4,15 @@ An application template that creates starter applications for Rails 4.1.
 
 It's the Rails generator on steroids.
 
-The Rails Composer application template is built from recipes provided by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem. Need to customize the Rails Composer application template? Want to build your own application template? Use the  "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem.
-
 |_. |_. |
 | !http://railsapps.github.io/images/rails-composer-mailing-list.png(Sign up for the Rails Composer mailing list)!:http://mailinglist.railscomposer.com/ |  !http://railsapps.github.io/images/join/join-railsapps.png(Join the RailsApps Project)!:http://railsapps.github.io/ |
-| "Sign up for the Rails Composer mailing list":http://mailinglist.railscomposer.com/ | "Subscribe to support the RailsApps Project":http://railsapps.github.io/ |
+| "Get on the Rails Composer mailing list":http://mailinglist.railscomposer.com/ | "Subscribe at $19/mo to support the project":http://railsapps.github.io/ |
 
 h4. From the RailsApps Project
 
-The "RailsApps project":http://railsapps.github.io/ provides example applications that developers use as starter apps. Hundreds of developers use the apps, report problems as they arise, and propose solutions. Rails changes frequently; each application is known to work and serves as your personal "reference implementation."
+The "RailsApps project":http://railsapps.github.io/ provides example applications that developers use as starter apps. Hundreds of developers use the apps, report problems as they arise, and propose solutions. Rails changes frequently; each application is known to work and serves as your personal "reference implementation." You can use Rails Composer to build any of the example applications.
 
-Support for the project comes from subscribers. If you use Rails Composer, please "join RailsApps":http://railsapps.github.io/ and support the project.
-
-h4. If You Are New to Rails
-
-If you're new to Rails, see "What is Ruby on Rails?":http://railsapps.github.io/what-is-ruby-rails.html, the book "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html, and recommendations for a "Rails tutorial":https://tutorials.railsapps.org/rails-tutorial.
+If you use Rails Composer, please "join RailsApps":http://railsapps.github.io/ to support the project. "Sign up for the Rails Composer mailing list":http://mailinglist.railscomposer.com/ for news and announcements.
 
 h2. Starter apps
 
@@ -30,7 +24,15 @@ Here are some of the starter apps you can build.
 | "rails-foundation":https://github.com/RailsApps/rails-foundation/ | "Rails and Foundation":http://railsapps.github.io/rails-foundation.html | Foundation front-end framework |
 | "rails-omniauth":https://github.com/RailsApps/rails-omniauth | no tutorial (yet) | authentication with OmniAuth |
 | "rails-devise":https://github.com/RailsApps/rails-devise | "Rails Devise Tutorial":http://railsapps.github.io/rails-devise/ | authentication with Devise |
-| "rails-devise-pundit":https://github.com/RailsApps/rails-devise-pundit | no tutorial (yet) | authorization with Pundit |
+| "rails-devise-pundit":https://github.com/RailsApps/rails-devise-pundit | "Rails Pundit Tutorial":http://railsapps.github.io/rails-devise-pundit/ | authorization with Pundit |
+
+h4. The rails_apps_composer Gem
+
+Want to contribute a starter app you've created? Or need to customize the Rails Composer application template? The Rails Composer application template is built from recipes provided by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem.
+
+h4. If You Are New to Rails
+
+If you're new to Rails, see "What is Ruby on Rails?":http://railsapps.github.io/what-is-ruby-rails.html, the book "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html, and recommendations for a "Rails tutorial":https://tutorials.railsapps.org/rails-tutorial.
 
 h2. Dependencies
 
@@ -192,7 +194,7 @@ It is a good idea to use "RVM":https://rvm.io/, the Ruby Version Manager, and cr
 
 h2. Contributed Applications
 
-Currently, there are no contributed applications available for Rails 4.1. If you would like to add your favorite starter application to Rails Composer, open an issue to let me know.
+Currently, there are no contributed applications available for Rails 4.1. If you would like to add your favorite starter application to Rails Composer, open an issue to let us know.
 
 h2. Build Your Own Application
 
