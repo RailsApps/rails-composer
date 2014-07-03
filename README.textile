@@ -6,7 +6,9 @@ It's the Rails generator on steroids.
 
 The Rails Composer application template is built from recipes provided by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem. Need to customize the Rails Composer application template? Want to build your own application template? Use the  "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem.
 
-h4. !http://railsapps.github.io/images/join/join-railsapps.png(Join RailsApps)!:http://railsapps.github.io/
+|_. |_. |
+| !http://railsapps.github.io/images/rails-composer-mailing-list.png(Sign up for the Rails Composer mailing list)!:http://mailinglist.railscomposer.com/ |  !http://railsapps.github.io/images/join/join-railsapps.png(Join the RailsApps Project)!:http://railsapps.github.io/ |
+| "Sign up for the Rails Composer mailing list":http://mailinglist.railscomposer.com/ | "Subscribe to support the RailsApps Project":http://railsapps.github.io/ |
 
 h4. From the RailsApps Project
 
