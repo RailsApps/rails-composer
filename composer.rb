@@ -110,6 +110,7 @@ def diagnostics_recipes; @diagnostics_recipes end
 def diagnostics_prefs; @diagnostics_prefs end
 
 def say_custom(tag, text); say "\033[1m\033[36m" + tag.to_s.rjust(10) + "\033[0m" + "  #{text}" end
+def say_loud(tag, text); say "\033[1m\033[36m" + tag.to_s.rjust(10) + "  #{text}" + "\033[0m" end
 def say_recipe(name); say "\033[1m\033[36m" + "recipe".rjust(10) + "\033[0m" + "  Running #{name} recipe..." end
 def say_wizard(text); say_custom(@current_recipe || 'composer', text) end
 
@@ -374,6 +375,17 @@ when "4"
         prefs[:apps4] = multiple_choice "No contributed applications are available.",
           [["create custom application", "railsapps"]]
     end
+  end
+end
+
+unless prefs[:announcements]
+  say_loud '', 'Get on the mailing list for Rails Composer news?'
+  prefs[:announcements] = ask_wizard('Enter your email address:')
+  if prefs[:announcements].present?
+    system "curl --silent http://mailinglist.railscomposer.com/api -d'visitor[email]=#{prefs[:announcements]}' > /dev/null"
+    prefs[:announcements] = 'mailinglist'
+  else
+    prefs[:announcements] = 'none'
   end
 end
 # >-------------------------- recipes/railsapps.rb ---------------------------end<
