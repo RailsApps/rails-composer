@@ -652,6 +652,7 @@ if prefer :apps4, 'rails-signup-download'
 
     # >-------------------------------[ Controllers ]--------------------------------<
 
+    copy_from_repo 'app/controllers/visitors_controller.rb', :repo => repo
     copy_from_repo 'app/controllers/products_controller.rb', :repo => repo
 
     # >-------------------------------[ Views ]--------------------------------<
@@ -1521,8 +1522,8 @@ say_recipe 'pages'
 # Application template recipe for the rails_apps_composer. Change the recipe here:
 # https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/pages.rb
 
-stage_three do
-  say_wizard "recipe stage three"
+stage_two do
+  say_wizard "recipe stage two"
   case prefs[:pages]
     when 'home'
       generate 'pages:home -f'
