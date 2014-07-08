@@ -1449,6 +1449,10 @@ say_recipe 'roles'
 stage_two do
   say_wizard "recipe stage two"
   if prefer :authorization, 'pundit'
+    if prefer :authentication, 'none'
+      generate 'model User email:string'
+      run 'bundle exec rake db:migrate'
+    end
     generate 'migration AddRoleToUsers role:integer'
     role_boilerplate = "  enum role: [:user, :vip, :admin]\n  after_initialize :set_default_role, :if => :new_record?\n\n"
     role_boilerplate << "  def set_default_role\n    self.role ||= :user\n  end\n\n" if prefer :authentication, 'devise'
