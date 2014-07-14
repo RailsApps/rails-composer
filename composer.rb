@@ -93,7 +93,7 @@ module Gemfile
 end
 def add_gem(*all) Gemfile.add(*all); end
 
-@recipes = ["core", "git", "railsapps", "learn_rails", "rails_bootstrap", "rails_foundation", "rails_omniauth", "rails_devise", "rails_devise_pundit", "rails_signup_download", "rails_mailinglist_signup", "setup", "locale", "readme", "gems", "tests", "email", "devise", "omniauth", "roles", "frontend", "pages", "init", "extras", "deployment"]
+@recipes = ["core", "git", "railsapps", "learn_rails", "rails_bootstrap", "rails_foundation", "rails_omniauth", "rails_devise", "rails_devise_pundit", "rails_signup_download", "rails_mailinglist_signup", "setup", "locale", "readme", "gems", "tests", "email", "devise", "omniauth", "roles", "frontend", "pages", "init", "analytics", "deployment", "extras"]
 @prefs = {}
 @gems = []
 @diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "tests"], ["apps4", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "tests"], ["apps4", "core", "deployment", "devise", "email", "extras", "frontend", "gems", "git", "init", "omniauth", "pundit", "railsapps", "readme", "setup", "tests"]]
@@ -115,7 +115,11 @@ def say_recipe(name); say "\033[1m\033[36m" + "recipe".rjust(10) + "\033[0m" + "
 def say_wizard(text); say_custom(@current_recipe || 'composer', text) end
 
 def ask_wizard(question)
-  ask "\033[1m\033[36m" + (@current_recipe || "prompt").rjust(10) + "\033[1m\033[36m" + "  #{question}\033[0m"
+  ask "\033[1m\033[36m" + ("option").rjust(10) + "\033[1m\033[36m" + "  #{question}\033[0m"
+end
+
+def whisper_ask_wizard(question)
+  ask "\033[1m\033[36m" + ("choose").rjust(10) + "\033[0m" + "  #{question}"
 end
 
 def yes_wizard?(question)
@@ -133,13 +137,13 @@ end
 def no_wizard?(question); !yes_wizard?(question) end
 
 def multiple_choice(question, choices)
-  say_custom('question', question)
+  say_custom('option', "\033[1m\033[36m" + "#{question}\033[0m")
   values = {}
   choices.each_with_index do |choice,i|
     values[(i + 1).to_s] = choice[1]
     say_custom( (i + 1).to_s + ')', choice[0] )
   end
-  answer = ask_wizard("Enter your selection:") while !values.keys.include?(answer)
+  answer = whisper_ask_wizard("Enter your selection:") while !values.keys.include?(answer)
   values[answer]
 end
 
@@ -362,7 +366,7 @@ when "4"
       ["Custom application (experimental)", "none"]] unless prefs.has_key? :apps4
     case prefs[:apps4]
       when 'railsapps'
-        prefs[:apps4] = prefs[:rails_4_1_starter_app] || (multiple_choice "Starter apps for Rails 4.1. More to come.",
+        prefs[:apps4] = prefs[:rails_4_1_starter_app] || (multiple_choice "Choose a starter application.",
         [["learn-rails", "learn-rails"],
         ["rails-bootstrap", "rails-bootstrap"],
         ["rails-foundation", "rails-foundation"],
@@ -869,6 +873,9 @@ say_recipe 'locale'
 @configs[@current_recipe] = config
 # >---------------------------- recipes/locale.rb ----------------------------start<
 
+# Application template recipe for the rails_apps_composer. Change the recipe here:
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/locale.rb
+
 unless prefs[:locale]
   prefs[:locale] = ask_wizard('Set a locale? Enter nothing for English, or es, de, etc:')
   prefs[:locale] = 'none' unless prefs[:locale].present?
@@ -910,71 +917,147 @@ stage_three do
     doc/README_FOR_APP
   }.each { |file| remove_file file }
 
-  # add placeholder READMEs and humans.txt file
-  copy_from_repo 'public/humans.txt'
-  copy_from_repo 'README'
-  copy_from_repo 'README.md'
-  gsub_file "README", /App_Name/, "#{app_name.humanize.titleize}"
-  gsub_file "README.md", /App_Name/, "#{app_name.humanize.titleize}"
-
-  # Diagnostics
-  gsub_file "README.md", /recipes that are known/, "recipes that are NOT known" if diagnostics[:recipes] == 'fail'
-  gsub_file "README.md", /preferences that are known/, "preferences that are NOT known" if diagnostics[:prefs] == 'fail'
-  print_recipes = recipes.sort.map { |r| "\n* #{r}" }.join('')
-  print_preferences = prefs.map { |k, v| "\n* #{k}: #{v}" }.join('')
-  gsub_file "README.md", /RECIPES/, print_recipes
-  gsub_file "README.md", /PREFERENCES/, print_preferences
-  gsub_file "README", /RECIPES/, print_recipes
-  gsub_file "README", /PREFERENCES/, print_preferences
-
-  # Ruby on Rails
-  gsub_file "README.md", /\* Ruby/, "* Ruby version #{RUBY_VERSION}"
-  gsub_file "README.md", /\* Rails/, "* Rails version #{Rails::VERSION::STRING}"
-
-  # Database
-  gsub_file "README.md", /SQLite/, "PostgreSQL" if prefer :database, 'postgresql'
-  gsub_file "README.md", /SQLite/, "MySQL" if prefer :database, 'mysql'
-  gsub_file "README.md", /SQLite/, "MongoDB" if prefer :database, 'mongodb'
-  gsub_file "README.md", /ActiveRecord/, "the Mongoid ORM" if prefer :orm, 'mongoid'
-
-  # Template Engine
-  gsub_file "README.md", /ERB/, "Haml" if prefer :templates, 'haml'
-  gsub_file "README.md", /ERB/, "Slim" if prefer :templates, 'slim'
-
-  # Testing Framework
-  gsub_file "README.md", /Test::Unit/, "RSpec" if prefer :tests, 'rspec'
-
-  # Front-end Framework
-  gsub_file "README.md", /Front-end Framework: None/, "Front-end Framework: Bootstrap 2.3 (Sass)" if prefer :frontend, 'bootstrap2'
-  gsub_file "README.md", /Front-end Framework: None/, "Front-end Framework: Bootstrap 3.0 (Sass)" if prefer :frontend, 'bootstrap3'
-  gsub_file "README.md", /Front-end Framework: None/, "Front-end Framework: Zurb Foundation 4" if prefer :frontend, 'foundation4'
-  gsub_file "README.md", /Front-end Framework: None/, "Front-end Framework: Zurb Foundation 5" if prefer :frontend, 'foundation5'
-
-  # Form Builder
-  gsub_file "README.md", /Form Builder: None/, "Form Builder: SimpleForm" if prefer :form_builder, 'simple_form'
-
-  # Email
-  unless prefer :email, 'none'
-    gsub_file "README.md", /Gmail/, "SMTP" if prefer :email, 'smtp'
-    gsub_file "README.md", /Gmail/, "SendGrid" if prefer :email, 'sendgrid'
-    gsub_file "README.md", /Gmail/, "Mandrill" if prefer :email, 'mandrill'
-    gsub_file "README.md", /Email delivery is disabled in development./, "Email delivery is configured via MailCatcher in development." if prefer :mailcatcher, true
-    insert_into_file 'README.md', "\nEmail rendering in development enabled via MailView.", :after => /Email delivery is.*\n/ if prefer :mail_view, true
-  else
-    gsub_file "README.md", /Email/, ""
-    gsub_file "README.md", /-----/, ""
-    gsub_file "README.md", /The application is configured to send email using a Gmail account./, ""
-    gsub_file "README.md", /Email delivery is disabled in development./, ""
+  # add diagnostics to README
+  create_file 'README', "#{app_name.humanize.titleize}\n================\n\n"
+  append_to_file 'README' do <<-TEXT
+Rails Composer, open source, supported by subscribers.
+Please join RailsApps to support development of Rails Composer.
+Need help? Ask on Stack Overflow with the tag 'railsapps.'
+Problems? Submit an issue: https://github.com/RailsApps/rails_apps_composer/issues
+Your application contains diagnostics in this README file.
+Please provide a copy of this README file when reporting any issues.
+\n
+TEXT
+  end
+  append_to_file 'README' do <<-TEXT
+option  Build a starter application?
+choose  Enter your selection: [#{prefs[:apps4]}]
+option  Get on the mailing list for Rails Composer news?
+choose  Enter your selection: [#{prefs[:announcements]}]
+option  Web server for development?
+choose  Enter your selection: [#{prefs[:dev_webserver]}]
+option  Web server for production?
+choose  Enter your selection: [#{prefs[:prod_webserver]}]
+option  Database used in development?
+choose  Enter your selection: [#{prefs[:database]}]
+option  Template engine?
+choose  Enter your selection: [#{prefs[:templates]}]
+option  Test framework?
+choose  Enter your selection: [#{prefs[:tests]}]
+option  Continuous testing?
+choose  Enter your selection: [#{prefs[:continuous_testing]}]
+option  Front-end framework?
+choose  Enter your selection: [#{prefs[:frontend]}]
+option  Add support for sending email?
+choose  Enter your selection: [#{prefs[:email]}]
+option  Authentication?
+choose  Enter your selection: [#{prefs[:authentication]}]
+option  Devise modules?
+choose  Enter your selection: [#{prefs[:devise_modules]}]
+option  OmniAuth provider?
+choose  Enter your selection: [#{prefs[:omniauth_provider]}]
+option  Authorization?
+choose  Enter your selection: [#{prefs[:authorization]}]
+option  Use a form builder gem?
+choose  Enter your selection: [#{prefs[:form_builder]}]
+option  Add pages?
+choose  Enter your selection: [#{prefs[:pages]}]
+option  Set a locale?
+choose  Enter your selection: [#{prefs[:locale]}]
+option  Install page-view analytics?
+choose  Enter your selection: [#{prefs[:analytics]}]
+option  Add a deployment mechanism?
+choose  Enter your selection: [#{prefs[:deployment]}]
+option  Set a robots.txt file to ban spiders?
+choose  Enter your selection: [#{prefs[:ban_spiders]}]
+option  Create a GitHub repository? (y/n)
+choose  Enter your selection: [#{prefs[:github]}]
+option  Add gem and file for environment variables?
+choose  Enter your selection: [#{prefs[:local_env_file]}]
+option  Reduce assets logger noise during development?
+choose  Enter your selection: [#{prefs[:quiet_assets]}]
+option  Improve error reporting with 'better_errors' during development?
+choose  Enter your selection: [#{prefs[:better_errors]}]
+option  Use 'pry' as console replacement during development and test?
+choose  Enter your selection: [#{prefs[:pry]}]
+option  Use or create a project-specific rvm gemset?
+choose  Enter your selection: [#{prefs[:rvmrc]}]
+TEXT
   end
 
-  # Authentication and Authorization
-  gsub_file "README.md", /Authentication: None/, "Authentication: Devise" if prefer :authentication, 'devise'
-  gsub_file "README.md", /Authentication: None/, "Authentication: OmniAuth" if prefer :authentication, 'omniauth'
-  gsub_file "README.md", /Authorization: None/, "Authorization: Pundit" if prefer :authorization, 'pundit'
+  create_file 'public/humans.txt' do <<-TEXT
+/* the humans responsible & colophon */
+/* humanstxt.org */
 
-  # Admin
-  gsub_file "README.md", /Admin: None/, "Admin: ActiveAdmin" if prefer :admin, 'activeadmin'
-  gsub_file "README.md", /Admin: None/, "Admin: RailsAdmin" if prefer :admin, 'rails_admin'
+
+/* TEAM */
+  <your title>: <your name>
+  Site:
+  Twitter:
+  Location:
+
+/* THANKS */
+  Daniel Kehoe (@rails_apps) for the RailsApps project
+
+/* SITE */
+  Standards: HTML5, CSS3
+  Components: jQuery
+  Software: Ruby on Rails
+
+/* GENERATED BY */
+Rails Composer: http://railscomposer.com/
+TEXT
+  end
+
+  create_file 'README.md', "#{app_name.humanize.titleize}\n================\n\n"
+  append_to_file 'README.md' do <<-TEXT
+This application was generated with the [rails_apps_composer](https://github.com/RailsApps/rails_apps_composer) gem
+provided by the [RailsApps Project](http://railsapps.github.io/).
+
+Rails Composer is open source and supported by subscribers. Please join RailsApps to support development of Rails Composer.
+
+Problems? Issues?
+-----------
+
+Need help? Ask on Stack Overflow with the tag 'railsapps.'
+
+Your application contains diagnostics in the README file. Please provide a copy of the README file when reporting any issues.
+
+If the application doesn’t work as expected, please [report an issue](https://github.com/RailsApps/rails_apps_composer/issues)
+and include the diagnostics.
+
+Ruby on Rails
+-------------
+
+This application requires:
+
+- Ruby #{RUBY_VERSION}
+- Rails #{Rails::VERSION::STRING}
+
+Learn more about [Installing Rails](http://railsapps.github.io/installing-rails.html).
+
+Getting Started
+---------------
+
+Documentation and Support
+-------------------------
+
+Issues
+-------------
+
+Similar Projects
+----------------
+
+Contributing
+------------
+
+Credits
+-------
+
+License
+-------
+TEXT
+  end
 
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: add README files"' if prefer :git, true
@@ -1696,6 +1779,82 @@ end
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
 # >-------------------------- templates/recipe.erb ---------------------------start<
+# >-------------------------------[ analytics ]-------------------------------<
+@current_recipe = "analytics"
+@before_configs["analytics"].call if @before_configs["analytics"]
+say_recipe 'analytics'
+@configs[@current_recipe] = config
+# >-------------------------- recipes/analytics.rb ---------------------------start<
+
+# Application template recipe for the rails_apps_composer. Change the recipe here:
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/analytics.rb
+
+prefs[:analytics] = multiple_choice "Install page-view analytics?", [["None", "none"],
+  ["Google Analytics", "ga"],
+  ["Segment.io", "segmentio"]] unless prefs.has_key? :analytics
+case prefs[:analytics]
+  when 'ga'
+    ga_id = ask_wizard('Google Analytics ID?')
+  when 'segmentio'
+    segmentio_api_key = ask_wizard('Segment.io API key?')
+end
+
+stage_two do
+  say_wizard "recipe stage two"
+  unless prefer :analytics, 'none'
+    # don't add the gem if it has already been added by the railsapps recipe
+    add_gem 'rails_apps_pages', :group => :development unless prefs[:apps4]
+  end
+  case prefs[:analytics]
+    when 'ga'
+      generate 'analytics:google -f'
+      gsub_file 'app/assets/javascripts/google_analytics.js.coffee', /UA-XXXXXXX-XX/, ga_id
+    when 'segmentio'
+      generate 'analytics:segmentio -f'
+      gsub_file 'app/assets/javascripts/segmentio.js', /SEGMENTIO_API_KEY/, segmentio_api_key
+  end
+  ### GIT ###
+  git :add => '-A' if prefer :git, true
+  git :commit => '-qm "rails_apps_composer: add analytics"' if prefer :git, true
+end
+# >-------------------------- recipes/analytics.rb ---------------------------end<
+# >-------------------------- templates/recipe.erb ---------------------------end<
+
+# >-------------------------- templates/recipe.erb ---------------------------start<
+# >------------------------------[ deployment ]-------------------------------<
+@current_recipe = "deployment"
+@before_configs["deployment"].call if @before_configs["deployment"]
+say_recipe 'deployment'
+config = {}
+config['deployment'] = multiple_choice("Add a deployment mechanism?", [["None", "none"], ["Capistrano3", "capistrano3"]]) if true && true unless config.key?('deployment') || prefs.has_key?(:deployment)
+@configs[@current_recipe] = config
+# >-------------------------- recipes/deployment.rb --------------------------start<
+
+# Application template recipe for the rails_apps_composer. Change the recipe here:
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/deployment.rb
+
+case config['deployment']
+when 'capistrano3'
+  prefs[:deployment] = 'capistrano3'
+end
+
+if prefer :deployment, 'capistrano3'
+  say_wizard "recipe adding capistrano gems"
+  add_gem 'capistrano', '~> 3.0.1', group: :development
+  add_gem 'capistrano-rvm', '~> 0.1.1', group: :development
+  add_gem 'capistrano-bundler', group: :development
+  add_gem 'capistrano-rails', '~> 1.1.0', group: :development
+  add_gem 'capistrano-rails-console', group: :development
+  stage_two do
+    say_wizard "recipe stage two"
+    say_wizard 'recipe capistrano file'
+    run 'bundle exec cap install'
+  end
+end
+# >-------------------------- recipes/deployment.rb --------------------------end<
+# >-------------------------- templates/recipe.erb ---------------------------end<
+
+# >-------------------------- templates/recipe.erb ---------------------------start<
 # >--------------------------------[ extras ]---------------------------------<
 @current_recipe = "extras"
 @before_configs["extras"].call if @before_configs["extras"]
@@ -1762,7 +1921,6 @@ if prefs[:rvmrc]
       say_wizard "rvm failure: unable to use gemset #{app_name}, reason: #{e}"
       raise
     end
-    run "rvm gemset list"
     if File.exist?('.ruby-version')
       say_wizard ".ruby-version file already exists"
     else
@@ -1903,40 +2061,6 @@ if prefs[:github]
   end
 end
 # >---------------------------- recipes/extras.rb ----------------------------end<
-# >-------------------------- templates/recipe.erb ---------------------------end<
-
-# >-------------------------- templates/recipe.erb ---------------------------start<
-# >------------------------------[ deployment ]-------------------------------<
-@current_recipe = "deployment"
-@before_configs["deployment"].call if @before_configs["deployment"]
-say_recipe 'deployment'
-config = {}
-config['deployment'] = multiple_choice("Add a deployment mechanism?", [["None", "none"], ["Capistrano3", "capistrano3"]]) if true && true unless config.key?('deployment') || prefs.has_key?(:deployment)
-@configs[@current_recipe] = config
-# >-------------------------- recipes/deployment.rb --------------------------start<
-
-# Application template recipe for the rails_apps_composer. Change the recipe here:
-# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/deployment.rb
-
-case config['deployment']
-when 'capistrano3'
-  prefs[:deployment] = 'capistrano3'
-end
-
-if prefer :deployment, 'capistrano3'
-  say_wizard "recipe adding capistrano gems"
-  add_gem 'capistrano', '~> 3.0.1', group: :development
-  add_gem 'capistrano-rvm', '~> 0.1.1', group: :development
-  add_gem 'capistrano-bundler', group: :development
-  add_gem 'capistrano-rails', '~> 1.1.0', group: :development
-  add_gem 'capistrano-rails-console', group: :development
-  stage_two do
-    say_wizard "recipe stage two"
-    say_wizard 'recipe capistrano file'
-    run 'bundle exec cap install'
-  end
-end
-# >-------------------------- recipes/deployment.rb --------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
 
