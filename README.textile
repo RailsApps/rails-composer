@@ -20,11 +20,12 @@ Here are some of the starter apps you can build.
 
 |_. Rails 4.1 |_. Tutorial |_. Comments |
 | "learn-rails":https://github.com/RailsApps/learn-rails | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | from the book for beginners |
-| "rails-bootstrap":https://github.com/RailsApps/rails-bootstrap/ | "Rails and Bootstrap":http://railsapps.github.io/twitter-bootstrap-rails.html | Bootstrap front-end framework |
-| "rails-foundation":https://github.com/RailsApps/rails-foundation/ | "Rails and Foundation":http://railsapps.github.io/rails-foundation.html | Foundation front-end framework |
-| "rails-omniauth":https://github.com/RailsApps/rails-omniauth | no tutorial (yet) | authentication with OmniAuth |
+| "rails-bootstrap":https://github.com/RailsApps/rails-bootstrap | "Rails and Bootstrap":http://railsapps.github.io/twitter-bootstrap-rails.html | Bootstrap front-end framework |
+| "rails-foundation":https://github.com/RailsApps/rails-foundation | "Rails and Foundation":http://railsapps.github.io/rails-foundation.html | Foundation front-end framework |
+| "rails-omniauth":https://github.com/RailsApps/rails-omniauth | "OmniAuth Tutorial":http://railsapps.github.io/rails-omniauth/ | authentication with OmniAuth |
 | "rails-devise":https://github.com/RailsApps/rails-devise | "Rails Devise Tutorial":http://railsapps.github.io/rails-devise/ | authentication with Devise |
 | "rails-devise-pundit":https://github.com/RailsApps/rails-devise-pundit | "Rails Pundit Tutorial":http://railsapps.github.io/rails-devise-pundit/ | authorization with Pundit |
+| "rails-signup-download":https://github.com/RailsApps/rails-signup-download | "Rails Signup Download":https://tutorials.railsapps.org/rails-signup-download | Devise plus download a PDF file |
 
 h4. The rails_apps_composer Gem
 
@@ -109,13 +110,15 @@ question  Build a starter application?
 Enter "1" to select *Build a starter application*. You'll see a prompt:
 
 <pre>
-question  Starter apps for Rails 4.1. More to come.
+question  Choose a starter application.
       1)  learn-rails
       2)  rails-bootstrap
       3)  rails-foundation
-      4)  rails-omniauth
-      5)  rails-devise
-      6)  rails-devise-pundit
+      4)  rails-mailinglist-signup
+      5)  rails-omniauth
+      6)  rails-devise
+      7)  rails-devise-pundit
+      8)  rails-signup-download
 </pre>
 
 Make your choice. The Rails Composer tool may give you other options (other applications may have been added since these notes were written).
