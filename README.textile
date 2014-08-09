@@ -128,38 +128,42 @@ h4. Options
 The application generator template will ask you for additional preferences. Options vary, depending on the example application you build:
 
 <pre>
- question  Web server for development?
+ option  Web server for development?
        1)  WEBrick (default)
        2)  Thin
        3)  Unicorn
        4)  Puma
        5)  Phusion Passenger (Apache/Nginx)
        6)  Phusion Passenger (Standalone)
- question  Web server for production?
+ option  Web server for production?
        1)  Same as development
        2)  Thin
        3)  Unicorn
        4)  Puma
        5)  Phusion Passenger (Apache/Nginx)
        6)  Phusion Passenger (Standalone)
- question  Database used in development?
+ option  Database used in development?
        1)  SQLite
        2)  PostgreSQL
        3)  MySQL
- question  Template engine?
+ option  Template engine?
        1)  ERB
        2)  Haml
        3)  Slim
- question  Test framework?
+ option  Test framework?
        1)  None
        2)  RSpec with Capybara
- question  Front-end framework?
+ option  Front-end framework?
        1)  None
        2)  Bootstrap 3.0
        3)  Bootstrap 2.3
        4)  Zurb Foundation 5.0
        5)  Zurb Foundation 4.0
        6)  Simple CSS
+ option  Install page-view analytics?
+       1)  None
+       2)  Google Analytics
+       3)  Segment.io
    extras  Set a robots.txt file to ban spiders? (y/n)
    extras  Create a GitHub repository? (y/n)
    extras  Use or create a project-specific rvm gemset? (y/n)
