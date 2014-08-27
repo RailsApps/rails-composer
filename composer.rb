@@ -370,7 +370,6 @@ when "4"
         [["learn-rails", "learn-rails"],
         ["rails-bootstrap", "rails-bootstrap"],
         ["rails-foundation", "rails-foundation"],
-        ["rails-mailinglist-signup", "rails-mailinglist-signup"],
         ["rails-omniauth", "rails-omniauth"],
         ["rails-devise", "rails-devise"],
         ["rails-devise-pundit", "rails-devise-pundit"],
@@ -431,6 +430,7 @@ if prefer :apps4, 'learn-rails'
   prefs[:tests] = false
   prefs[:pages] = 'none'
   prefs[:locale] = 'none'
+  prefs[:analytics] = 'none'
 
   # gems
   add_gem 'activerecord-tableless'
@@ -1134,7 +1134,7 @@ if prefer :tests, 'rspec'
   add_gem 'rails_apps_testing', :group => :development
   add_gem 'rspec-rails', :group => [:development, :test]
   add_gem 'factory_girl_rails', :group => [:development, :test]
-  add_gem 'faker', :group => :test
+  add_gem 'faker', :group => [:development, :test]
   add_gem 'capybara', :group => :test
   add_gem 'database_cleaner', :group => :test
   add_gem 'launchy', :group => :test
