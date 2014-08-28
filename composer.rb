@@ -93,7 +93,7 @@ module Gemfile
 end
 def add_gem(*all) Gemfile.add(*all); end
 
-@recipes = ["core", "git", "railsapps", "learn_rails", "rails_bootstrap", "rails_foundation", "rails_omniauth", "rails_devise", "rails_devise_pundit", "rails_signup_download", "rails_mailinglist_signup", "setup", "locale", "readme", "gems", "tests", "email", "devise", "omniauth", "roles", "frontend", "pages", "init", "analytics", "deployment", "extras"]
+@recipes = ["core", "git", "railsapps", "learn_rails", "rails_bootstrap", "rails_foundation", "rails_omniauth", "rails_devise", "rails_devise_roles", "rails_devise_pundit", "rails_signup_download", "rails_mailinglist_signup", "setup", "locale", "readme", "gems", "tests", "email", "devise", "omniauth", "roles", "frontend", "pages", "init", "analytics", "deployment", "extras"]
 @prefs = {}
 @gems = []
 @diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "tests"], ["apps4", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "tests"], ["apps4", "core", "deployment", "devise", "email", "extras", "frontend", "gems", "git", "init", "omniauth", "pundit", "railsapps", "readme", "setup", "tests"]]
@@ -372,6 +372,7 @@ when "4"
         ["rails-foundation", "rails-foundation"],
         ["rails-omniauth", "rails-omniauth"],
         ["rails-devise", "rails-devise"],
+        ["rails-devise-roles", "rails-devise-roles"],
         ["rails-devise-pundit", "rails-devise-pundit"],
         ["rails-signup-download", "rails-signup-download"]])
       when 'contributed_app'
@@ -598,6 +599,32 @@ if prefer :apps4, 'rails-devise'
   prefs[:locale] = 'none'
 end
 # >------------------------- recipes/rails_devise.rb -------------------------end<
+# >-------------------------- templates/recipe.erb ---------------------------end<
+
+# >-------------------------- templates/recipe.erb ---------------------------start<
+# >--------------------------[ rails_devise_roles ]---------------------------<
+@current_recipe = "rails_devise_roles"
+@before_configs["rails_devise_roles"].call if @before_configs["rails_devise_roles"]
+say_recipe 'rails_devise_roles'
+@configs[@current_recipe] = config
+# >---------------------- recipes/rails_devise_roles.rb ----------------------start<
+
+# Application template recipe for the rails_apps_composer. Change the recipe here:
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/rails_devise_roles.rb
+
+if prefer :apps4, 'rails-devise-roles'
+  prefs[:authentication] = 'devise'
+  prefs[:authorization] = 'roles'
+  prefs[:better_errors] = true
+  prefs[:deployment] = 'none'
+  prefs[:git] = true
+  prefs[:local_env_file] = false
+  prefs[:pry] = false
+  prefs[:quiet_assets] = true
+  prefs[:pages] = 'users'
+  prefs[:locale] = 'none'
+end
+# >---------------------- recipes/rails_devise_roles.rb ----------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
 # >-------------------------- templates/recipe.erb ---------------------------start<
@@ -845,7 +872,7 @@ if (recipes.include? 'devise') || (recipes.include? 'omniauth')
       prefs[:omniauth_provider] = multiple_choice "OmniAuth provider?", [["Facebook", "facebook"], ["Twitter", "twitter"], ["GitHub", "github"],
         ["LinkedIn", "linkedin"], ["Google-Oauth-2", "google_oauth2"], ["Tumblr", "tumblr"]] unless prefs.has_key? :omniauth_provider
   end
-  prefs[:authorization] = multiple_choice "Authorization?", [["None", "none"], ["Pundit", "pundit"]] unless prefs.has_key? :authorization
+  prefs[:authorization] = multiple_choice "Authorization?", [["None", "none"], ["Simple role-based", "roles"], ["Pundit", "pundit"]] unless prefs.has_key? :authorization
 end
 
 ## Form Builder
@@ -1375,10 +1402,11 @@ stage_three do
     if prefer :authentication, 'omniauth'
       generate 'testing:configure omniauth -f'
     end
-    if prefer :authorization, 'pundit'
+    if (prefer :authorization, 'roles') || (prefer :authorization, 'pundit')
       generate 'testing:configure pundit -f'
       remove_file 'spec/policies/user_policy_spec.rb' unless %w(users about+users).include?(prefs[:pages])
-
+      remove_file 'spec/policies/user_policy_spec.rb' if prefer :authorization, 'roles'
+      remove_file 'spec/support/pundit.rb' if prefer :authorization, 'roles'
       if (prefer :authentication, 'devise') &&\
         ((prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable'))
         inject_into_file 'spec/factories/users.rb', "    confirmed_at Time.now\n", :after => "factory :user do\n"
@@ -1544,7 +1572,7 @@ say_recipe 'roles'
 
 stage_two do
   say_wizard "recipe stage two"
-  if prefer :authorization, 'pundit'
+  if (prefer :authorization, 'roles') || (prefer :authorization, 'pundit')
     if prefer :authentication, 'none'
       generate 'model User email:string'
       run 'bundle exec rake db:migrate'
@@ -1626,10 +1654,12 @@ stage_two do
       generate 'pages:about -f'
     when 'users'
       generate 'pages:users -f'
+      generate 'pages:roles -f' if prefer :authorization, 'roles'
       generate 'pages:authorized -f' if prefer :authorization, 'pundit'
     when 'about+users'
       generate 'pages:about -f'
       generate 'pages:users -f'
+      generate 'pages:roles -f' if prefer :authorization, 'roles'
       generate 'pages:authorized -f' if prefer :authorization, 'pundit'
   end
   generate 'layout:navigation -f'
@@ -1720,7 +1750,9 @@ stage_three do
   ### DATABASE SEED ###
   if prefer :authentication, 'devise'
     copy_from_repo 'db/seeds.rb', :repo => 'https://raw.github.com/RailsApps/rails-devise/master/'
-    if prefer :authorization, 'pundit'
+    if prefer :authorization, 'roles'
+      copy_from_repo 'app/services/create_admin_service.rb', :repo => 'https://raw.github.com/RailsApps/rails-devise-roles/master/'
+    elsif prefer :authorization, 'pundit'
       copy_from_repo 'app/services/create_admin_service.rb', :repo => 'https://raw.github.com/RailsApps/rails-devise-pundit/master/'
     else
       copy_from_repo 'app/services/create_admin_service.rb', :repo => 'https://raw.github.com/RailsApps/rails-devise/master/'
