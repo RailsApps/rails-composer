@@ -666,7 +666,7 @@ say_recipe 'rails_signup_download'
 
 if prefer :apps4, 'rails-signup-download'
   prefs[:authentication] = 'devise'
-  prefs[:authorization] = 'pundit'
+  prefs[:authorization] = 'roles'
   prefs[:better_errors] = true
   prefs[:deployment] = 'none'
   prefs[:devise_modules] = false
