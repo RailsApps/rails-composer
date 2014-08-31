@@ -14,9 +14,7 @@ The "RailsApps project":http://railsapps.github.io/ provides example application
 
 If you use Rails Composer, please "join RailsApps":http://railsapps.github.io/ to support the project. "Sign up for the Rails Composer mailing list":http://mailinglist.railscomposer.com/ for news and announcements.
 
-h2. Starter apps
-
-Here are some of the starter apps you can build.
+h2. Starter Apps and Tutorials
 
 |_. Rails 4.1 |_. Tutorial |_. Comments |
 | "learn-rails":https://github.com/RailsApps/learn-rails | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | from the book for beginners |
@@ -24,6 +22,7 @@ Here are some of the starter apps you can build.
 | "rails-foundation":https://github.com/RailsApps/rails-foundation | "Rails and Foundation":http://railsapps.github.io/rails-foundation.html | Foundation front-end framework |
 | "rails-omniauth":https://github.com/RailsApps/rails-omniauth | "OmniAuth Tutorial":http://railsapps.github.io/rails-omniauth/ | authentication with OmniAuth |
 | "rails-devise":https://github.com/RailsApps/rails-devise | "Rails Devise Tutorial":http://railsapps.github.io/rails-devise/ | authentication with Devise |
+| "rails-devise-roles":https://github.com/RailsApps/rails-devise-roles | "Role-Based Authorization":http://railsapps.github.io/rails-devise-roles/ | authorization with roles |
 | "rails-devise-pundit":https://github.com/RailsApps/rails-devise-pundit | "Rails Pundit Tutorial":http://railsapps.github.io/rails-devise-pundit/ | authorization with Pundit |
 | "rails-signup-download":https://github.com/RailsApps/rails-signup-download | "Rails Signup Download":https://tutorials.railsapps.org/rails-signup-download | Devise plus download a PDF file |
 
@@ -114,9 +113,9 @@ question  Choose a starter application.
       1)  learn-rails
       2)  rails-bootstrap
       3)  rails-foundation
-      4)  rails-mailinglist-signup
-      5)  rails-omniauth
-      6)  rails-devise
+      4)  rails-omniauth
+      5)  rails-devise
+      6)  rails-devise-roles
       7)  rails-devise-pundit
       8)  rails-signup-download
 </pre>
@@ -171,9 +170,7 @@ The application generator template will ask you for additional preferences. Opti
 
 h4. Web Servers
 
-We recommend Thin in development for speed and less noise in the log files.
-
-If you plan to deploy to Heroku, select Thin as your production webserver. Unicorn is recommended by Heroku but configuration is more complex.
+If you plan to deploy to Heroku, select Unicorn as your production webserver. Unicorn is recommended by Heroku.
 
 h4. Database
 
@@ -185,7 +182,7 @@ The example applications use the default "ERB" Rails template engine. Optionally
 
 h4. Testing
 
-If you are a beginner, select "None."
+If you are a beginner, select "None." Select "RSpec with Capybara" if you want tests.
 
 h4. Front-end Framework
 
@@ -207,7 +204,7 @@ h2. Build Your Own Application
 
 If you choose "I want to build my own application," you will get a wide set of choices. Not all are actively supported.
 
-Rails Composer is primarily a tool to build the RailsApps example applications. I actively maintain the tool to support that mission. A large community of developers contributes code that supports additional gems and favorite configurations offered with the "build your own options." However, not all contributions are actively maintained. That means not all options are tested or fully supported, so you may need to spend time debugging a "build your own application."
+A large community of developers contributes code that supports additional gems and favorite configurations offered with the "build your own options." However, not all contributions are actively maintained. That means not all options are tested or fully supported, so you may need to spend time debugging a "build your own application."
 
 When you choose "I want to build my own application," you will see something similar to this:
 
