@@ -100,7 +100,7 @@ h4. Rails 4.1
 With Rails 4.1, you'll see a prompt:
 
 <pre>
-question  Build a starter application?
+option  Build a starter application?
       1)  Build a RailsApps example application
       2)  Contributed applications
       3)  Custom application
@@ -109,7 +109,7 @@ question  Build a starter application?
 Enter "1" to select *Build a starter application*. You'll see a prompt:
 
 <pre>
-question  Choose a starter application.
+option  Choose a starter application.
       1)  learn-rails
       2)  rails-bootstrap
       3)  rails-foundation
@@ -202,19 +202,19 @@ Currently, there are no contributed applications available for Rails 4.1. If you
 
 h2. Build Your Own Application
 
-If you choose "I want to build my own application," you will get a wide set of choices. Not all are actively supported.
+If you choose "Custom application," you will get a wide set of choices. Not all are actively supported.
 
 A large community of developers contributes code that supports additional gems and favorite configurations offered with the "build your own options." However, not all contributions are actively maintained. That means not all options are tested or fully supported, so you may need to spend time debugging a "build your own application."
 
-When you choose "I want to build my own application," you will see something similar to this:
+When you choose "Custom application," you will see something similar to this:
 
 <pre>
-question  Build a starter application?
+option  Build a starter application?
       1)  Build a RailsApps example application
-      2)  Build a contributed application
-      3)  I want to build my own application
+      2)  Contributed applications
+      3)  Custom application
 
-question  Web server for development?
+option  Web server for development?
       1)  WEBrick (default)
       2)  Thin
       3)  Unicorn
@@ -222,7 +222,7 @@ question  Web server for development?
       5)  Phusion Passenger (Apache/Nginx)
       6)  Phusion Passenger (Standalone)
 
-question  Web server for production?
+option  Web server for production?
       1)  Same as development
       2)  Thin
       3)  Unicorn
@@ -230,25 +230,25 @@ question  Web server for production?
       5)  Phusion Passenger (Apache/Nginx)
       6)  Phusion Passenger (Standalone)
 
-question  Database used in development?
+option  Database used in development?
       1)  SQLite
       2)  PostgreSQL
       3)  MySQL
 
-question  Template engine?
+option  Template engine?
       1)  ERB
       2)  Haml
       3)  Slim
 
-question  Test framework?
+option  Test framework?
       1)  None
       2)  RSpec with Capybara
 
-question  Continuous testing?
+option  Continuous testing?
       1)  None
       2)  Guard
 
-question  Front-end framework?
+option  Front-end framework?
       1)  None
       2)  Bootstrap 3.0
       3)  Bootstrap 2.3
@@ -256,31 +256,31 @@ question  Front-end framework?
       5)  Zurb Foundation 4.0
       6)  Simple CSS
 
-question  Add support for sending email?
+option  Add support for sending email?
       1)  None
       2)  Gmail
       3)  SMTP
       4)  SendGrid
       5)  Mandrill
 
-question  Authentication?
+option  Authentication?
       1)  None
       2)  Devise
       3)  OmniAuth
 
-question  Devise modules?
+option  Devise modules?
       1)  Devise with default modules
       2)  Devise with Confirmable module
 
-question  Authorization?
+option  Authorization?
       1)  None
       2)  Pundit
 
-question  Use a form builder gem?
+option  Use a form builder gem?
       1)  None
       2)  SimpleForm
 
-question  Install a starter app?
+option  Install a starter app?
       1)  None
       2)  Home Page
       3)  Home Page, User Accounts
@@ -290,7 +290,7 @@ extras  Add 'therubyracer' JavaScript runtime (for Linux users without node.js)?
 extras  Set a robots.txt file to ban spiders? (y/n)
 extras  Create a GitHub repository? (y/n)
 
-question  Add gem and file for environment variables?
+option  Add gem and file for environment variables?
       1)  None
       2)  Add .env with Foreman
       3)  Add application.yml with Figaro
@@ -300,7 +300,7 @@ extras  Improve error reporting with 'better_errors' during development? (y/n)
 extras  Use 'pry' as console replacement during development and test? (y/n)
 extras  Use or create a project-specific rvm gemset? (y/n)
 
-question  Add a deployment mechanism?
+option  Add a deployment mechanism?
       1)  None
       2)  Capistrano3
 </pre>
