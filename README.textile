@@ -51,7 +51,7 @@ h4. Rails 4.1
 
 Currently, only Rails 4.1 is supported.
 
-h2. Creating a Starter App
+h2. How To Use Rails Composer
 
 To build a Rails application using the Rails Composer tool:
 
@@ -63,11 +63,11 @@ Replace @myapp@ with the name of your application.
 
 The @$@ character indicates a shell prompt; don't include it when you run the command.
 
-See the "Troubleshooting" section below if you see errors. In general, you'll avoid many problems if you create your application using RVM as described below.
+See the "Troubleshooting" section below if you see errors. In general, you'll avoid problems if you create your application using RVM as described in the next section.
 
-h2. Creating a Starter App Using RVM
+h3. Creating a Starter App Using RVM
 
-I recommend using "rvm":https://rvm.io/, the Ruby Version Manager, to manage your Rails versions, as described in the "Installing Rails":http://railsapps.github.io/installing-rails.html article.
+I recommend using "RVM":https://rvm.io/, the Ruby Version Manager, to manage your Rails versions, as described in the "Installing Rails":http://railsapps.github.io/installing-rails.html article.
 
 Here's how to generate a new Rails application using the Rails Composer tool and RVM:
 
