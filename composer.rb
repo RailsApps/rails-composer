@@ -844,8 +844,8 @@ end
 ## Front-end Framework
 if recipes.include? 'frontend'
   prefs[:frontend] = multiple_choice "Front-end framework?", [["None", "none"],
-    ["Bootstrap 3.0", "bootstrap3"], ["Bootstrap 2.3", "bootstrap2"],
-    ["Zurb Foundation 5.0", "foundation5"], ["Zurb Foundation 4.0", "foundation4"],
+    ["Bootstrap 3.2", "bootstrap3"], ["Bootstrap 2.3", "bootstrap2"],
+    ["Zurb Foundation 5.4", "foundation5"], ["Zurb Foundation 4.0", "foundation4"],
     ["Simple CSS", "simple"]] unless prefs.has_key? :frontend
 end
 
@@ -1202,7 +1202,14 @@ end
 add_gem 'sendgrid' if prefer :email, 'sendgrid'
 
 ## Authentication (Devise)
-add_gem 'devise' if prefer :authentication, 'devise'
+if prefer :authentication, 'devise'
+  case Rails::VERSION::MINOR.to_s
+  when "2"
+    add_gem 'devise', git: 'https://github.com/plataformatec/devise.git', branch: 'lm-rails-4-2'
+  else
+    add_gem 'devise'
+  end
+end
 add_gem 'devise_invitable' if prefer :devise_modules, 'invitable'
 
 ## Authentication (OmniAuth)
