@@ -411,6 +411,7 @@ if prefer :apps4, 'learn-rails'
   # preferences
   prefs[:authentication] = false
   prefs[:authorization] = false
+  prefs[:dashboard] = 'none'
   prefs[:ban_spiders] = false
   prefs[:better_errors] = true
   prefs[:database] = 'default'
@@ -500,6 +501,7 @@ say_recipe 'rails_bootstrap'
 if prefer :apps4, 'rails-bootstrap'
   prefs[:authentication] = false
   prefs[:authorization] = false
+  prefs[:dashboard] = 'none'
   prefs[:better_errors] = true
   prefs[:database] = 'default'
   prefs[:deployment] = 'none'
@@ -531,6 +533,7 @@ say_recipe 'rails_foundation'
 if prefer :apps4, 'rails-foundation'
   prefs[:authentication] = false
   prefs[:authorization] = false
+  prefs[:dashboard] = 'none'
   prefs[:better_errors] = true
   prefs[:database] = 'default'
   prefs[:deployment] = 'none'
@@ -562,6 +565,7 @@ say_recipe 'rails_omniauth'
 if prefer :apps4, 'rails-omniauth'
   prefs[:authentication] = 'omniauth'
   prefs[:authorization] = 'none'
+  prefs[:dashboard] = 'none'
   prefs[:better_errors] = true
   prefs[:deployment] = 'none'
   prefs[:email] = 'none'
@@ -589,6 +593,7 @@ say_recipe 'rails_devise'
 if prefer :apps4, 'rails-devise'
   prefs[:authentication] = 'devise'
   prefs[:authorization] = false
+  prefs[:dashboard] = 'none'
   prefs[:better_errors] = true
   prefs[:deployment] = 'none'
   prefs[:git] = true
@@ -719,6 +724,7 @@ say_recipe 'rails_mailinglist_signup'
 if prefer :apps4, 'rails-mailinglist-signup'
   prefs[:authentication] = false
   prefs[:authorization] = false
+  prefs[:dashboard] = 'none'
   prefs[:better_errors] = true
   prefs[:deployment] = 'none'
   prefs[:devise_modules] = false
@@ -873,6 +879,11 @@ if (recipes.include? 'devise') || (recipes.include? 'omniauth')
         ["LinkedIn", "linkedin"], ["Google-Oauth-2", "google_oauth2"], ["Tumblr", "tumblr"]] unless prefs.has_key? :omniauth_provider
   end
   prefs[:authorization] = multiple_choice "Authorization?", [["None", "none"], ["Simple role-based", "roles"], ["Pundit", "pundit"]] unless prefs.has_key? :authorization
+  if prefer :authentication, 'devise'
+    if (prefer :authorization, 'roles') || (prefer :authorization, 'pundit')
+      prefs[:dashboard] = multiple_choice "Admin interface for database?", [["None", "none"], ["Upmin", "upmin"]] unless prefs.has_key? :dashboard
+    end
+  end
 end
 
 ## Form Builder
@@ -1211,6 +1222,9 @@ if prefer :authentication, 'devise'
   end
 end
 add_gem 'devise_invitable' if prefer :devise_modules, 'invitable'
+
+## Administratative Interface (Upmin)
+add_gem 'upmin-admin' if prefer :dashboard, 'upmin'
 
 ## Authentication (OmniAuth)
 add_gem 'omniauth' if prefer :authentication, 'omniauth'
@@ -1669,6 +1683,7 @@ stage_two do
       generate 'pages:roles -f' if prefer :authorization, 'roles'
       generate 'pages:authorized -f' if prefer :authorization, 'pundit'
   end
+  generate 'pages:upmin -f' if prefer :dashboard, 'upmin'
   generate 'layout:navigation -f'
   ### GIT ###
   git :add => '-A' if prefer :git, true
