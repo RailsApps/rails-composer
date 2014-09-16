@@ -1364,15 +1364,15 @@ FILE
 
 FILE
     end
-    create_file 'Procfile', 'web: bundle exec rails server -p $PORT' if prefer :prod_webserver, 'thin'
-    create_file 'Procfile', 'web: bundle exec unicorn -p $PORT' if prefer :prod_webserver, 'unicorn'
-    create_file 'Procfile', 'web: bundle exec puma -p $PORT' if prefer :prod_webserver, 'puma'
-    create_file 'Procfile', 'web: bundle exec passenger start -p $PORT' if prefer :prod_webserver, 'passenger_standalone'
+    create_file 'Procfile', "web: bundle exec rails server -p $PORT\n" if prefer :prod_webserver, 'thin'
+    create_file 'Procfile', "web: bundle exec unicorn -p $PORT\n" if prefer :prod_webserver, 'unicorn'
+    create_file 'Procfile', "web: bundle exec puma -p $PORT\n" if prefer :prod_webserver, 'puma'
+    create_file 'Procfile', "web: bundle exec passenger start -p $PORT\n" if prefer :prod_webserver, 'passenger_standalone'
     if (prefs[:dev_webserver] != prefs[:prod_webserver])
-      create_file 'Procfile.dev', 'web: bundle exec rails server -p $PORT' if prefer :dev_webserver, 'thin'
-      create_file 'Procfile.dev', 'web: bundle exec unicorn -p $PORT' if prefer :dev_webserver, 'unicorn'
-      create_file 'Procfile.dev', 'web: bundle exec puma -p $PORT' if prefer :dev_webserver, 'puma'
-      create_file 'Procfile.dev', 'web: bundle exec passenger start -p $PORT' if prefer :dev_webserver, 'passenger_standalone'
+      create_file 'Procfile.dev', "web: bundle exec rails server -p $PORT\n" if prefer :dev_webserver, 'thin'
+      create_file 'Procfile.dev', "web: bundle exec unicorn -p $PORT\n" if prefer :dev_webserver, 'unicorn'
+      create_file 'Procfile.dev', "web: bundle exec puma -p $PORT\n" if prefer :dev_webserver, 'puma'
+      create_file 'Procfile.dev', "web: bundle exec passenger start -p $PORT\n" if prefer :dev_webserver, 'passenger_standalone'
     end
   end
   ## Git
