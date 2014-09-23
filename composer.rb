@@ -414,8 +414,8 @@ if prefer :apps4, 'learn-rails'
   prefs[:dashboard] = 'none'
   prefs[:ban_spiders] = false
   prefs[:better_errors] = true
-  prefs[:database] = 'default'
-  prefs[:deployment] = 'none'
+  prefs[:database] = 'sqlite'
+  prefs[:deployment] = 'heroku'
   prefs[:devise_modules] = false
   prefs[:dev_webserver] = 'webrick'
   prefs[:email] = 'gmail'
@@ -503,8 +503,7 @@ if prefer :apps4, 'rails-bootstrap'
   prefs[:authorization] = false
   prefs[:dashboard] = 'none'
   prefs[:better_errors] = true
-  prefs[:database] = 'default'
-  prefs[:deployment] = 'none'
+  prefs[:database] = 'sqlite'
   prefs[:devise_modules] = false
   prefs[:email] = 'none'
   prefs[:form_builder] = false
@@ -535,8 +534,7 @@ if prefer :apps4, 'rails-foundation'
   prefs[:authorization] = false
   prefs[:dashboard] = 'none'
   prefs[:better_errors] = true
-  prefs[:database] = 'default'
-  prefs[:deployment] = 'none'
+  prefs[:database] = 'sqlite'
   prefs[:devise_modules] = false
   prefs[:email] = 'none'
   prefs[:form_builder] = false
@@ -567,7 +565,6 @@ if prefer :apps4, 'rails-omniauth'
   prefs[:authorization] = 'none'
   prefs[:dashboard] = 'none'
   prefs[:better_errors] = true
-  prefs[:deployment] = 'none'
   prefs[:email] = 'none'
   prefs[:git] = true
   prefs[:local_env_file] = false
@@ -595,7 +592,6 @@ if prefer :apps4, 'rails-devise'
   prefs[:authorization] = false
   prefs[:dashboard] = 'none'
   prefs[:better_errors] = true
-  prefs[:deployment] = 'none'
   prefs[:git] = true
   prefs[:local_env_file] = false
   prefs[:pry] = false
@@ -621,7 +617,6 @@ if prefer :apps4, 'rails-devise-roles'
   prefs[:authentication] = 'devise'
   prefs[:authorization] = 'roles'
   prefs[:better_errors] = true
-  prefs[:deployment] = 'none'
   prefs[:git] = true
   prefs[:local_env_file] = false
   prefs[:pry] = false
@@ -647,7 +642,6 @@ if prefer :apps4, 'rails-devise-pundit'
   prefs[:authentication] = 'devise'
   prefs[:authorization] = 'pundit'
   prefs[:better_errors] = true
-  prefs[:deployment] = 'none'
   prefs[:git] = true
   prefs[:local_env_file] = false
   prefs[:pry] = false
@@ -673,7 +667,6 @@ if prefer :apps4, 'rails-signup-download'
   prefs[:authentication] = 'devise'
   prefs[:authorization] = 'roles'
   prefs[:better_errors] = true
-  prefs[:deployment] = 'none'
   prefs[:devise_modules] = false
   prefs[:form_builder] = false
   prefs[:git] = true
@@ -726,7 +719,6 @@ if prefer :apps4, 'rails-mailinglist-signup'
   prefs[:authorization] = false
   prefs[:dashboard] = 'none'
   prefs[:better_errors] = true
-  prefs[:deployment] = 'none'
   prefs[:devise_modules] = false
   prefs[:form_builder] = 'simple_form'
   prefs[:git] = true
@@ -830,6 +822,7 @@ if prefs[:prod_webserver] == 'same'
 end
 
 ## Database Adapter
+prefs[:database] = "sqlite" if prefer :database, 'default'
 prefs[:database] = multiple_choice "Database used in development?", [["SQLite", "sqlite"], ["PostgreSQL", "postgresql"],
   ["MySQL", "mysql"]] unless prefs.has_key? :database
 
@@ -1048,6 +1041,15 @@ TEXT
   end
 
   create_file 'README.md', "#{app_name.humanize.titleize}\n================\n\n"
+
+  if prefer :deployment, 'heroku'
+    append_to_file 'README.md' do <<-TEXT
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+TEXT
+    end
+  end
+
   append_to_file 'README.md' do <<-TEXT
 This application was generated with the [rails_apps_composer](https://github.com/RailsApps/rails_apps_composer) gem
 provided by the [RailsApps Project](http://railsapps.github.io/).
@@ -1145,8 +1147,8 @@ else
 end
 
 ## Database Adapter
-unless prefer :database, 'default'
-  gsub_file 'Gemfile', /gem 'sqlite3'\n/, '' unless prefer :database, 'sqlite'
+unless prefer :database, 'sqlite'
+  gsub_file 'Gemfile', /gem 'sqlite3'\n/, ''
 end
 gsub_file 'Gemfile', /gem 'pg'.*/, ''
 add_gem 'pg' if prefer :database, 'postgresql'
@@ -1254,7 +1256,7 @@ git :commit => '-qm "rails_apps_composer: Gemfile"' if prefer :git, true
 stage_two do
   say_wizard "recipe stage two"
   say_wizard "configuring database"
-  unless prefer :database, 'default'
+  unless prefer :database, 'sqlite'
     copy_from_repo 'config/database-postgresql.yml', :prefs => 'postgresql'
     copy_from_repo 'config/database-mysql.yml', :prefs => 'mysql'
     if prefer :database, 'postgresql'
@@ -1806,7 +1808,7 @@ FILE
     generate 'devise_invitable user'
   end
   ### APPLY DATABASE SEED ###
-  unless prefer :database, 'default'
+  if File.exists?('db/migrate')
     ## ACTIVE_RECORD
     say_wizard "applying migrations and seeding the database"
     if prefer :local_env_file, 'foreman'
@@ -1891,21 +1893,90 @@ end
 @current_recipe = "deployment"
 @before_configs["deployment"].call if @before_configs["deployment"]
 say_recipe 'deployment'
-config = {}
-config['deployment'] = multiple_choice("Add a deployment mechanism?", [["None", "none"], ["Capistrano3", "capistrano3"]]) if true && true unless config.key?('deployment') || prefs.has_key?(:deployment)
 @configs[@current_recipe] = config
 # >-------------------------- recipes/deployment.rb --------------------------start<
 
 # Application template recipe for the rails_apps_composer. Change the recipe here:
 # https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/deployment.rb
 
-case config['deployment']
-when 'capistrano3'
-  prefs[:deployment] = 'capistrano3'
+prefs[:deployment] = multiple_choice "Prepare for deployment?", [["no", "none"],
+    ["Heroku", "heroku"],
+    ["Capistrano", "capistrano3"]] unless prefs.has_key? :deployment
+
+if prefer :deployment, 'heroku'
+  say_wizard "installing gems for Heroku"
+  gsub_file 'Gemfile', /.*gem 'sqlite3'\n/, '' if prefer :database, 'sqlite'
+  add_gem 'sqlite3', group: [:development, :test] if prefer :database, 'sqlite'
+  add_gem 'pg', group: :production
+  add_gem 'rails_12factor', group: :production
+  stage_three do
+    say_wizard "recipe stage three"
+    say_wizard "precompiling assets for Heroku"
+    run 'RAILS_ENV=production rake assets:precompile'
+    say_wizard "creating app.json file for Heroku Button"
+    create_file 'app.json' do <<-TEXT
+{
+  "name": "#{app_name.humanize.titleize}",
+  "description": "Starter application generated by Rails Composer",
+  "logo": "https://avatars3.githubusercontent.com/u/788200",
+  "keywords": [
+    "Ruby #{RUBY_VERSION}",
+    "Rails #{Rails::VERSION::STRING}"
+  ],
+  "scripts": {},
+  "env": {
+    "RAILS_ENV": "production",
+    "ADMIN_EMAIL": {
+      "description": "The administrator's email address.",
+      "value": "user@example.com",
+      "required": true
+    },
+    "ADMIN_PASSWORD": {
+      "description": "The administrator's password.",
+      "value": "changeme",
+      "required": true
+    },
+    "GMAIL_USERNAME": {
+      "description": "Your Gmail address.",
+      "value": "user@example.com",
+      "required": false
+    },
+    "GMAIL_PASSWORD": {
+      "description": "Your Gmail password.",
+      "value": "changeme",
+      "required": false
+    },
+    "OWNER_EMAIL": {
+      "description": "Destination for messages sent from the app's contact form.",
+      "value": "user@example.com",
+      "required": false
+    },
+    "DOMAIN_NAME": {
+      "description": "Required for sending mail. Use the app name you've given.",
+      "value": "myapp.herokuapp.com",
+      "required": false
+    }
+  }
+}
+TEXT
+    end
+    if File.exists?('db/migrate')
+      gsub_file 'app.json', /"scripts": {/,
+          "\"scripts\": {\"postdeploy\": \"bundle exec rake db:migrate; bundle exec rake db:seed\""
+    end
+    gsub_file 'config/database.yml', /production:.*$\n.*$\n.*$/, ""
+    append_file 'config/database.yml' do <<-TEXT
+production:
+  <<: *default
+  adapter: postgresql
+  encoding: unicode
+TEXT
+    end
+  end
 end
 
 if prefer :deployment, 'capistrano3'
-  say_wizard "recipe adding capistrano gems"
+  say_wizard "installing gems for Capistrano"
   add_gem 'capistrano', '~> 3.0.1', group: :development
   add_gem 'capistrano-rvm', '~> 0.1.1', group: :development
   add_gem 'capistrano-bundler', group: :development
@@ -1913,9 +1984,15 @@ if prefer :deployment, 'capistrano3'
   add_gem 'capistrano-rails-console', group: :development
   stage_two do
     say_wizard "recipe stage two"
-    say_wizard 'recipe capistrano file'
+    say_wizard "installing Capistrano files"
     run 'bundle exec cap install'
   end
+end
+
+stage_three do
+  ### GIT ###
+  git :add => '-A' if prefer :git, true
+  git :commit => '-qm "rails_apps_composer: prepare for deployment"' if prefer :git, true
 end
 # >-------------------------- recipes/deployment.rb --------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -2099,6 +2176,8 @@ stage_three do
   # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
   gsub_file 'Gemfile', /#.*\n/, "\n"
   gsub_file 'Gemfile', /\n^\s*\n/, "\n"
+  remove_file 'Gemfile.lock'
+  run 'bundle install --without production'
   # remove commented lines and multiple blank lines from config/routes.rb
   gsub_file 'config/routes.rb', /  #.*\n/, "\n"
   gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
