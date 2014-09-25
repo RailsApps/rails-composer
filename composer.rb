@@ -1988,12 +1988,12 @@ TEXT
       append_file 'app.json' do <<-TEXT
     "OMNIAUTH_PROVIDER_KEY": {
       "description": "Credentials from Twitter, Facebook, or another provider.",
-      "value": "user@example.com",
+      "value": "some_long_key",
       "required": false
     },
     "OMNIAUTH_PROVIDER_SECRET": {
       "description": "Credentials from Twitter, Facebook, or another provider.",
-      "value": "changeme",
+      "value": "some_long_key",
       "required": false
     },
 TEXT
@@ -2019,16 +2019,6 @@ TEXT
 TEXT
       end
     end
-    if prefer :apps4, 'learn-rails'
-      append_file 'app.json' do <<-TEXT
-    "OWNER_EMAIL": {
-      "description": "Destination for messages sent from the application's contact form.",
-      "value": "user@example.com",
-      "required": false
-    },
-TEXT
-      end
-    end
     if (!prefs[:secrets].nil?)
       prefs[:secrets].each do |secret|
         append_file 'app.json' do <<-TEXT
@@ -2049,14 +2039,6 @@ TEXT
     if File.exists?('db/migrate')
       gsub_file 'app.json', /"scripts": {/,
           "\"scripts\": {\"postdeploy\": \"bundle exec rake db:migrate; bundle exec rake db:seed\""
-    end
-    gsub_file 'config/database.yml', /production:.*$\n.*$\n.*$/, ""
-    append_file 'config/database.yml' do <<-TEXT
-production:
-  <<: *default
-  adapter: postgresql
-  encoding: unicode
-TEXT
     end
   end
 end
