@@ -1200,7 +1200,7 @@ case prefs[:frontend]
     add_gem 'zurb-foundation', '~> 4.3.2'
     add_gem 'compass-rails', '~> 1.1.2'
   when 'foundation5'
-    add_gem 'foundation-rails', '5.4.3.1'
+    add_gem 'foundation-rails'
 end
 
 ## Pages
