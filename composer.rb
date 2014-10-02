@@ -1274,8 +1274,7 @@ stage_two do
           say_wizard "set config/database.yml for username/password #{pg_username}/#{pg_password}"
         end
         if pg_host.present?
-          gsub_file "config/database.yml", /#host: localhost/, "host: #{pg_host}"
-          gsub_file "config/database.yml", /test:/, "test:\n  host: #{pg_host}"
+          gsub_file "config/database.yml", /  host:     localhost/, "  host:     #{pg_host}"
         end
       rescue StandardError => e
         raise "unable to create a user for PostgreSQL, reason: #{e}"
@@ -1905,9 +1904,11 @@ prefs[:deployment] = multiple_choice "Prepare for deployment?", [["no", "none"],
 
 if prefer :deployment, 'heroku'
   say_wizard "installing gems for Heroku"
-  gsub_file 'Gemfile', /.*gem 'sqlite3'\n/, '' if prefer :database, 'sqlite'
-  add_gem 'sqlite3', group: [:development, :test] if prefer :database, 'sqlite'
-  add_gem 'pg', group: :production
+  if prefer :database, 'sqlite'
+    gsub_file 'Gemfile', /.*gem 'sqlite3'\n/, ''
+    add_gem 'sqlite3', group: [:development, :test]
+    add_gem 'pg', group: :production
+  end
   add_gem 'rails_12factor', group: :production
   stage_three do
     say_wizard "recipe stage three"
