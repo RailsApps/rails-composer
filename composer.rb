@@ -366,15 +366,29 @@ when "4"
       ["Custom application (experimental)", "none"]] unless prefs.has_key? :apps4
     case prefs[:apps4]
       when 'railsapps'
-        prefs[:apps4] = prefs[:rails_4_1_starter_app] || (multiple_choice "Choose a starter application.",
-        [["learn-rails", "learn-rails"],
-        ["rails-bootstrap", "rails-bootstrap"],
-        ["rails-foundation", "rails-foundation"],
-        ["rails-omniauth", "rails-omniauth"],
-        ["rails-devise", "rails-devise"],
-        ["rails-devise-roles", "rails-devise-roles"],
-        ["rails-devise-pundit", "rails-devise-pundit"],
-        ["rails-signup-download", "rails-signup-download"]])
+        case Rails::VERSION::MINOR.to_s
+        when "2"
+          prefs[:apps4] = multiple_choice "Choose a starter application.",
+          [["learn-rails", "learn-rails"],
+          ["rails-bootstrap", "rails-bootstrap"],
+          ["rails-foundation", "rails-foundation"],
+          ["rails-mailinglist-signup", "rails-mailinglist-signup"],
+          ["rails-omniauth", "rails-omniauth"],
+          ["rails-devise", "rails-devise"],
+          ["rails-devise-roles", "rails-devise-roles"],
+          ["rails-devise-pundit", "rails-devise-pundit"],
+          ["rails-signup-download", "rails-signup-download"]]
+        else
+          prefs[:apps4] = multiple_choice "Choose a starter application.",
+          [["learn-rails", "learn-rails"],
+          ["rails-bootstrap", "rails-bootstrap"],
+          ["rails-foundation", "rails-foundation"],
+          ["rails-omniauth", "rails-omniauth"],
+          ["rails-devise", "rails-devise"],
+          ["rails-devise-roles", "rails-devise-roles"],
+          ["rails-devise-pundit", "rails-devise-pundit"],
+          ["rails-signup-download", "rails-signup-download"]]
+        end
       when 'contributed_app'
         prefs[:apps4] = multiple_choice "No contributed applications are available.",
           [["create custom application", "railsapps"]]
@@ -719,7 +733,6 @@ if prefer :apps4, 'rails-mailinglist-signup'
   prefs[:authorization] = false
   prefs[:dashboard] = 'none'
   prefs[:better_errors] = true
-  prefs[:devise_modules] = false
   prefs[:form_builder] = 'simple_form'
   prefs[:git] = true
   prefs[:local_env_file] = false
@@ -730,7 +743,6 @@ if prefer :apps4, 'rails-mailinglist-signup'
   prefs[:locale] = 'none'
 
   # gems
-  add_gem 'activejob', github: 'rails/activejob'
   add_gem 'gibbon'
   add_gem 'sucker_punch'
 
@@ -1216,14 +1228,9 @@ add_gem 'sendgrid' if prefer :email, 'sendgrid'
 
 ## Authentication (Devise)
 if prefer :authentication, 'devise'
-  case Rails::VERSION::MINOR.to_s
-  when "2"
-    add_gem 'devise', git: 'https://github.com/plataformatec/devise.git', branch: 'lm-rails-4-2'
-  else
     add_gem 'devise'
-  end
+    add_gem 'devise_invitable' if prefer :devise_modules, 'invitable'
 end
-add_gem 'devise_invitable' if prefer :devise_modules, 'invitable'
 
 ## Administratative Interface (Upmin)
 add_gem 'upmin-admin' if prefer :dashboard, 'upmin'
