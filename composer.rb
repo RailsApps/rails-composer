@@ -93,7 +93,7 @@ module Gemfile
 end
 def add_gem(*all) Gemfile.add(*all); end
 
-@recipes = ["core", "git", "railsapps", "learn_rails", "rails_bootstrap", "rails_foundation", "rails_omniauth", "rails_devise", "rails_devise_roles", "rails_devise_pundit", "rails_signup_download", "rails_mailinglist_signup", "setup", "locale", "readme", "gems", "tests", "email", "devise", "omniauth", "roles", "frontend", "pages", "init", "analytics", "deployment", "extras"]
+@recipes = ["core", "git", "railsapps", "learn_rails", "rails_bootstrap", "rails_foundation", "rails_omniauth", "rails_devise", "rails_devise_roles", "rails_devise_pundit", "rails_signup_download", "rails_mailinglist_activejob", "setup", "locale", "readme", "gems", "tests", "email", "devise", "omniauth", "roles", "frontend", "pages", "init", "analytics", "deployment", "extras"]
 @prefs = {}
 @gems = []
 @diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "tests"], ["apps4", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "tests"], ["apps4", "core", "deployment", "devise", "email", "extras", "frontend", "gems", "git", "init", "omniauth", "pundit", "railsapps", "readme", "setup", "tests"]]
@@ -372,7 +372,7 @@ when "4"
           [["learn-rails", "learn-rails"],
           ["rails-bootstrap", "rails-bootstrap"],
           ["rails-foundation", "rails-foundation"],
-          ["rails-mailinglist-signup", "rails-mailinglist-signup"],
+          ["rails-mailinglist-activejob", "rails-mailinglist-activejob"],
           ["rails-omniauth", "rails-omniauth"],
           ["rails-devise", "rails-devise"],
           ["rails-devise-roles", "rails-devise-roles"],
@@ -714,17 +714,17 @@ end
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
 # >-------------------------- templates/recipe.erb ---------------------------start<
-# >-----------------------[ rails_mailinglist_signup ]------------------------<
-@current_recipe = "rails_mailinglist_signup"
-@before_configs["rails_mailinglist_signup"].call if @before_configs["rails_mailinglist_signup"]
-say_recipe 'rails_mailinglist_signup'
+# >----------------------[ rails_mailinglist_activejob ]----------------------<
+@current_recipe = "rails_mailinglist_activejob"
+@before_configs["rails_mailinglist_activejob"].call if @before_configs["rails_mailinglist_activejob"]
+say_recipe 'rails_mailinglist_activejob'
 @configs[@current_recipe] = config
-# >------------------- recipes/rails_mailinglist_signup.rb -------------------start<
+# >----------------- recipes/rails_mailinglist_activejob.rb ------------------start<
 
 # Application template recipe for the rails_apps_composer. Change the recipe here:
-# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/rails_mailinglist_signup.rb
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/rails_mailinglist_activejob.rb
 
-if prefer :apps4, 'rails-mailinglist-signup'
+if prefer :apps4, 'rails-mailinglist-activejob'
   prefs[:authentication] = false
   prefs[:authorization] = false
   prefs[:dashboard] = 'none'
@@ -735,11 +735,12 @@ if prefer :apps4, 'rails-mailinglist-signup'
   prefs[:pry] = false
   prefs[:quiet_assets] = true
   prefs[:secrets] = ['mailchimp_list_id', 'mailchimp_api_key']
-  prefs[:pages] = 'none'
+  prefs[:pages] = 'about'
   prefs[:locale] = 'none'
 
   # gems
   add_gem 'gibbon'
+  add_gem 'high_voltage'
   add_gem 'sucker_punch'
 
   stage_two do
@@ -749,7 +750,7 @@ if prefer :apps4, 'rails-mailinglist-signup'
 
   stage_three do
     say_wizard "recipe stage three"
-    repo = 'https://raw.github.com/RailsApps/rails-mailinglist-signup/master/'
+    repo = 'https://raw.github.com/RailsApps/rails-mailinglist-activejob/master/'
 
     # >-------------------------------[ Config ]---------------------------------<
 
@@ -769,10 +770,12 @@ if prefer :apps4, 'rails-mailinglist-signup'
 
     # >-------------------------------[ Views ]--------------------------------<
 
+    remove_file 'app/views/visitors/index.html.erb'
     copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
 
     # >-------------------------------[ Routes ]-------------------------------<
 
+    gsub_file 'config/routes.rb', /  root to: 'visitors#index'\n/, ''
     inject_into_file 'config/routes.rb', "  root to: 'visitors#new'\n", :after => "routes.draw do\n"
     route = '  resources :visitors, only: [:new, :create]'
     inject_into_file 'config/routes.rb', route + "\n", :after => "routes.draw do\n"
@@ -783,7 +786,7 @@ if prefer :apps4, 'rails-mailinglist-signup'
 
   end
 end
-# >------------------- recipes/rails_mailinglist_signup.rb -------------------end<
+# >----------------- recipes/rails_mailinglist_activejob.rb ------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
 # >-------------------------- templates/recipe.erb ---------------------------start<
