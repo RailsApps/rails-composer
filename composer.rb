@@ -386,8 +386,7 @@ when "4"
           ["rails-omniauth", "rails-omniauth"],
           ["rails-devise", "rails-devise"],
           ["rails-devise-roles", "rails-devise-roles"],
-          ["rails-devise-pundit", "rails-devise-pundit"],
-          ["rails-signup-download", "rails-signup-download"]]
+          ["rails-devise-pundit", "rails-devise-pundit"]]
         end
       when 'contributed_app'
         prefs[:apps4] = multiple_choice "No contributed applications are available.",
@@ -683,16 +682,34 @@ if prefer :apps4, 'rails-signup-download'
   prefs[:local_env_file] = false
   prefs[:pry] = false
   prefs[:quiet_assets] = true
+  prefs[:secrets] = ['mailchimp_list_id', 'mailchimp_api_key']
   prefs[:pages] = 'users'
   prefs[:locale] = 'none'
+
+  # gems
+  add_gem 'gibbon'
+  add_gem 'sucker_punch'
+
   stage_three do
     say_wizard "recipe stage three"
     repo = 'https://raw.github.com/RailsApps/rails-signup-download/master/'
+
+    # >-------------------------------[ Config ]---------------------------------<
+
+    copy_from_repo 'config/initializers/active_job.rb', :repo => repo
+
+    # >-------------------------------[ Models ]--------------------------------<
+
+    copy_from_repo 'app/models/user.rb', :repo => repo
 
     # >-------------------------------[ Controllers ]--------------------------------<
 
     copy_from_repo 'app/controllers/visitors_controller.rb', :repo => repo
     copy_from_repo 'app/controllers/products_controller.rb', :repo => repo
+
+    # >-------------------------------[ Jobs ]---------------------------------<
+
+    copy_from_repo 'app/jobs/mailing_list_signup_job.rb', :repo => repo
 
     # >-------------------------------[ Views ]--------------------------------<
 
