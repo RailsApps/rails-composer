@@ -93,7 +93,7 @@ module Gemfile
 end
 def add_gem(*all) Gemfile.add(*all); end
 
-@recipes = ["core", "git", "railsapps", "learn_rails", "rails_bootstrap", "rails_foundation", "rails_omniauth", "rails_devise", "rails_devise_roles", "rails_devise_pundit", "rails_signup_download", "rails_mailinglist_activejob", "setup", "locale", "readme", "gems", "tests", "email", "devise", "omniauth", "roles", "frontend", "pages", "init", "analytics", "deployment", "extras"]
+@recipes = ["core", "git", "railsapps", "learn_rails", "rails_bootstrap", "rails_foundation", "rails_omniauth", "rails_devise", "rails_devise_roles", "rails_devise_pundit", "rails_signup_download", "rails_mailinglist_activejob", "rails_stripe_checkout", "setup", "locale", "readme", "gems", "tests", "email", "devise", "omniauth", "roles", "frontend", "pages", "init", "analytics", "deployment", "extras"]
 @prefs = {}
 @gems = []
 @diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "tests"], ["apps4", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "tests"], ["apps4", "core", "deployment", "devise", "email", "extras", "frontend", "gems", "git", "init", "omniauth", "pundit", "railsapps", "readme", "setup", "tests"]]
@@ -377,7 +377,8 @@ when "4"
           ["rails-devise", "rails-devise"],
           ["rails-devise-roles", "rails-devise-roles"],
           ["rails-devise-pundit", "rails-devise-pundit"],
-          ["rails-signup-download", "rails-signup-download"]]
+          ["rails-signup-download", "rails-signup-download"],
+          ["rails-stripe-checkout", "rails-stripe-checkout"]]
         else
           prefs[:apps4] = multiple_choice "Choose a starter application.",
           [["learn-rails", "learn-rails"],
@@ -807,6 +808,90 @@ end
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
 # >-------------------------- templates/recipe.erb ---------------------------start<
+# >-------------------------[ rails_stripe_checkout ]-------------------------<
+@current_recipe = "rails_stripe_checkout"
+@before_configs["rails_stripe_checkout"].call if @before_configs["rails_stripe_checkout"]
+say_recipe 'rails_stripe_checkout'
+@configs[@current_recipe] = config
+# >-------------------- recipes/rails_stripe_checkout.rb ---------------------start<
+
+# Application template recipe for the rails_apps_composer. Change the recipe here:
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/rails_stripe_checkout.rb
+
+if prefer :apps4, 'rails-stripe-checkout'
+  prefs[:frontend] = 'bootstrap3'
+  prefs[:authentication] = 'devise'
+  prefs[:authorization] = 'roles'
+  prefs[:better_errors] = true
+  prefs[:devise_modules] = false
+  prefs[:form_builder] = false
+  prefs[:git] = true
+  prefs[:local_env_file] = false
+  prefs[:pry] = false
+  prefs[:quiet_assets] = true
+  prefs[:secrets] = ['product_price',
+    'product_title',
+    'stripe_publishable_key',
+    'stripe_api_key',
+    'mailchimp_list_id',
+    'mailchimp_api_key']
+  prefs[:pages] = 'users'
+  prefs[:locale] = 'none'
+
+  # gems
+  add_gem 'gibbon'
+  add_gem 'stripe'
+  add_gem 'sucker_punch'
+
+  stage_three do
+    say_wizard "recipe stage three"
+    repo = 'https://raw.github.com/RailsApps/rails-stripe-checkout/master/'
+
+    # >-------------------------------[ Config ]---------------------------------<
+
+    copy_from_repo 'config/initializers/active_job.rb', :repo => repo
+    copy_from_repo 'config/initializers/devise_permitted_parameters.rb', :repo => repo
+    copy_from_repo 'config/initializers/stripe.rb', :repo => repo
+
+    # >-------------------------------[ Assets ]--------------------------------<
+
+    copy_from_repo 'app/assets/images/rubyonrails.png', :repo => repo
+
+    # >-------------------------------[ Models ]--------------------------------<
+
+    copy_from_repo 'app/models/user.rb', :repo => repo
+
+    # >-------------------------------[ Controllers ]--------------------------------<
+
+    copy_from_repo 'app/controllers/visitors_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/products_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/registrations_controller.rb', :repo => repo
+
+    # >-------------------------------[ Jobs ]---------------------------------<
+
+    copy_from_repo 'app/jobs/mailing_list_signup_job.rb', :repo => repo
+
+    # >-------------------------------[ Views ]--------------------------------<
+
+    copy_from_repo 'app/views/devise/registrations/new.html.erb', :repo => repo
+    copy_from_repo 'app/views/visitors/_purchase.html.erb', :repo => repo
+    copy_from_repo 'app/views/visitors/index.html.erb', :repo => repo
+    copy_from_repo 'app/views/products/product.pdf', :repo => repo
+
+    # >-------------------------------[ Routes ]--------------------------------<
+
+    copy_from_repo 'config/routes.rb', :repo => repo
+
+    # >-------------------------------[ Tests ]--------------------------------<
+
+    ### tests not implemented
+
+  end
+end
+# >-------------------- recipes/rails_stripe_checkout.rb ---------------------end<
+# >-------------------------- templates/recipe.erb ---------------------------end<
+
+# >-------------------------- templates/recipe.erb ---------------------------start<
 # >---------------------------------[ setup ]---------------------------------<
 @current_recipe = "setup"
 @before_configs["setup"].call if @before_configs["setup"]
@@ -946,7 +1031,8 @@ end
 
 stage_two do
   unless prefer :locale, 'none'
-    gsub_file 'config/application.rb', /# config.i18n.default_locale.*$/, "config.i18n.default_locale = :#{prefs[:locale]}"
+    locale_for_app = prefs[:locale].include?('-') ? "'#{prefs[:locale]}'" : prefs[:locale]
+    gsub_file 'config/application.rb', /# config.i18n.default_locale.*$/, "config.i18n.default_locale = :#{locale_for_app}"
     locale_filename = "config/locales/#{prefs[:locale]}.yml"
     create_file locale_filename
     append_to_file locale_filename, "#{prefs[:locale]}:"
@@ -1201,6 +1287,7 @@ end
 if prefer :tests, 'rspec'
   add_gem 'rails_apps_testing', :group => :development
   add_gem 'rspec-rails', :group => [:development, :test]
+  add_gem 'spring-commands-rspec', :group => :development
   add_gem 'factory_girl_rails', :group => [:development, :test]
   add_gem 'faker', :group => [:development, :test]
   add_gem 'capybara', :group => :test
@@ -1551,7 +1638,7 @@ stage_two do
     generate 'devise:install'
     generate 'devise_invitable:install' if prefer :devise_modules, 'invitable'
     generate 'devise user' # create the User model
-    generate 'migration AddNameToUsers name:string'
+    generate 'migration AddNameToUsers name:string' unless prefer :apps4, 'rails-stripe-checkout'
     if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
       gsub_file 'app/models/user.rb', /:registerable,/, ":registerable, :confirmable,"
       generate 'migration AddConfirmableToUsers confirmation_token:string confirmed_at:datetime confirmation_sent_at:datetime unconfirmed_email:string'
