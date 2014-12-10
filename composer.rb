@@ -919,20 +919,7 @@ prefs[:dev_webserver] = multiple_choice "Web server for development?", [["WEBric
 prefs[:prod_webserver] = multiple_choice "Web server for production?", [["Same as development", "same"],
   ["Thin", "thin"], ["Unicorn", "unicorn"], ["Puma", "puma"], ["Phusion Passenger (Apache/Nginx)", "passenger"],
   ["Phusion Passenger (Standalone)", "passenger_standalone"]] unless prefs.has_key? :prod_webserver
-if prefs[:prod_webserver] == 'same'
-  case prefs[:dev_webserver]
-    when 'thin'
-      prefs[:prod_webserver] = 'thin'
-    when 'unicorn'
-      prefs[:prod_webserver] = 'unicorn'
-    when 'puma'
-      prefs[:prod_webserver] = 'puma'
-    when 'passenger'
-      prefs[:prod_webserver] = 'passenger'
-    when 'passenger_standalone'
-      prefs[:prod_webserver] = 'passenger_standalone'
-  end
-end
+prefs[:prod_webserver] = prefs[:dev_webserver] if prefs[:prod_webserver] == 'same'
 
 ## Database Adapter
 prefs[:database] = "sqlite" if prefer :database, 'default'
@@ -1177,7 +1164,7 @@ Need help? Ask on Stack Overflow with the tag 'railsapps.'
 
 Your application contains diagnostics in the README file. Please provide a copy of the README file when reporting any issues.
 
-If the application doesn’t work as expected, please [report an issue](https://github.com/RailsApps/rails_apps_composer/issues)
+If the application doesn't work as expected, please [report an issue](https://github.com/RailsApps/rails_apps_composer/issues)
 and include the diagnostics.
 
 Ruby on Rails
@@ -1238,8 +1225,12 @@ insert_into_file('Gemfile', "ruby '#{RUBY_VERSION}'\n", :before => /^ *gem 'rail
 
 ## Cleanup
 # remove the 'sdoc' gem
-gsub_file 'Gemfile', /group :doc do/, ''
-gsub_file 'Gemfile', /\s*gem 'sdoc', require: false\nend/, ''
+if Rails::VERSION::MAJOR == 4 && Rails::VERSION::MINOR >= 2
+  gsub_file 'Gemfile', /gem 'sdoc',\s+'~> 0.4.0',\s+group: :doc/, ''
+else
+  gsub_file 'Gemfile', /group :doc do/, ''
+  gsub_file 'Gemfile', /\s*gem 'sdoc', require: false\nend/, ''
+end
 
 ## Web Server
 if (prefs[:dev_webserver] == prefs[:prod_webserver])
@@ -2188,6 +2179,7 @@ config['local_env_file'] = multiple_choice("Add gem and file for environment var
 config['quiet_assets'] = yes_wizard?("Reduce assets logger noise during development?") if true && true unless config.key?('quiet_assets') || prefs.has_key?(:quiet_assets)
 config['better_errors'] = yes_wizard?("Improve error reporting with 'better_errors' during development?") if true && true unless config.key?('better_errors') || prefs.has_key?(:better_errors)
 config['pry'] = yes_wizard?("Use 'pry' as console replacement during development and test?") if true && true unless config.key?('pry') || prefs.has_key?(:pry)
+config['rubocop'] = yes_wizard?("Use 'rubocop' to ensure that your code conforms to the Ruby style guide?") if true && true unless config.key?('rubocop') || prefs.has_key?(:rubocop)
 @configs[@current_recipe] = config
 # >---------------------------- recipes/extras.rb ----------------------------start<
 
@@ -2311,6 +2303,16 @@ if prefs[:pry]
   say_wizard "recipe adding pry-rails gem"
   add_gem 'pry-rails', :group => [:development, :test]
   add_gem 'pry-rescue', :group => [:development, :test]
+end
+
+## Rubocop
+if config['rubocop']
+  prefs[:rubocop] = true
+end
+if prefs[:rubocop]
+  say_wizard "recipe adding rubocop gem and basic .rubocop.yml"
+  add_gem 'rubocop', :group => [:development, :test]
+  copy_from_repo '.rubocop.yml'
 end
 
 ## BAN SPIDERS
