@@ -450,14 +450,11 @@ if prefer :apps4, 'learn-rails'
   prefs[:rubocop] = false
 
   # gems
-  add_gem 'activerecord-tableless'
   add_gem 'high_voltage'
   add_gem 'gibbon'
   add_gem 'google_drive'
   gsub_file 'Gemfile', /gem 'sqlite3'\n/, ''
   add_gem 'sqlite3', :group => :development
-  add_gem 'pg', :group => :production
-  add_gem 'thin', :group => :production
   add_gem 'rails_12factor', :group => :production
 
   stage_three do
