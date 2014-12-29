@@ -380,7 +380,7 @@ when "4"
           ["rails-signup-download", "rails-signup-download"],
           ["rails-stripe-checkout", "rails-stripe-checkout"]]
         else
-          prefs[:apps4] = multiple_choice "Choose a starter application.",
+          prefs[:apps4] = multiple_choice "Upgrade to Rails 4.2 for more choices.",
           [["learn-rails", "learn-rails"],
           ["rails-bootstrap", "rails-bootstrap"],
           ["rails-foundation", "rails-foundation"],
