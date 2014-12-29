@@ -447,6 +447,7 @@ if prefer :apps4, 'learn-rails'
   prefs[:pages] = 'none'
   prefs[:locale] = 'none'
   prefs[:analytics] = 'none'
+  prefs[:rubocop] = false
 
   # gems
   add_gem 'activerecord-tableless'
@@ -526,6 +527,7 @@ if prefer :apps4, 'rails-bootstrap'
   prefs[:quiet_assets] = true
   prefs[:pages] = 'about'
   prefs[:locale] = 'none'
+  prefs[:rubocop] = false
 end
 # >----------------------- recipes/rails_bootstrap.rb ------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -555,6 +557,7 @@ if prefer :apps4, 'rails-foundation'
   prefs[:quiet_assets] = true
   prefs[:pages] = 'about'
   prefs[:locale] = 'none'
+  prefs[:rubocop] = false
 end
 # >----------------------- recipes/rails_foundation.rb -----------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -582,6 +585,7 @@ if prefer :apps4, 'rails-omniauth'
   prefs[:quiet_assets] = true
   prefs[:pages] = 'about+users'
   prefs[:locale] = 'none'
+  prefs[:rubocop] = false
 end
 # >------------------------ recipes/rails_omniauth.rb ------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -608,6 +612,7 @@ if prefer :apps4, 'rails-devise'
   prefs[:quiet_assets] = true
   prefs[:pages] = 'users'
   prefs[:locale] = 'none'
+  prefs[:rubocop] = false
 end
 # >------------------------- recipes/rails_devise.rb -------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -633,6 +638,7 @@ if prefer :apps4, 'rails-devise-roles'
   prefs[:quiet_assets] = true
   prefs[:pages] = 'users'
   prefs[:locale] = 'none'
+  prefs[:rubocop] = false
 end
 # >---------------------- recipes/rails_devise_roles.rb ----------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -658,6 +664,7 @@ if prefer :apps4, 'rails-devise-pundit'
   prefs[:quiet_assets] = true
   prefs[:pages] = 'users'
   prefs[:locale] = 'none'
+  prefs[:rubocop] = false
 end
 # >--------------------- recipes/rails_devise_pundit.rb ----------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -686,6 +693,7 @@ if prefer :apps4, 'rails-signup-download'
   prefs[:secrets] = ['mailchimp_list_id', 'mailchimp_api_key']
   prefs[:pages] = 'users'
   prefs[:locale] = 'none'
+  prefs[:rubocop] = false
 
   # gems
   add_gem 'gibbon'
@@ -755,6 +763,7 @@ if prefer :apps4, 'rails-mailinglist-activejob'
   prefs[:secrets] = ['mailchimp_list_id', 'mailchimp_api_key']
   prefs[:pages] = 'about'
   prefs[:locale] = 'none'
+  prefs[:rubocop] = false
 
   # gems
   add_gem 'gibbon'
@@ -837,6 +846,7 @@ if prefer :apps4, 'rails-stripe-checkout'
     'mailchimp_api_key']
   prefs[:pages] = 'users'
   prefs[:locale] = 'none'
+  prefs[:rubocop] = false
 
   # gems
   add_gem 'gibbon'
