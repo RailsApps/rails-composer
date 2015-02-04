@@ -1,6 +1,6 @@
 h1. !http://railsapps.github.io/images/rails-36x36.jpg(Rails Composer)! Rails Composer
 
-An application template that creates starter applications for Rails 4.1.
+An application template that creates starter applications for Rails 4.2.
 
 It's the Rails generator on steroids.
 
@@ -16,7 +16,7 @@ If you use Rails Composer, please "join RailsApps":http://railsapps.github.io/ t
 
 h2. Starter Apps and Tutorials
 
-|_. Rails 4.1 |_. Tutorial |_. Comments |
+|_. Rails 4.2 |_. Tutorial |_. Comments |
 | "learn-rails":https://github.com/RailsApps/learn-rails | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | from the book for beginners |
 | "rails-bootstrap":https://github.com/RailsApps/rails-bootstrap | "Rails and Bootstrap":http://railsapps.github.io/twitter-bootstrap-rails.html | Bootstrap front-end framework |
 | "rails-foundation":https://github.com/RailsApps/rails-foundation | "Rails and Foundation":http://railsapps.github.io/rails-foundation.html | Foundation front-end framework |
@@ -25,6 +25,8 @@ h2. Starter Apps and Tutorials
 | "rails-devise-roles":https://github.com/RailsApps/rails-devise-roles | "Role-Based Authorization":http://railsapps.github.io/rails-devise-roles/ | authorization with roles |
 | "rails-devise-pundit":https://github.com/RailsApps/rails-devise-pundit | "Rails Pundit Tutorial":http://railsapps.github.io/rails-devise-pundit/ | authorization with Pundit |
 | "rails-signup-download":https://github.com/RailsApps/rails-signup-download | "Rails Signup Download":https://tutorials.railsapps.org/rails-signup-download | Devise plus download a PDF file |
+| "rails-stripe-checkout":https://github.com/RailsApps/rails-stripe-checkout | "Stripe Checkout":https://tutorials.railsapps.org/rails-stripe-checkout | selling a product with Stripe Checkout |
+| "rails-stripe-coupons":https://github.com/RailsApps/rails-stripe-coupons | "Stripe JS With Coupons":https://tutorials.railsapps.org/rails-stripe-coupons | complex Rails and Stripe integration |
 
 h4. The rails_apps_composer Gem
 
@@ -38,8 +40,8 @@ h2. Dependencies
 
 Before running the Rails Composer tool, you need to install:
 
-* The Ruby language (version 2.1)
-* Rails (versions 4.1)
+* The Ruby language (version 2.2)
+* Rails (versions 4.2)
 
 Check that appropriate versions of Ruby and Rails are installed in your development environment:
 @$ ruby -v@
@@ -47,9 +49,9 @@ Check that appropriate versions of Ruby and Rails are installed in your developm
 
 Be sure to read the article "Installing Rails":http://railsapps.github.io/installing-rails.html to make sure your development environment is set up properly.
 
-h4. Rails 4.1
+h4. Rails 4.2
 
-Currently, only Rails 4.1 is supported.
+Currently, only Rails 4.2 is supported.
 
 h2. How To Use Rails Composer
 
@@ -95,30 +97,35 @@ Use Rails Composer to generate any of the example applications from the "RailsAp
 
 To build the example application, Rails must be installed in your development environment.
 
-h4. Rails 4.1
+h4. Rails 4.2
 
-With Rails 4.1, you'll see a prompt:
+With Rails 4.2, you'll see a prompt:
 
 <pre>
 option  Build a starter application?
-      1)  Build a RailsApps example application
-      2)  Contributed applications
-      3)  Custom application
+    1)  Build a RailsApps example application
+    2)  Contributed applications
+    3)  Custom application
 </pre>
 
 Enter "1" to select *Build a starter application*. You'll see a prompt:
 
 <pre>
 option  Choose a starter application.
-      1)  learn-rails
-      2)  rails-bootstrap
-      3)  rails-foundation
-      4)  rails-omniauth
-      5)  rails-devise
-      6)  rails-devise-roles
-      7)  rails-devise-pundit
-      8)  rails-signup-download
+    1)  learn-rails
+    2)  rails-bootstrap
+    3)  rails-foundation
+    4)  rails-mailinglist-activejob
+    5)  rails-omniauth
+    6)  rails-devise
+    7)  rails-devise-roles
+    8)  rails-devise-pundit
+    9)  rails-signup-download
+   10)  rails-stripe-checkout
+   11)  rails-stripe-coupons
 </pre>
+
+Each of these applications is available as an example in the "RailsApps GitHub repo":https://github.com/RailsApps and each is accompanied by a tutorial on the "Capstone Rails Tutorials":https://tutorials.railsapps.org/ site.
 
 Make your choice. The Rails Composer tool may give you other options (other applications may have been added since these notes were written).
 
@@ -198,7 +205,7 @@ It is a good idea to use "RVM":https://rvm.io/, the Ruby Version Manager, and cr
 
 h2. Contributed Applications
 
-Currently, there are no contributed applications available for Rails 4.1. If you would like to add your favorite starter application to Rails Composer, open an issue to let us know.
+Currently, there are no contributed applications available for Rails 4.2. If you would like to add your favorite starter application to Rails Composer, open an issue to let us know.
 
 h2. Build Your Own Application
 
