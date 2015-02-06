@@ -177,7 +177,7 @@ The application generator template will ask you for additional preferences. Opti
 
 h4. Web Servers
 
-If you plan to deploy to Heroku, select Unicorn as your production webserver. Unicorn is recommended by Heroku.
+If you plan to deploy to Heroku, select Puma as your production webserver. Puma is recommended by Heroku.
 
 h4. Database
 
