@@ -93,7 +93,7 @@ module Gemfile
 end
 def add_gem(*all) Gemfile.add(*all); end
 
-@recipes = ["core", "git", "railsapps", "learn_rails", "rails_bootstrap", "rails_foundation", "rails_omniauth", "rails_devise", "rails_devise_roles", "rails_devise_pundit", "rails_signup_download", "rails_mailinglist_activejob", "rails_stripe_checkout", "rails_stripe_coupons", "setup", "locale", "readme", "gems", "tests", "email", "devise", "omniauth", "roles", "frontend", "pages", "init", "analytics", "deployment", "extras"]
+@recipes = ["core", "git", "railsapps", "learn_rails", "rails_bootstrap", "rails_foundation", "rails_omniauth", "rails_devise", "rails_devise_roles", "rails_devise_pundit", "rails_signup_download", "rails_mailinglist_activejob", "rails_stripe_checkout", "rails_stripe_coupons", "rails_stripe_membership_saas", "setup", "locale", "readme", "gems", "tests", "email", "devise", "omniauth", "roles", "frontend", "pages", "init", "analytics", "deployment", "extras"]
 @prefs = {}
 @gems = []
 @diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "tests"], ["apps4", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "tests"], ["apps4", "core", "deployment", "devise", "email", "extras", "frontend", "gems", "git", "init", "omniauth", "pundit", "railsapps", "readme", "setup", "tests"]]
@@ -379,7 +379,8 @@ when "4"
           ["rails-devise-pundit", "rails-devise-pundit"],
           ["rails-signup-download", "rails-signup-download"],
           ["rails-stripe-checkout", "rails-stripe-checkout"],
-          ["rails-stripe-coupons", "rails-stripe-coupons"]]
+          ["rails-stripe-coupons", "rails-stripe-coupons"],
+          ["rails-stripe-membership-saas", "rails-stripe-membership-saas"]]
         else
           prefs[:apps4] = multiple_choice "Upgrade to Rails 4.2 for more choices.",
           [["learn-rails", "learn-rails"],
@@ -1023,6 +1024,118 @@ if prefer :apps4, 'rails-stripe-coupons'
   end
 end
 # >--------------------- recipes/rails_stripe_coupons.rb ---------------------end<
+# >-------------------------- templates/recipe.erb ---------------------------end<
+
+# >-------------------------- templates/recipe.erb ---------------------------start<
+# >---------------------[ rails_stripe_membership_saas ]----------------------<
+@current_recipe = "rails_stripe_membership_saas"
+@before_configs["rails_stripe_membership_saas"].call if @before_configs["rails_stripe_membership_saas"]
+say_recipe 'rails_stripe_membership_saas'
+@configs[@current_recipe] = config
+# >----------------- recipes/rails_stripe_membership_saas.rb -----------------start<
+
+# Application template recipe for the rails_apps_composer. Change the recipe here:
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/rails_stripe_membership_saas.rb
+
+if prefer :apps4, 'rails-stripe-membership-saas'
+  prefs[:frontend] = 'bootstrap3'
+  prefs[:authentication] = 'devise'
+  prefs[:authorization] = 'roles'
+  prefs[:better_errors] = true
+  prefs[:devise_modules] = false
+  prefs[:form_builder] = false
+  prefs[:git] = true
+  prefs[:local_env_file] = false
+  prefs[:pry] = false
+  prefs[:quiet_assets] = true
+  prefs[:secrets] = ['stripe_publishable_key',
+    'stripe_api_key',
+    'mailchimp_list_id',
+    'mailchimp_api_key']
+  prefs[:pages] = 'users'
+  prefs[:locale] = 'none'
+  prefs[:rubocop] = false
+
+  # gems
+  add_gem 'gibbon'
+  add_gem 'payola-payments'
+  add_gem 'sucker_punch'
+
+  stage_three do
+    say_wizard "recipe stage three"
+    repo = 'https://raw.github.com/RailsApps/rails-stripe-membership-saas/master/'
+
+    # >-------------------------------[ Migrations ]---------------------------------<
+
+    generate 'payola:install'
+    generate 'model Plan name stripe_id interval amount:integer --no-test-framework'
+    generate 'migration AddPlanRefToUsers plan:references'
+    generate 'migration RemoveNameFromUsers name'
+    run 'bundle exec rake db:migrate'
+
+    # >-------------------------------[ Config ]---------------------------------<
+
+    copy_from_repo 'config/initializers/active_job.rb', :repo => repo
+    copy_from_repo 'config/initializers/payola.rb', :repo => repo
+    copy_from_repo 'db/seeds.rb', :repo => repo
+
+    # >-------------------------------[ Assets ]--------------------------------<
+
+    copy_from_repo 'app/assets/stylesheets/pricing.css.scss', :repo => repo
+
+    # >-------------------------------[ Controllers ]--------------------------------<
+
+    copy_from_repo 'app/controllers/application_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/content_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/visitors_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/products_controller.rb', :repo => repo
+    copy_from_repo 'app/controllers/registrations_controller.rb', :repo => repo
+
+    # >-------------------------------[ Jobs ]---------------------------------<
+
+    copy_from_repo 'app/jobs/mailing_list_signup_job.rb', :repo => repo
+
+    # >-------------------------------[ Mailers ]--------------------------------<
+
+    copy_from_repo 'app/mailers/application_mailer.rb', :repo => repo
+    copy_from_repo 'app/mailers/user_mailer.rb', :repo => repo
+
+    # >-------------------------------[ Models ]--------------------------------<
+
+    copy_from_repo 'app/models/plan.rb', :repo => repo
+    copy_from_repo 'app/models/user.rb', :repo => repo
+
+    # >-------------------------------[ Services ]---------------------------------<
+
+    copy_from_repo 'app/services/create_plan_service.rb', :repo => repo
+
+    # >-------------------------------[ Views ]--------------------------------<
+
+    copy_from_repo 'app/views/content/gold.html.erb', :repo => repo
+    copy_from_repo 'app/views/content/platinum.html.erb', :repo => repo
+    copy_from_repo 'app/views/content/silver.html.erb', :repo => repo
+    copy_from_repo 'app/views/devise/registrations/edit.html.erb', :repo => repo
+    copy_from_repo 'app/views/devise/registrations/new.html.erb', :repo => repo
+    copy_from_repo 'app/views/layouts/_navigation_links.html.erb', :repo => repo
+    copy_from_repo 'app/views/layouts/application.html.erb', :repo => repo
+    copy_from_repo 'app/views/layouts/mailer.html.erb', :repo => repo
+    copy_from_repo 'app/views/layouts/mailer.text.erb', :repo => repo
+    copy_from_repo 'app/views/user_mailer/expire_email.html.erb', :repo => repo
+    copy_from_repo 'app/views/user_mailer/expire_email.text.erb', :repo => repo
+    copy_from_repo 'app/views/visitors/index.html.erb', :repo => repo
+    copy_from_repo 'app/views/products/product.pdf', :repo => repo
+
+    # >-------------------------------[ Routes ]--------------------------------<
+
+    copy_from_repo 'config/routes.rb', :repo => repo
+
+    # >-------------------------------[ Tests ]--------------------------------<
+
+    ### tests not implemented
+
+  end
+end
+# >----------------- recipes/rails_stripe_membership_saas.rb -----------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
 # >-------------------------- templates/recipe.erb ---------------------------start<
@@ -1763,7 +1876,7 @@ stage_two do
     generate 'devise:install'
     generate 'devise_invitable:install' if prefer :devise_modules, 'invitable'
     generate 'devise user' # create the User model
-    unless (prefer :apps4, 'rails-stripe-checkout') || (prefer :apps4, 'rails-stripe-coupons')
+    unless :apps4.to_s.include? 'rails-stripe-'
       generate 'migration AddNameToUsers name:string'
     end
     if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
@@ -2031,6 +2144,13 @@ puts 'CREATED PROMOTIONAL CODES'
 FILE
     end
   end
+  if prefer :apps4, 'rails-stripe-membership-saas'
+    append_file 'db/seeds.rb' do <<-FILE
+CreatePlanService.new.call
+puts 'CREATED PLANS'
+FILE
+    end
+  end
   if prefer :local_env_file, 'figaro'
     append_file 'db/seeds.rb' do <<-FILE
 # Environment variables (ENV['...']) can be set in the file config/application.yml.
@@ -2091,6 +2211,10 @@ FILE
   if prefer :apps4, 'rails-stripe-coupons'
     inject_into_file 'app/views/layouts/_navigation_links.html.erb', ", data: { no_turbolink: true }", :after => "new_user_registration_path"
     inject_into_file 'app/views/layouts/_navigation_links.html.erb', "\n    <li><%= link_to 'Coupons', coupons_path %></li>", :after => "users_path %></li>"
+  end
+  if prefer :apps4, 'rails-stripe-membership-saas'
+    inject_into_file 'app/views/layouts/_navigation_links.html.erb', ", data: { no_turbolink: true }", :after => "new_user_registration_path"
+    copy_from_repo 'app/views/devise/registrations/edit.html.erb', :repo => 'https://raw.github.com/RailsApps/rails-stripe-membership-saas/master/'
   end
   ### GIT ###
   git :add => '-A' if prefer :git, true
