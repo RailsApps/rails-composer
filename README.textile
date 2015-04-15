@@ -27,6 +27,7 @@ h2. Starter Apps and Tutorials
 | "rails-signup-download":https://github.com/RailsApps/rails-signup-download | "Rails Signup Download":https://tutorials.railsapps.org/rails-signup-download | Devise plus download a PDF file |
 | "rails-stripe-checkout":https://github.com/RailsApps/rails-stripe-checkout | "Stripe Checkout":https://tutorials.railsapps.org/rails-stripe-checkout | selling a product with Stripe Checkout |
 | "rails-stripe-coupons":https://github.com/RailsApps/rails-stripe-coupons | "Stripe JS With Coupons":https://tutorials.railsapps.org/rails-stripe-coupons | complex Rails and Stripe integration |
+| "rails-stripe-membership-saas":https://github.com/RailsApps/rails-stripe-membership-saas | "Membership Site with Stripe":https://tutorials.railsapps.org/rails-stripe-membership-saas | Stripe for recurring billing |
 
 h4. The rails_apps_composer Gem
 
@@ -123,6 +124,7 @@ option  Choose a starter application.
     9)  rails-signup-download
    10)  rails-stripe-checkout
    11)  rails-stripe-coupons
+   12)  rails-stripe-membership-saas
 </pre>
 
 Each of these applications is available as an example in the "RailsApps GitHub repo":https://github.com/RailsApps and each is accompanied by a tutorial on the "Capstone Rails Tutorials":https://tutorials.railsapps.org/ site.
