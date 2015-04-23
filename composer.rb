@@ -2699,6 +2699,8 @@ end
 
 # >-----------------------------[ Run 'Bundle Install' ]-------------------------------<
 
+say_wizard "Installing Bundler (in case it is not installed)."
+run 'gem install bundler'
 say_wizard "Installing gems. This will take a while."
 run 'bundle install --without production'
 say_wizard "Updating gem paths."
