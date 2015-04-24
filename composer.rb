@@ -1048,6 +1048,7 @@ if prefer :apps4, 'rails-stripe-membership-saas'
   prefs[:local_env_file] = false
   prefs[:pry] = false
   prefs[:quiet_assets] = true
+  prefs[:disable_turbolinks] = true
   prefs[:secrets] = ['stripe_publishable_key',
     'stripe_api_key',
     'mailchimp_list_id',
@@ -2450,6 +2451,7 @@ end
 @before_configs["extras"].call if @before_configs["extras"]
 say_recipe 'extras'
 config = {}
+config['disable_turbolinks'] = yes_wizard?("Disable Rails Turbolinks?") if true && true unless config.key?('disable_turbolinks') || prefs.has_key?(:disable_turbolinks)
 config['ban_spiders'] = yes_wizard?("Set a robots.txt file to ban spiders?") if true && true unless config.key?('ban_spiders') || prefs.has_key?(:ban_spiders)
 config['github'] = yes_wizard?("Create a GitHub repository?") if true && true unless config.key?('github') || prefs.has_key?(:github)
 config['local_env_file'] = multiple_choice("Add gem and file for environment variables?", [["None", "none"], ["Add .env with Foreman", "foreman"], ["Add application.yml with Figaro", "figaro"]]) if true && true unless config.key?('local_env_file') || prefs.has_key?(:local_env_file)
@@ -2590,6 +2592,20 @@ if prefs[:rubocop]
   say_wizard "recipe adding rubocop gem and basic .rubocop.yml"
   add_gem 'rubocop', :group => [:development, :test]
   copy_from_repo '.rubocop.yml'
+end
+
+## Disable Turbolinks
+if config['disable_turbolinks']
+  prefs[:disable_turbolinks] = true
+end
+if prefs[:disable_turbolinks]
+  say_wizard "recipe removing support for Rails Turbolinks"
+  stage_two do
+    say_wizard "recipe stage two"
+    gsub_file 'Gemfile', /gem 'turbolinks'\n/, ''
+    gsub_file 'app/assets/javascripts/application.js', "//= require turbolinks\n", ''
+    gsub_file 'app/views/layouts/application.html.erb', /, 'data-turbolinks-track' => true/, ''
+  end
 end
 
 ## BAN SPIDERS
