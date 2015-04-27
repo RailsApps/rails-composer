@@ -2604,7 +2604,14 @@ if prefs[:disable_turbolinks]
     say_wizard "recipe stage two"
     gsub_file 'Gemfile', /gem 'turbolinks'\n/, ''
     gsub_file 'app/assets/javascripts/application.js', "//= require turbolinks\n", ''
-    gsub_file 'app/views/layouts/application.html.erb', /, 'data-turbolinks-track' => true/, ''
+    case prefs[:templates]
+      when 'erb'
+        gsub_file 'app/views/layouts/application.html.erb', /, 'data-turbolinks-track' => true/, ''
+      when 'haml'
+        gsub_file 'app/views/layouts/application.html.haml', /, 'data-turbolinks-track' => true/, ''
+      when 'slim'
+        gsub_file 'app/views/layouts/application.html.slim', /, 'data-turbolinks-track' => true/, ''
+    end
   end
 end
 
