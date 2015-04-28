@@ -2059,7 +2059,7 @@ stage_three do
   say_wizard "recipe stage three"
   if (!prefs[:secrets].nil?)
     prefs[:secrets].each do |secret|
-      env_var = "  #{secret}: <%= ENV[\"#{secret.upcase}\"] %>"
+      env_var = "  #{secret}: <%= ENV.fetch(\"#{secret.upcase}\") %>"
       inject_into_file 'config/secrets.yml', "\n" + env_var, :after => "development:"
       ### 'inject_into_file' doesn't let us inject the same text twice unless we append the extra space, why?
       inject_into_file 'config/secrets.yml', "\n" + env_var + " ", :after => "production:"
@@ -2117,8 +2117,8 @@ stage_three do
   end
   ## rails-stripe-coupons
   if prefer :apps4, 'rails-stripe-coupons'
-    gsub_file 'config/secrets.yml', /<%= ENV\["PRODUCT_TITLE"] %>/, 'What is Ruby on Rails'
-    gsub_file 'config/secrets.yml', /<%= ENV\["PRODUCT_PRICE"] %>/, '995'
+    gsub_file 'config/secrets.yml', /<%= ENV\["PRODUCT_TITLE"\] %>/, 'What is Ruby on Rails'
+    gsub_file 'config/secrets.yml', /<%= ENV\["PRODUCT_PRICE"\] %>/, '995'
   end
   ### EXAMPLE FILE FOR FOREMAN AND FIGARO ###
   if prefer :local_env_file, 'figaro'
