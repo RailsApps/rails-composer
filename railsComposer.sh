@@ -1,5 +1,8 @@
 #!/bin/bash --login
 # railsComposer.sh
+
+#  ./railsComposer.sh AppName
+
 myapp=$1
 
 mkdir $myapp
