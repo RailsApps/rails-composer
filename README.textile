@@ -4,6 +4,8 @@ An application template that creates starter applications for Rails 4.2.
 
 It's the Rails generator on steroids.
 
+For a video introduction, see "RailsClips Episode 007: Rails Composer":https://devchat.tv/rails-clips/007-railsclips-rails-composer from Charles Max Wood.
+
 |_. |_. |
 | !http://railsapps.github.io/images/rails-composer-mailing-list.png(Sign up for the Rails Composer mailing list)!:http://mailinglist.railscomposer.com/ |  !http://railsapps.github.io/images/join/join-railsapps.png(Join the RailsApps Project)!:http://railsapps.github.io/ |
 | "Get on the Rails Composer mailing list":http://mailinglist.railscomposer.com/ | "Subscribe at $19/mo to support the project":http://railsapps.github.io/ |
