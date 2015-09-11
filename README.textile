@@ -8,13 +8,13 @@ For a video introduction, see "RailsClips Episode 007: Rails Composer":https://d
 
 |_. |_. |
 | !http://railsapps.github.io/images/rails-composer-mailing-list.png(Sign up for the Rails Composer mailing list)!:http://mailinglist.railscomposer.com/ |  !http://railsapps.github.io/images/join/join-railsapps.png(Join the RailsApps Project)!:http://railsapps.github.io/ |
-| "Get on the Rails Composer mailing list":http://mailinglist.railscomposer.com/ | "Subscribe at $19/mo to support the project":http://railsapps.github.io/ |
+| "Rails Composer mailing list":http://mailinglist.railscomposer.com/ | "Support the project":http://railsapps.github.io/ |
 
 h4. From the RailsApps Project
 
 The "RailsApps project":http://railsapps.github.io/ provides example applications that developers use as starter apps. Hundreds of developers use the apps, report problems as they arise, and propose solutions. Rails changes frequently; each application is known to work and serves as your personal "reference implementation." You can use Rails Composer to build any of the example applications.
 
-If you use Rails Composer, please "join RailsApps":http://railsapps.github.io/ to support the project. "Sign up for the Rails Composer mailing list":http://mailinglist.railscomposer.com/ for news and announcements.
+You can purchase the "Capstone Rails Tutorials":https://tutorials.railsapps.org/ to support the project. The tutorials explain all the code in the starter applications. "Sign up for the Rails Composer mailing list":http://mailinglist.railscomposer.com/ for news and announcements.
 
 h2. Starter Apps and Tutorials
 
@@ -34,7 +34,7 @@ h2. Starter Apps and Tutorials
 
 h4. The rails_apps_composer Gem
 
-Want to contribute a starter app you've created? Or need to customize the Rails Composer application template? The Rails Composer application template is built from recipes provided by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem.
+Do you want to customize the Rails Composer application template? The Rails Composer application template is built from recipes provided by the "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem.
 
 h4. If You Are New to Rails
 
@@ -475,7 +475,7 @@ Please make changes to the "rails_apps_composer":https://github.com/RailsApps/ra
 
 h2. Credits
 
-Daniel Kehoe initiated the "RailsApps project":https://github.com/RailsApps and created the Rails Composer application template.
+Daniel Kehoe initiated the "RailsApps project":https://github.com/RailsApps. The "rails_apps_composer":https://github.com/RailsApps/rails_apps_composer gem is derived from Michael Bleigh’s RailsWizard gem.
 
 Is it useful to you? Follow the project on Twitter:
 "@rails_apps":http://twitter.com/rails_apps
