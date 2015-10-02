@@ -12,9 +12,11 @@ For a video introduction, see "RailsClips Episode 007: Rails Composer":https://d
 
 h4. From the RailsApps Project
 
-The "RailsApps project":http://railsapps.github.io/ provides example applications that developers use as starter apps. Hundreds of developers use the apps, report problems as they arise, and propose solutions. Rails changes frequently; each application is known to work and serves as your personal "reference implementation." You can use Rails Composer to build any of the example applications.
+The "RailsApps":http://railsapps.github.io/ open source project offers starter applications and tutorials for Rails developers. Generate the applications with the Rails Composer tool.
 
-You can purchase the "Capstone Rails Tutorials":https://tutorials.railsapps.org/ to support the project. The tutorials explain all the code in the starter applications. "Sign up for the Rails Composer mailing list":http://mailinglist.railscomposer.com/ for news and announcements.
+All the code is explained in the Capstone Rails Tutorials. You can purchase the "Capstone Rails Tutorials":https://tutorials.railsapps.org/ to support the project.
+
+"Sign up for the Rails Composer mailing list":http://mailinglist.railscomposer.com/ for news and announcements.
 
 h2. Starter Apps and Tutorials
 
