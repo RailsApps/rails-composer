@@ -1528,9 +1528,7 @@ else
 end
 
 ## Database Adapter
-unless prefer :database, 'sqlite'
-  gsub_file 'Gemfile', /gem 'sqlite3'\n/, ''
-end
+gsub_file 'Gemfile', /gem 'sqlite3'\n/, '' unless prefer :database, 'sqlite'
 gsub_file 'Gemfile', /gem 'pg'.*/, ''
 add_gem 'pg' if prefer :database, 'postgresql'
 gsub_file 'Gemfile', /gem 'mysql2'.*/, ''
@@ -2558,23 +2556,15 @@ if prefs[:rvmrc]
 end
 
 ## QUIET ASSETS
-if config['quiet_assets']
-  prefs[:quiet_assets] = true
-end
+prefs[:quiet_assets] = true if config['quiet_assets']
 if prefs[:quiet_assets]
   say_wizard "recipe setting quiet_assets for reduced asset pipeline logging"
   add_gem 'quiet_assets', :group => :development
 end
 
 ## LOCAL_ENV.YML FILE
-if config['local_env_file']
-  case config['local_env_file']
-  when 'figaro'
-    prefs[:local_env_file] = 'figaro'
-  when 'foreman'
-    prefs[:local_env_file] = 'foreman'
-  end
-end
+prefs[:local_env_file] = config['local_env_file'] unless config['local_env_file'] = 'none'
+
 if prefer :local_env_file, 'figaro'
   say_wizard "recipe creating application.yml file for environment variables with figaro"
   add_gem 'figaro', '>= 1.0.0.rc1'
@@ -2584,9 +2574,7 @@ elsif prefer :local_env_file, 'foreman'
 end
 
 ## BETTER ERRORS
-if config['better_errors']
-  prefs[:better_errors] = true
-end
+prefs[:better_errors] = true if config['better_errors']
 if prefs[:better_errors]
   say_wizard "recipe adding better_errors gem"
   add_gem 'better_errors', :group => :development
@@ -2603,9 +2591,7 @@ if prefs[:better_errors]
 end
 
 # Pry
-if config['pry']
-  prefs[:pry] = true
-end
+prefs[:pry] = true if config['pry']
 if prefs[:pry]
   say_wizard "recipe adding pry-rails gem"
   add_gem 'pry-rails', :group => [:development, :test]
@@ -2613,9 +2599,7 @@ if prefs[:pry]
 end
 
 ## Rubocop
-if config['rubocop']
-  prefs[:rubocop] = true
-end
+prefs[:rubocop] = true if config['rubocop']
 if prefs[:rubocop]
   say_wizard "recipe adding rubocop gem and basic .rubocop.yml"
   add_gem 'rubocop', :group => [:development, :test]
@@ -2644,9 +2628,7 @@ if prefs[:disable_turbolinks]
 end
 
 ## BAN SPIDERS
-if config['ban_spiders']
-  prefs[:ban_spiders] = true
-end
+prefs[:ban_spiders] = true if config['ban_spiders']
 if prefs[:ban_spiders]
   say_wizard "recipe banning spiders by modifying 'public/robots.txt'"
   stage_two do
@@ -2697,9 +2679,7 @@ stage_three do
 end
 
 ## GITHUB
-if config['github']
-  prefs[:github] = true
-end
+prefs[:github] = true if config['github']
 if prefs[:github]
   add_gem 'hub', :require => nil, :group => [:development]
   stage_three do
