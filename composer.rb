@@ -154,6 +154,8 @@ end
 def stage_two(&block); @after_blocks << [@current_recipe, block]; end
 @stage_three_blocks = []
 def stage_three(&block); @stage_three_blocks << [@current_recipe, block]; end
+@stage_four_blocks = []
+def stage_four(&block); @stage_four_blocks << [@current_recipe, block]; end
 @before_configs = {}
 def before_config(&block); @before_configs[@current_recipe] = block; end
 
@@ -250,8 +252,8 @@ say_wizard("\033[1m\033[36m" + "|_|  \\_\\__,_|_|_|___/_/    \\_\\ .__/| .__/|__
 say_wizard("\033[1m\033[36m" + "                             \| \|   \| \|" + "\033[0m")
 say_wizard("\033[1m\033[36m" + "                             \| \|   \| \|" + "\033[0m")
 say_wizard("\033[1m\033[36m" + '' + "\033[0m")
-say_wizard("\033[1m\033[36m" + "Rails Composer, open source, supported by subscribers." + "\033[0m")
-say_wizard("\033[1m\033[36m" + "Please join RailsApps to support development of Rails Composer." + "\033[0m")
+say_wizard("\033[1m\033[36m" + "Rails Composer, open source, supported by purchases of RailsApps tutorials." + "\033[0m")
+say_wizard("\033[1m\033[36m" + "Please purchase the tutorials to support development of Rails Composer." + "\033[0m")
 say_wizard("Need help? Ask on Stack Overflow with the tag \'railsapps.\'")
 say_wizard("Your new application will contain diagnostics in its README file.")
 
@@ -1238,6 +1240,37 @@ if recipes.include? 'pages'
     ["Home, About, and Users", "about+users"]] unless prefs.has_key? :pages
 end
 
+## Bootstrap Page Templates
+if recipes.include? 'pages'
+  if prefs[:frontend] == 'bootstrap3'
+    say_wizard "Which Bootstrap page template? Visit startbootstrap.com."
+    prefs[:layouts] = multiple_choice "Add Bootstrap page templates?", [["None", "none"],
+    ["1 Col Portfolio", "one_col_portfolio"],
+    ["2 Col Portfolio", "two_col_portfolio"],
+    ["3 Col Portfolio", "three_col_portfolio"],
+    ["4 Col Portfolio", "four_col_portfolio"],
+    ["Bare", "bare"],
+    ["Blog Home", "blog_home"],
+    ["Business Casual", "business_casual"],
+    ["Business Frontpage", "business_frontpage"],
+    ["Clean Blog", "clean_blog"],
+    ["Full Width Pics", "full_width_pics"],
+    ["Heroic Features", "heroic_features"],
+    ["Landing Page", "landing_page"],
+    ["Modern Business", "modern_business"],
+    ["One Page Wonder", "one_page_wonder"],
+    ["Portfolio Item", "portfolio_item"],
+    ["Round About", "round_about"],
+    ["Shop Homepage", "shop_homepage"],
+    ["Shop Item", "shop_item"],
+    ["Simple Sidebar", "simple_sidebar"],
+    ["Small Business", "small_business"],
+    ["Stylish Portfolio", "stylish_portfolio"],
+    ["The Big Picture", "the_big_picture"],
+    ["Thumbnail Gallery", "thumbnail_gallery"]] unless prefs.has_key? :layouts
+  end
+end
+
 # save configuration before anything can fail
 create_file 'config/railscomposer.yml', "# This application was generated with Rails Composer\n\n"
 append_to_file 'config/railscomposer.yml' do <<-TEXT
@@ -1257,6 +1290,7 @@ omniauth_provider: [#{prefs[:omniauth_provider]}]
 authorization: [#{prefs[:authorization]}]
 form_builder: [#{prefs[:form_builder]}]
 pages: [#{prefs[:pages]}]
+layouts: [#{prefs[:layouts]}]
 locale: [#{prefs[:locale]}]
 analytics: [#{prefs[:analytics]}]
 deployment: [#{prefs[:deployment]}]
@@ -1328,8 +1362,7 @@ stage_three do
   # add diagnostics to README
   create_file 'README', "#{app_name.humanize.titleize}\n================\n\n"
   append_to_file 'README' do <<-TEXT
-Rails Composer, open source, supported by subscribers.
-Please join RailsApps to support development of Rails Composer.
+Rails Composer is supported by developers who purchase our RailsApps tutorials.
 Need help? Ask on Stack Overflow with the tag 'railsapps.'
 Problems? Submit an issue: https://github.com/RailsApps/rails_apps_composer/issues
 Your application contains diagnostics in this README file.
@@ -1431,7 +1464,7 @@ TEXT
 This application was generated with the [rails_apps_composer](https://github.com/RailsApps/rails_apps_composer) gem
 provided by the [RailsApps Project](http://railsapps.github.io/).
 
-Rails Composer is open source and supported by subscribers. Please join RailsApps to support development of Rails Composer.
+Rails Composer is supported by developers who purchase our RailsApps tutorials.
 
 Problems? Issues?
 -----------
@@ -1620,7 +1653,7 @@ add_gem 'simple_form' if prefer :form_builder, 'simple_form'
 
 ## Gems from a defaults file or added interactively
 gems.each do |g|
-  gem(*g)
+  add_gem(*g)
 end
 
 ## Git
@@ -2066,6 +2099,61 @@ stage_two do
   ### GIT ###
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: add pages"' if prefer :git, true
+end
+
+stage_four do
+  say_wizard "recipe stage four"
+  case prefs[:layouts]
+    when 'bare'
+      generate 'theme:bare -f'
+    when 'blog_home'
+      generate 'theme:blog_home -f'
+    when 'business_casual'
+      generate 'theme:business_casual -f'
+    when 'business_frontpage'
+      generate 'theme:business_frontpage -f'
+    when 'clean_blog'
+      generate 'theme:clean_blog -f'
+    when 'four_col_portfolio'
+      generate 'theme:four_col_portfolio -f'
+    when 'full_width_pics'
+      generate 'theme:full_width_pics -f'
+    when 'heroic_features'
+      generate 'theme:heroic_features -f'
+    when 'landing_page'
+      generate 'theme:landing_page -f'
+    when 'modern_business'
+      generate 'theme:modern_business -f'
+    when 'one_col_portfolio'
+      generate 'theme:one_col_portfolio -f'
+    when 'one_page_wonder'
+      generate 'theme:one_page_wonder -f'
+    when 'portfolio_item'
+      generate 'theme:portfolio_item -f'
+    when 'round_about'
+      generate 'theme:round_about -f'
+    when 'shop_homepage'
+      generate 'theme:shop_homepage -f'
+    when 'shop_item'
+      generate 'theme:shop_item -f'
+    when 'simple_sidebar'
+      generate 'theme:simple_sidebar -f'
+    when 'small_business'
+      generate 'theme:small_business -f'
+    when 'stylish_portfolio'
+      generate 'theme:stylish_portfolio -f'
+    when 'the_big_picture'
+      generate 'theme:the_big_picture -f'
+    when 'three_col_portfolio'
+      generate 'theme:three_col_portfolio -f'
+    when 'thumbnail_gallery'
+      generate 'theme:thumbnail_gallery -f'
+    when 'two_col_portfolio'
+      generate 'theme:two_col_portfolio -f'
+  end
+  ### GIT ###
+  git :add => '-A' if prefer :git, true
+  git :commit => '-qm "rails_apps_composer: add Bootstrap page layouts"' if prefer :git, true
 end
 # >---------------------------- recipes/pages.rb -----------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -2563,11 +2651,11 @@ if prefs[:quiet_assets]
 end
 
 ## LOCAL_ENV.YML FILE
-prefs[:local_env_file] = config['local_env_file'] unless config['local_env_file'] = 'none'
+prefs[:local_env_file] = config['local_env_file'] unless (config['local_env_file'] == 'none')
 
 if prefer :local_env_file, 'figaro'
   say_wizard "recipe creating application.yml file for environment variables with figaro"
-  add_gem 'figaro', '>= 1.0.0.rc1'
+  add_gem 'figaro'
 elsif prefer :local_env_file, 'foreman'
   say_wizard "recipe creating .env file for development environment variables with foreman"
   add_gem 'foreman', :group => :development
@@ -2648,8 +2736,8 @@ case RbConfig::CONFIG['host_os']
     end
 end
 
-stage_three do
-  say_wizard "recipe stage three"
+stage_four do
+  say_wizard "recipe stage four"
   say_wizard "recipe removing unnecessary files and whitespace"
   %w{
     public/index.html
@@ -2669,7 +2757,6 @@ stage_three do
   gsub_file 'Gemfile', /#.*\n/, "\n"
   gsub_file 'Gemfile', /\n^\s*\n/, "\n"
   remove_file 'Gemfile.lock'
-  run 'bundle install --without production'
   # remove commented lines and multiple blank lines from config/routes.rb
   gsub_file 'config/routes.rb', /  #.*\n/, "\n"
   gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
@@ -2756,6 +2843,12 @@ end
 @current_recipe = nil
 say_wizard "Stage Three (running recipe 'stage_three' callbacks)."
 @stage_three_blocks.each{|b| config = @configs[b[0]] || {}; @current_recipe = b[0]; puts @current_recipe; b[1].call}
+
+# >-----------------------------[ Run 'stage_four' Callbacks ]-------------------------------<
+
+@current_recipe = nil
+say_wizard "Stage Four (running recipe 'stage_four' callbacks)."
+@stage_four_blocks.each{|b| config = @configs[b[0]] || {}; @current_recipe = b[0]; puts @current_recipe; b[1].call}
 
 @current_recipe = nil
 say_wizard("Your new application will contain diagnostics in its README file.")
