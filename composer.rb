@@ -252,8 +252,8 @@ say_wizard("\033[1m\033[36m" + "|_|  \\_\\__,_|_|_|___/_/    \\_\\ .__/| .__/|__
 say_wizard("\033[1m\033[36m" + "                             \| \|   \| \|" + "\033[0m")
 say_wizard("\033[1m\033[36m" + "                             \| \|   \| \|" + "\033[0m")
 say_wizard("\033[1m\033[36m" + '' + "\033[0m")
-say_wizard("\033[1m\033[36m" + "Rails Composer, open source, supported by purchases of RailsApps tutorials." + "\033[0m")
-say_wizard("\033[1m\033[36m" + "Please purchase the tutorials to support development of Rails Composer." + "\033[0m")
+say_wizard("\033[1m\033[36m" + "If you like Rails Composer, will you support it?" + "\033[0m")
+say_wizard("\033[1m\033[36m" + "You can help by purchasing our tutorials." + "\033[0m")
 say_wizard("Need help? Ask on Stack Overflow with the tag \'railsapps.\'")
 say_wizard("Your new application will contain diagnostics in its README file.")
 
@@ -611,7 +611,7 @@ if prefer :apps4, 'rails-devise'
   prefs[:local_env_file] = false
   prefs[:pry] = false
   prefs[:quiet_assets] = true
-  prefs[:pages] = 'users'
+  prefs[:pages] = 'about+users'
   prefs[:locale] = 'none'
   prefs[:rubocop] = false
 end
@@ -637,7 +637,7 @@ if prefer :apps4, 'rails-devise-roles'
   prefs[:local_env_file] = false
   prefs[:pry] = false
   prefs[:quiet_assets] = true
-  prefs[:pages] = 'users'
+  prefs[:pages] = 'about+users'
   prefs[:locale] = 'none'
   prefs[:rubocop] = false
 end
@@ -663,7 +663,7 @@ if prefer :apps4, 'rails-devise-pundit'
   prefs[:local_env_file] = false
   prefs[:pry] = false
   prefs[:quiet_assets] = true
-  prefs[:pages] = 'users'
+  prefs[:pages] = 'about+users'
   prefs[:locale] = 'none'
   prefs[:rubocop] = false
 end
@@ -692,7 +692,7 @@ if prefer :apps4, 'rails-signup-download'
   prefs[:pry] = false
   prefs[:quiet_assets] = true
   prefs[:secrets] = ['mailchimp_list_id', 'mailchimp_api_key']
-  prefs[:pages] = 'users'
+  prefs[:pages] = 'about+users'
   prefs[:locale] = 'none'
   prefs[:rubocop] = false
 
@@ -845,7 +845,7 @@ if prefer :apps4, 'rails-stripe-checkout'
     'stripe_api_key',
     'mailchimp_list_id',
     'mailchimp_api_key']
-  prefs[:pages] = 'users'
+  prefs[:pages] = 'about+users'
   prefs[:locale] = 'none'
   prefs[:rubocop] = false
 
@@ -930,13 +930,12 @@ if prefer :apps4, 'rails-stripe-coupons'
     'product_title',
     'mailchimp_list_id',
     'mailchimp_api_key']
-  prefs[:pages] = 'users'
+  prefs[:pages] = 'about+users'
   prefs[:locale] = 'none'
   prefs[:rubocop] = false
 
   # gems
   add_gem 'gibbon'
-  add_gem 'high_voltage'
   add_gem 'stripe'
   add_gem 'sucker_punch'
 
@@ -1055,7 +1054,7 @@ if prefer :apps4, 'rails-stripe-membership-saas'
     'stripe_api_key',
     'mailchimp_list_id',
     'mailchimp_api_key']
-  prefs[:pages] = 'users'
+  prefs[:pages] = 'about+users'
   prefs[:locale] = 'none'
   prefs[:rubocop] = false
 
@@ -2095,7 +2094,6 @@ stage_two do
       generate 'pages:authorized -f' if prefer :authorization, 'pundit'
   end
   generate 'pages:upmin -f' if prefer :dashboard, 'upmin'
-  generate 'layout:navigation -f'
   ### GIT ###
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: add pages"' if prefer :git, true
@@ -2324,11 +2322,11 @@ FILE
   # create navigation links using the rails_layout gem
   generate 'layout:navigation -f'
   if prefer :apps4, 'rails-stripe-coupons'
-    inject_into_file 'app/views/layouts/_navigation_links.html.erb', ", data: { no_turbolink: true }", :after => "new_user_registration_path"
-    inject_into_file 'app/views/layouts/_navigation_links.html.erb', "\n    <li><%= link_to 'Coupons', coupons_path %></li>", :after => "users_path %></li>"
+    inject_into_file 'app/views/layouts/_nav_links_for_auth.html.erb', ", data: { no_turbolink: true }", :after => "new_user_registration_path"
+    inject_into_file 'app/views/layouts/_nav_links_for_auth.html.erb', "\n    <li><%= link_to 'Coupons', coupons_path %></li>", :after => "users_path %></li>"
   end
   if prefer :apps4, 'rails-stripe-membership-saas'
-    inject_into_file 'app/views/layouts/_navigation_links.html.erb', ", data: { no_turbolink: true }", :after => "new_user_registration_path"
+    inject_into_file 'app/views/layouts/_nav_links_for_auth.html.erb', ", data: { no_turbolink: true }", :after => "new_user_registration_path"
     copy_from_repo 'app/views/devise/registrations/edit.html.erb', :repo => 'https://raw.github.com/RailsApps/rails-stripe-membership-saas/master/'
   end
   ### GIT ###
