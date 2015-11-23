@@ -1223,7 +1223,8 @@ if (recipes.include? 'devise') || (recipes.include? 'omniauth')
   prefs[:authorization] = multiple_choice "Authorization?", [["None", "none"], ["Simple role-based", "roles"], ["Pundit", "pundit"]] unless prefs.has_key? :authorization
   if prefer :authentication, 'devise'
     if (prefer :authorization, 'roles') || (prefer :authorization, 'pundit')
-      prefs[:dashboard] = multiple_choice "Admin interface for database?", [["None", "none"], ["Upmin", "upmin"]] unless prefs.has_key? :dashboard
+      prefs[:dashboard] = multiple_choice "Admin interface for database?", [["None", "none"],
+        ["Thoughtbot Administrate", "administrate"], ["Upmin", "upmin"]] unless prefs.has_key? :dashboard
     end
   end
 end
@@ -1632,8 +1633,9 @@ if prefer :authentication, 'devise'
     add_gem 'devise_invitable' if prefer :devise_modules, 'invitable'
 end
 
-## Administratative Interface (Upmin)
+## Administratative Interface
 add_gem 'upmin-admin' if prefer :dashboard, 'upmin'
+add_gem 'administrate' if prefer :dashboard, 'administrate'
 
 ## Authentication (OmniAuth)
 add_gem 'omniauth' if prefer :authentication, 'omniauth'
@@ -2094,6 +2096,7 @@ stage_two do
       generate 'pages:authorized -f' if prefer :authorization, 'pundit'
   end
   generate 'pages:upmin -f' if prefer :dashboard, 'upmin'
+  generate 'administrate:install' if prefer :dashboard, 'administrate'
   ### GIT ###
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: add pages"' if prefer :git, true
