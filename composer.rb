@@ -265,9 +265,11 @@ end
 
 # this application template only supports Rails version 4.1 and newer
 case Rails::VERSION::MAJOR.to_s
+when "5"
+  say_wizard "You are using Rails version #{Rails::VERSION::STRING}. Please report any issues."
 when "3"
-    say_wizard "You are using Rails version #{Rails::VERSION::STRING} which is not supported. Use Rails 4.1 or newer."
-    raise StandardError.new "Rails #{Rails::VERSION::STRING} is not supported. Use Rails 4.1 or newer."
+  say_wizard "You are using Rails version #{Rails::VERSION::STRING} which is not supported. Use Rails 4.1 or newer."
+  raise StandardError.new "Rails #{Rails::VERSION::STRING} is not supported. Use Rails 4.1 or newer."
 when "4"
   case Rails::VERSION::MINOR.to_s
   when "0"
@@ -355,6 +357,30 @@ if options[:verbose]
 end
 
 case Rails::VERSION::MAJOR.to_s
+when "5"
+  prefs[:apps4] = multiple_choice "Build a starter application?",
+    [["Build a RailsApps example application", "railsapps"],
+    ["Contributed applications (none available)", "contributed_app"],
+    ["Custom application (experimental)", "none"]] unless prefs.has_key? :apps4
+  case prefs[:apps4]
+    when 'railsapps'
+        prefs[:apps4] = multiple_choice "Choose a starter application.",
+        [["learn-rails", "learn-rails"],
+        ["rails-bootstrap", "rails-bootstrap"],
+        ["rails-foundation", "rails-foundation"],
+        ["rails-mailinglist-activejob", "rails-mailinglist-activejob"],
+        ["rails-omniauth", "rails-omniauth"],
+        ["rails-devise", "rails-devise"],
+        ["rails-devise-roles", "rails-devise-roles"],
+        ["rails-devise-pundit", "rails-devise-pundit"],
+        ["rails-signup-download", "rails-signup-download"],
+        ["rails-stripe-checkout", "rails-stripe-checkout"],
+        ["rails-stripe-coupons", "rails-stripe-coupons"],
+        ["rails-stripe-membership-saas", "rails-stripe-membership-saas"]]
+    when 'contributed_app'
+      prefs[:apps4] = multiple_choice "No contributed applications are available.",
+        [["create custom application", "railsapps"]]
+  end
 when "3"
   say_wizard "Please upgrade to Rails 4.1 or newer."
 when "4"
