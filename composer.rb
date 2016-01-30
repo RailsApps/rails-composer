@@ -462,7 +462,7 @@ if prefer :apps4, 'learn-rails'
   prefs[:deployment] = 'heroku'
   prefs[:devise_modules] = false
   prefs[:dev_webserver] = 'webrick'
-  prefs[:email] = 'gmail'
+  prefs[:email] = 'mandrill'
   prefs[:form_builder] = 'simple_form'
   prefs[:frontend] = 'foundation5'
   prefs[:github] = false
@@ -1641,7 +1641,7 @@ case prefs[:frontend]
     add_gem 'zurb-foundation', '~> 4.3.2'
     add_gem 'compass-rails', '~> 1.1.2'
   when 'foundation5'
-    add_gem 'foundation-rails'
+    add_gem 'foundation-rails', '~> 5.5'
 end
 
 ## Pages
