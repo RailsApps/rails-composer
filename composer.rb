@@ -481,7 +481,11 @@ if prefer :apps4, 'learn-rails'
   prefs[:disable_turbolinks] = false
 
   # gems
-  add_gem 'high_voltage'
+  if Rails::VERSION::MAJOR == 5
+    add_gem 'high_voltage', github: 'thoughtbot/high_voltage'
+  else
+    add_gem 'high_voltage'
+  end
   add_gem 'gibbon'
   gsub_file 'Gemfile', /gem 'sqlite3'\n/, ''
   add_gem 'sqlite3', :group => :development
@@ -794,7 +798,11 @@ if prefer :apps4, 'rails-mailinglist-activejob'
 
   # gems
   add_gem 'gibbon'
-  add_gem 'high_voltage'
+  if Rails::VERSION::MAJOR == 5
+    add_gem 'high_voltage', github: 'thoughtbot/high_voltage'
+  else
+    add_gem 'high_voltage'
+  end
   add_gem 'sucker_punch'
 
   stage_two do
@@ -1478,6 +1486,7 @@ Rails Composer: http://railscomposer.com/
 TEXT
   end
 
+  remove_file 'README.md'
   create_file 'README.md', "#{app_name.humanize.titleize}\n================\n\n"
 
   if prefer :deployment, 'heroku'
@@ -1647,9 +1656,17 @@ end
 ## Pages
 case prefs[:pages]
   when 'about'
-    add_gem 'high_voltage'
+    if Rails::VERSION::MAJOR == 5
+      add_gem 'high_voltage', github: 'thoughtbot/high_voltage'
+    else
+      add_gem 'high_voltage'
+    end
   when 'about+users'
-    add_gem 'high_voltage'
+    if Rails::VERSION::MAJOR == 5
+      add_gem 'high_voltage', github: 'thoughtbot/high_voltage'
+    else
+      add_gem 'high_voltage'
+    end
 end
 
 ## Email
