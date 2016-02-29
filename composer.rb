@@ -462,7 +462,7 @@ if prefer :apps4, 'learn-rails'
   prefs[:deployment] = 'heroku'
   prefs[:devise_modules] = false
   prefs[:dev_webserver] = 'webrick'
-  prefs[:email] = 'mandrill'
+  prefs[:email] = 'sendgrid'
   prefs[:form_builder] = 'simple_form'
   prefs[:frontend] = 'foundation5'
   prefs[:github] = false
