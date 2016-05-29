@@ -1196,11 +1196,11 @@ gemfile = File.read(destination_root() + '/Gemfile')
 sqlite_detected = gemfile.include? 'sqlite3'
 
 ## Web Server
-prefs[:dev_webserver] = multiple_choice "Web server for development?", [["WEBrick (default)", "webrick"],
-  ["Thin", "thin"], ["Unicorn", "unicorn"], ["Puma", "puma"], ["Phusion Passenger (Apache/Nginx)", "passenger"],
+prefs[:dev_webserver] = multiple_choice "Web server for development?", [["Puma (default)", "puma"],
+  ["Thin", "thin"], ["Unicorn", "unicorn"], ["Phusion Passenger (Apache/Nginx)", "passenger"],
   ["Phusion Passenger (Standalone)", "passenger_standalone"]] unless prefs.has_key? :dev_webserver
 prefs[:prod_webserver] = multiple_choice "Web server for production?", [["Same as development", "same"],
-  ["Thin", "thin"], ["Unicorn", "unicorn"], ["Puma", "puma"], ["Phusion Passenger (Apache/Nginx)", "passenger"],
+  ["Thin", "thin"], ["Unicorn", "unicorn"], ["Phusion Passenger (Apache/Nginx)", "passenger"],
   ["Phusion Passenger (Standalone)", "passenger_standalone"]] unless prefs.has_key? :prod_webserver
 prefs[:prod_webserver] = prefs[:dev_webserver] if prefs[:prod_webserver] == 'same'
 
@@ -1583,17 +1583,14 @@ if (prefs[:dev_webserver] == prefs[:prod_webserver])
   add_gem 'thin' if prefer :dev_webserver, 'thin'
   add_gem 'unicorn' if prefer :dev_webserver, 'unicorn'
   add_gem 'unicorn-rails' if prefer :dev_webserver, 'unicorn'
-  add_gem 'puma' if prefer :dev_webserver, 'puma'
   add_gem 'passenger' if prefer :dev_webserver, 'passenger_standalone'
 else
   add_gem 'thin', :group => [:development, :test] if prefer :dev_webserver, 'thin'
   add_gem 'unicorn', :group => [:development, :test] if prefer :dev_webserver, 'unicorn'
   add_gem 'unicorn-rails', :group => [:development, :test] if prefer :dev_webserver, 'unicorn'
-  add_gem 'puma', :group => [:development, :test] if prefer :dev_webserver, 'puma'
   add_gem 'passenger', :group => [:development, :test] if prefer :dev_webserver, 'passenger_standalone'
   add_gem 'thin', :group => :production if prefer :prod_webserver, 'thin'
   add_gem 'unicorn', :group => :production if prefer :prod_webserver, 'unicorn'
-  add_gem 'puma', :group => :production if prefer :prod_webserver, 'puma'
   add_gem 'passenger', :group => :production if prefer :prod_webserver, 'passenger_standalone'
 end
 
@@ -1821,12 +1818,10 @@ FILE
     end
     create_file 'Procfile', "web: bundle exec rails server -p $PORT\n" if prefer :prod_webserver, 'thin'
     create_file 'Procfile', "web: bundle exec unicorn -p $PORT\n" if prefer :prod_webserver, 'unicorn'
-    create_file 'Procfile', "web: bundle exec puma -p $PORT\n" if prefer :prod_webserver, 'puma'
     create_file 'Procfile', "web: bundle exec passenger start -p $PORT\n" if prefer :prod_webserver, 'passenger_standalone'
     if (prefs[:dev_webserver] != prefs[:prod_webserver])
       create_file 'Procfile.dev', "web: bundle exec rails server -p $PORT\n" if prefer :dev_webserver, 'thin'
       create_file 'Procfile.dev', "web: bundle exec unicorn -p $PORT\n" if prefer :dev_webserver, 'unicorn'
-      create_file 'Procfile.dev', "web: bundle exec puma -p $PORT\n" if prefer :dev_webserver, 'puma'
       create_file 'Procfile.dev', "web: bundle exec passenger start -p $PORT\n" if prefer :dev_webserver, 'passenger_standalone'
     end
   end
@@ -2614,7 +2609,7 @@ config = {}
 config['disable_turbolinks'] = yes_wizard?("Disable Rails Turbolinks?") if true && true unless config.key?('disable_turbolinks') || prefs.has_key?(:disable_turbolinks)
 config['ban_spiders'] = yes_wizard?("Set a robots.txt file to ban spiders?") if true && true unless config.key?('ban_spiders') || prefs.has_key?(:ban_spiders)
 config['github'] = yes_wizard?("Create a GitHub repository?") if true && true unless config.key?('github') || prefs.has_key?(:github)
-config['local_env_file'] = multiple_choice("Add gem and file for environment variables?", [["None", "none"], ["Add .env with Foreman", "foreman"], ["Add application.yml with Figaro", "figaro"]]) if true && true unless config.key?('local_env_file') || prefs.has_key?(:local_env_file)
+config['local_env_file'] = multiple_choice("Add gem and file for environment variables?", [["None", "none"], ["Add .env with Foreman", "foreman"]]) if true && true unless config.key?('local_env_file') || prefs.has_key?(:local_env_file)
 config['quiet_assets'] = yes_wizard?("Reduce assets logger noise during development?") if true && true unless config.key?('quiet_assets') || prefs.has_key?(:quiet_assets)
 config['better_errors'] = yes_wizard?("Improve error reporting with 'better_errors' during development?") if true && true unless config.key?('better_errors') || prefs.has_key?(:better_errors)
 config['pry'] = yes_wizard?("Use 'pry' as console replacement during development and test?") if true && true unless config.key?('pry') || prefs.has_key?(:pry)
@@ -2624,70 +2619,6 @@ config['rubocop'] = yes_wizard?("Use 'rubocop' to ensure that your code conforms
 
 # Application template recipe for the rails_apps_composer. Change the recipe here:
 # https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/extras.rb
-
-## RVMRC
-rvmrc_detected = false
-if File.exist?('.rvmrc')
-  rvmrc_file = File.read('.rvmrc')
-  rvmrc_detected = rvmrc_file.include? app_name
-end
-if File.exist?('.ruby-gemset')
-  rvmrc_file = File.read('.ruby-gemset')
-  rvmrc_detected = rvmrc_file.include? app_name
-end
-unless rvmrc_detected || (prefs.has_key? :rvmrc)
-  prefs[:rvmrc] = yes_wizard? "Use or create a project-specific rvm gemset?"
-end
-if prefs[:rvmrc]
-  if which("rvm")
-    say_wizard "recipe creating project-specific rvm gemset and .rvmrc"
-    # using the rvm Ruby API, see:
-    # http://blog.thefrontiergroup.com.au/2010/12/a-brief-introduction-to-the-rvm-ruby-api/
-    # https://rvm.io/integration/passenger
-    if ENV['MY_RUBY_HOME'] && ENV['MY_RUBY_HOME'].include?('rvm')
-      begin
-        gems_path = ENV['MY_RUBY_HOME'].split(/@/)[0].sub(/rubies/,'gems')
-        ENV['GEM_PATH'] = "#{gems_path}:#{gems_path}@global"
-        require 'rvm'
-        RVM.use_from_path! File.dirname(File.dirname(__FILE__))
-      rescue LoadError
-        raise "RVM gem is currently unavailable."
-      end
-    end
-    say_wizard "creating RVM gemset '#{app_name}'"
-    RVM.gemset_create app_name
-    say_wizard "switching to gemset '#{app_name}'"
-    # RVM.gemset_use! requires rvm version 1.11.3.5 or newer
-    rvm_spec =
-      if Gem::Specification.respond_to?(:find_by_name)
-        Gem::Specification.find_by_name("rvm")
-      else
-        Gem.source_index.find_name("rvm").last
-      end
-      unless rvm_spec.version > Gem::Version.create('1.11.3.4')
-        say_wizard "rvm gem version: #{rvm_spec.version}"
-        raise "Please update rvm gem to 1.11.3.5 or newer"
-      end
-    begin
-      RVM.gemset_use! app_name
-    rescue => e
-      say_wizard "rvm failure: unable to use gemset #{app_name}, reason: #{e}"
-      raise
-    end
-    if File.exist?('.ruby-version')
-      say_wizard ".ruby-version file already exists"
-    else
-      create_file '.ruby-version', "#{RUBY_VERSION}\n"
-    end
-    if File.exist?('.ruby-gemset')
-      say_wizard ".ruby-gemset file already exists"
-    else
-      create_file '.ruby-gemset', "#{app_name}\n"
-    end
-  else
-    say_wizard "WARNING! RVM does not appear to be available."
-  end
-end
 
 ## QUIET ASSETS
 prefs[:quiet_assets] = true if config['quiet_assets']
