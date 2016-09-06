@@ -546,13 +546,14 @@ if prefer :apps4, 'rails-bootstrap'
   prefs[:better_errors] = true
   prefs[:devise_modules] = false
   prefs[:email] = 'none'
-  prefs[:frontend] = 'bootstrap3'
   prefs[:git] = true
   prefs[:local_env_file] = false
   prefs[:pry] = false
   prefs[:pages] = 'about'
   prefs[:locale] = 'none'
   prefs[:rubocop] = false
+  prefs[:frontend] = multiple_choice "Front-end framework?",
+    [["Bootstrap 4.0", "bootstrap4"], ["Bootstrap 3.3", "bootstrap3"]] unless prefs.has_key? :frontend
 end
 # >----------------------- recipes/rails_bootstrap.rb ------------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
@@ -1206,7 +1207,7 @@ end
 ## Front-end Framework
 if recipes.include? 'frontend'
   prefs[:frontend] = multiple_choice "Front-end framework?", [["None", "none"],
-    ["Bootstrap 3.3", "bootstrap3"], ["Bootstrap 2.3", "bootstrap2"],
+    ["Bootstrap 4.0", "bootstrap4"], ["Bootstrap 3.3", "bootstrap3"], ["Bootstrap 2.3", "bootstrap2"],
     ["Zurb Foundation 5.5", "foundation5"], ["Zurb Foundation 4.0", "foundation4"],
     ["Simple CSS", "simple"]] unless prefs.has_key? :frontend
 end
@@ -1244,7 +1245,10 @@ if (recipes.include? 'devise') || (recipes.include? 'omniauth')
 end
 
 ## Form Builder
-prefs[:form_builder] = multiple_choice "Use a form builder gem?", [["None", "none"], ["SimpleForm", "simple_form"]] unless prefs.has_key? :form_builder
+## (no simple_form for Bootstrap 4 yet)
+unless prefs[:frontend] == 'bootstrap4'
+  prefs[:form_builder] = multiple_choice "Use a form builder gem?", [["None", "none"], ["SimpleForm", "simple_form"]] unless prefs.has_key? :form_builder
+end
 
 ## Pages
 if recipes.include? 'pages'
@@ -1620,6 +1624,8 @@ case prefs[:frontend]
     add_gem 'bootstrap-sass', '~> 2.3.2.2'
   when 'bootstrap3'
     add_gem 'bootstrap-sass'
+  when 'bootstrap4'
+    add_gem 'bootstrap', '~> 4.0.0.alpha3.1'
   when 'foundation4'
     add_gem 'zurb-foundation', '~> 4.3.2'
     add_gem 'compass-rails', '~> 1.1.2'
@@ -1745,6 +1751,8 @@ stage_two do
       when 'bootstrap3'
         say_wizard "recipe installing simple_form for use with Bootstrap"
         generate 'simple_form:install --bootstrap'
+      when 'bootstrap4'
+        say_wizard "simple_form not yet available for use with Bootstrap 4"
       when 'foundation5'
         say_wizard "recipe installing simple_form for use with Zurb Foundation"
         generate 'simple_form:install --foundation'
@@ -2063,6 +2071,8 @@ stage_two do
       generate 'layout:install bootstrap2 -f'
     when 'bootstrap3'
       generate 'layout:install bootstrap3 -f'
+    when 'bootstrap4'
+      generate 'layout:install bootstrap4 -f'
     when 'foundation4'
       generate 'layout:install foundation4 -f'
     when 'foundation5'
@@ -2327,12 +2337,18 @@ FILE
     case prefs[:frontend]
       when 'bootstrap3'
         generate 'layout:devise bootstrap3 -f'
+      when 'bootstrap4'
+        generate 'layout:devise bootstrap3 -f'
       when 'foundation5'
         generate 'layout:devise foundation5 -f'
     end
   end
   # create navigation links using the rails_layout gem
-  generate 'layout:navigation -f'
+  if prefs[:frontend] == 'bootstrap4'
+    generate 'layout:navigation bootstrap4 -f'
+  else
+    generate 'layout:navigation -f'
+  end
   if prefer :apps4, 'rails-stripe-coupons'
     inject_into_file 'app/views/layouts/_nav_links_for_auth.html.erb', ", data: { no_turbolink: true }", :after => "new_user_registration_path"
     inject_into_file 'app/views/layouts/_nav_links_for_auth.html.erb', "\n    <li><%= link_to 'Coupons', coupons_path %></li>", :after => "users_path %></li>"
@@ -2431,6 +2447,7 @@ TEXT
     append_file 'app.json', '    "RailsApps",' + "\n" + '    "starter",' + "\n" if prefs.keys.include?(:apps4)
     append_file 'app.json', '    "RSpec",' + "\n" if prefer :tests, 'rspec'
     append_file 'app.json', '    "Bootstrap",' + "\n" if prefer :frontend, 'bootstrap3'
+    append_file 'app.json', '    "Bootstrap",' + "\n" if prefer :frontend, 'bootstrap4'
     append_file 'app.json', '    "Foundation",' + "\n" if prefer :frontend, 'pundit'
     append_file 'app.json', '    "authentication",' + "\n" + '    "Devise",' + "\n" if prefer :authentication, 'devise'
     append_file 'app.json', '    "authentication",' + "\n" + '    "OmniAuth",' + "\n" if prefer :authentication, 'omniauth'
