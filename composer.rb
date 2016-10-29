@@ -461,10 +461,11 @@ if prefer :apps4, 'learn-rails'
   prefs[:database] = 'sqlite'
   prefs[:deployment] = 'heroku'
   prefs[:devise_modules] = false
-  prefs[:dev_webserver] = 'webrick'
+  prefs[:dev_webserver] = 'puma'
   prefs[:email] = 'sendgrid'
   prefs[:form_builder] = 'simple_form'
   prefs[:frontend] = 'bootstrap3'
+  prefs[:pages] = 'none'
   prefs[:github] = false
   prefs[:git] = true
   prefs[:local_env_file] = 'none'
@@ -525,7 +526,10 @@ if prefer :apps4, 'learn-rails'
     # >-------------------------------[ Tests ]--------------------------------<
 
     copy_from_repo 'test/test_helper.rb', :repo => repo
+    copy_from_repo 'test/integration/home_page_test.rb', :repo => repo
+    copy_from_repo 'test/models/visitor_test.rb', :repo => repo
 
+    run 'bundle exec rake db:migrate'
   end
 end
 # >------------------------- recipes/learn_rails.rb --------------------------end<
@@ -2428,7 +2432,6 @@ if prefer :deployment, 'heroku'
     add_gem 'sqlite3', group: [:development, :test]
     add_gem 'pg', group: :production
   end
-  add_gem 'rails_12factor', group: :production
   stage_three do
     say_wizard "recipe stage three"
     say_wizard "precompiling assets for Heroku"
