@@ -1641,9 +1641,6 @@ case prefs[:pages]
     add_gem 'high_voltage'
 end
 
-## Email
-add_gem 'sendgrid' if prefer :email, 'sendgrid'
-
 ## Authentication (Devise)
 if prefer :authentication, 'devise'
     add_gem 'devise'
