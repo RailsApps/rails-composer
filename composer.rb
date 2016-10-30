@@ -465,6 +465,7 @@ if prefer :apps4, 'learn-rails'
   prefs[:email] = 'sendgrid'
   prefs[:form_builder] = 'simple_form'
   prefs[:frontend] = 'bootstrap3'
+  prefs[:layouts] = 'none'
   prefs[:pages] = 'none'
   prefs[:github] = false
   prefs[:git] = true
@@ -474,7 +475,6 @@ if prefer :apps4, 'learn-rails'
   prefs[:secrets] = ['owner_email', 'mailchimp_list_id', 'mailchimp_api_key']
   prefs[:templates] = 'erb'
   prefs[:tests] = false
-  prefs[:pages] = 'none'
   prefs[:locale] = 'none'
   prefs[:analytics] = 'none'
   prefs[:rubocop] = false
