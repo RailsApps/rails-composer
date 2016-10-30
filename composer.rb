@@ -1260,7 +1260,7 @@ if (recipes.include? 'devise') || (recipes.include? 'omniauth')
   if prefer :authentication, 'devise'
     if (prefer :authorization, 'roles') || (prefer :authorization, 'pundit')
       prefs[:dashboard] = multiple_choice "Admin interface for database?", [["None", "none"],
-        ["Thoughtbot Administrate", "administrate"], ["Upmin", "upmin"]] unless prefs.has_key? :dashboard
+        ["Thoughtbot Administrate", "administrate"]] unless prefs.has_key? :dashboard
     end
   end
 end
@@ -1669,7 +1669,6 @@ if prefer :authentication, 'devise'
 end
 
 ## Administratative Interface
-add_gem 'upmin-admin' if prefer :dashboard, 'upmin'
 add_gem 'administrate' if prefer :dashboard, 'administrate'
 
 ## Authentication (OmniAuth)
@@ -2132,7 +2131,6 @@ stage_two do
       generate 'pages:roles -f' if prefer :authorization, 'roles'
       generate 'pages:authorized -f' if prefer :authorization, 'pundit'
   end
-  generate 'pages:upmin -f' if prefer :dashboard, 'upmin'
   generate 'administrate:install' if prefer :dashboard, 'administrate'
   ### GIT ###
   git :add => '-A' if prefer :git, true
@@ -2395,12 +2393,12 @@ say_recipe 'analytics'
 
 prefs[:analytics] = multiple_choice "Install page-view analytics?", [["None", "none"],
   ["Google Analytics", "ga"],
-  ["Segment.io", "segmentio"]] unless prefs.has_key? :analytics
+  ["Segment.com", "segmentio"]] unless prefs.has_key? :analytics
 case prefs[:analytics]
   when 'ga'
     ga_id = ask_wizard('Google Analytics ID?')
   when 'segmentio'
-    segmentio_api_key = ask_wizard('Segment.io API key?')
+    segmentio_api_key = ask_wizard('Segment.com Write Key?')
 end
 
 stage_two do
