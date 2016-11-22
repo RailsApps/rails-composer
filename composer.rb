@@ -1669,7 +1669,10 @@ if prefer :authentication, 'devise'
 end
 
 ## Administratative Interface
-add_gem 'administrate' if prefer :dashboard, 'administrate'
+if prefer :dashboard, 'administrate'
+  add_gem 'administrate'
+  add_gem 'bourbon'
+end
 
 ## Authentication (OmniAuth)
 add_gem 'omniauth' if prefer :authentication, 'omniauth'
