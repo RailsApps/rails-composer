@@ -2134,7 +2134,6 @@ stage_two do
       generate 'pages:roles -f' if prefer :authorization, 'roles'
       generate 'pages:authorized -f' if prefer :authorization, 'pundit'
   end
-  generate 'administrate:install' if prefer :dashboard, 'administrate'
   ### GIT ###
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: add pages"' if prefer :git, true
@@ -2142,6 +2141,7 @@ end
 
 stage_four do
   say_wizard "recipe stage four"
+  generate 'administrate:install' if prefer :dashboard, 'administrate'
   case prefs[:layouts]
     when 'bare'
       generate 'theme:bare -f'
