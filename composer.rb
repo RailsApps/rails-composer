@@ -2608,7 +2608,7 @@ stage_four do
   remove_file 'config/railscomposer.yml'
   # remove commented lines and multiple blank lines from Gemfile
   # thanks to https://github.com/perfectline/template-bucket/blob/master/cleanup.rb
-  gsub_file 'Gemfile', /#.*\n/, "\n"
+  gsub_file 'Gemfile', /#\s.*\n/, "\n"
   gsub_file 'Gemfile', /\n^\s*\n/, "\n"
   remove_file 'Gemfile.lock'
   # remove commented lines and multiple blank lines from config/routes.rb
