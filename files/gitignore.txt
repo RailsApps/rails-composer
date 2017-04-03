@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-# Ignore these files when commiting to a git repository.
+# Ignore these files when committing to a git repository.
 #
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 #
