@@ -4,7 +4,10 @@ An application template that creates starter applications for Rails.
 
 It's the Rails generator on steroids.
 
-For a video introduction, see "RailsClips Episode 007: Rails Composer":https://devchat.tv/rails-clips/007-railsclips-rails-composer from Charles Max Wood.
+Watch the videos:
+
+* "Rails Composer Introduction":https://fullstackvideos.com/videos/13 (for beginners)
+* "RailsClips Episode 007: Rails Composer":https://devchat.tv/rails-clips/007-railsclips-rails-composer from Charles Max Wood.
 
 |_. |_. |
 | !http://railsapps.github.io/images/rails-composer-mailing-list.png(Sign up for the Rails Composer mailing list)!:http://mailinglist.railscomposer.com/ |  !http://railsapps.github.io/images/join/join-railsapps.png(Join the RailsApps Project)!:http://railsapps.github.io/ |
@@ -20,7 +23,7 @@ All the code is explained in the Capstone Rails Tutorials. You can purchase the 
 
 h2. Starter Apps and Tutorials
 
-|_. Rails 4.2 |_. Tutorial |_. Comments |
+|_. Example |_. Tutorial |_. Comments |
 | "learn-rails":https://github.com/RailsApps/learn-rails | "Learn Ruby on Rails":http://learn-rails.com/learn-ruby-on-rails.html | from the book for beginners |
 | "rails-bootstrap":https://github.com/RailsApps/rails-bootstrap | "Rails and Bootstrap":http://railsapps.github.io/twitter-bootstrap-rails.html | Bootstrap front-end framework |
 | "rails-foundation":https://github.com/RailsApps/rails-foundation | "Rails and Foundation":http://railsapps.github.io/rails-foundation.html | Foundation front-end framework |
