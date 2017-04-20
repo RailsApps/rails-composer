@@ -2,6 +2,8 @@ h1. !http://railsapps.github.io/images/rails-36x36.jpg(Rails Composer)! Rails Co
 
 An application template that creates starter applications for Rails.
 
+<strong><span style="color:red">NEW!</span> Please support the <a href="https://www.kickstarter.com/projects/909377477/rails-composer-for-rails-51">Kickstarter campaign</a> to update Rails Composer to Rails 5.1</strong>
+
 It's the Rails generator on steroids.
 
 Watch the videos:
