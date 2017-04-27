@@ -252,8 +252,9 @@ say_wizard("\033[1m\033[36m" + "|_|  \\_\\__,_|_|_|___/_/    \\_\\ .__/| .__/|__
 say_wizard("\033[1m\033[36m" + "                             \| \|   \| \|" + "\033[0m")
 say_wizard("\033[1m\033[36m" + "                             \| \|   \| \|" + "\033[0m")
 say_wizard("\033[1m\033[36m" + '' + "\033[0m")
-say_wizard("\033[1m\033[36m" + "If you like Rails Composer, will you support it?" + "\033[0m")
-say_wizard("\033[1m\033[36m" + "You can help by purchasing our tutorials." + "\033[0m")
+say_wizard("\033[1m\033[36m" + "Support the KICKSTARTER for Rails Composer" + "\033[0m")
+say_wizard("\033[1m\033[36m" + "please act before June 4, 2017" + "\033[0m")
+say_wizard("\033[1m\033[36m" + "https://www.kickstarter.com/projects/909377477/rails-composer-for-rails-51" + "\033[0m")
 say_wizard("Need help? Ask on Stack Overflow with the tag \'railsapps.\'")
 say_wizard("Your new application will contain diagnostics in its README file.")
 
