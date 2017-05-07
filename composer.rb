@@ -464,7 +464,7 @@ if prefer :apps4, 'learn-rails'
   prefs[:devise_modules] = false
   prefs[:dev_webserver] = 'puma'
   prefs[:email] = 'sendgrid'
-  prefs[:form_builder] = 'simple_form'
+  prefs[:form_builder] = false
   prefs[:frontend] = 'bootstrap3'
   prefs[:layouts] = 'none'
   prefs[:pages] = 'none'
@@ -1269,7 +1269,7 @@ end
 ## Form Builder
 ## (no simple_form for Bootstrap 4 yet)
 unless prefs[:frontend] == 'bootstrap4'
-  prefs[:form_builder] = multiple_choice "Use a form builder gem?", [["None", "none"], ["SimpleForm", "simple_form"]] unless prefs.has_key? :form_builder
+  prefs[:form_builder] = multiple_choice "Use a form builder gem?", [["None", "none"], ["SimpleForm (incompatible with Rails 5.1)", "simple_form"]] unless prefs.has_key? :form_builder
 end
 
 ## Pages
