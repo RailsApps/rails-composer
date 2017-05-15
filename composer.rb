@@ -466,6 +466,7 @@ if prefer :apps4, 'learn-rails'
   prefs[:email] = 'sendgrid'
   prefs[:form_builder] = false
   prefs[:frontend] = 'bootstrap3'
+  prefs[:jquery] = 'gem'
   prefs[:layouts] = 'none'
   prefs[:pages] = 'none'
   prefs[:github] = false
@@ -486,7 +487,6 @@ if prefer :apps4, 'learn-rails'
   add_gem 'high_voltage'
   add_gem 'gibbon'
   add_gem 'minitest-spec-rails', :group => :test
-  add_gem 'minitest-rails-capybara', :group => :test
   gsub_file 'Gemfile', /gem 'sqlite3'\n/, ''
   add_gem 'sqlite3', :group => :development
 
@@ -1234,6 +1234,19 @@ if recipes.include? 'frontend'
     ["Simple CSS", "simple"]] unless prefs.has_key? :frontend
 end
 
+## jQuery
+if Rails::VERSION::MAJOR == 5 && Rails::VERSION::MINOR >= 1
+  if prefs[:frontend] == 'none'
+    prefs[:jquery] = multiple_choice "Add jQuery?", [["No", "none"],
+      ["Add jquery-rails gem", "gem"],
+      ["Add using yarn", "yarn"]] unless prefs.has_key? :jquery
+  else
+    prefs[:jquery] = multiple_choice "How to install jQuery?",
+      [["Add jquery-rails gem", "gem"],
+      ["Add using yarn", "yarn"]] unless prefs.has_key? :jquery
+  end
+end
+
 ## Email
 if recipes.include? 'email'
   unless prefs.has_key? :email
@@ -1653,6 +1666,14 @@ case prefs[:frontend]
     add_gem 'compass-rails', '~> 1.1.2'
   when 'foundation5'
     add_gem 'foundation-rails', '~> 5.5'
+end
+
+## jQuery
+case prefs[:jquery]
+  when 'gem'
+    add_gem 'jquery-rails'
+  when 'yarn'
+    run 'bundle exec yarn add jquery'
 end
 
 ## Pages
@@ -2098,6 +2119,12 @@ stage_two do
       generate 'layout:install foundation4 -f'
     when 'foundation5'
       generate 'layout:install foundation5 -f'
+    else
+      case prefs[:jquery]
+        when 'gem', 'yarn'
+        say_wizard "modifying application.js for jQuery"
+        insert_into_file('app/assets/javascripts/application.js', "//= require jquery\n", :before => /^ *\/\/= require rails-ujs/, :force => false)
+      end
   end
 
   ### GIT ###
