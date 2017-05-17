@@ -464,9 +464,7 @@ if prefer :apps4, 'learn-rails'
   prefs[:devise_modules] = false
   prefs[:dev_webserver] = 'puma'
   prefs[:email] = 'sendgrid'
-  prefs[:form_builder] = false
   prefs[:frontend] = 'bootstrap3'
-  prefs[:jquery] = 'gem'
   prefs[:layouts] = 'none'
   prefs[:pages] = 'none'
   prefs[:github] = false
@@ -482,6 +480,15 @@ if prefer :apps4, 'learn-rails'
   prefs[:rubocop] = false
   prefs[:disable_turbolinks] = false
   prefs[:rvmrc] = true
+
+  if Rails::VERSION::MAJOR == 5 && Rails::VERSION::MINOR >= 1
+    prefs[:form_builder] = false
+    prefs[:jquery] = 'gem'
+  else
+    # Rails 5.0 version uses SimpleForm
+    prefs[:form_builder] = 'simple_form'
+    add_gem 'minitest-rails-capybara', :group => :test
+  end
 
   # gems
   add_gem 'high_voltage'
@@ -511,11 +518,19 @@ if prefer :apps4, 'learn-rails'
 
     # >-------------------------------[ Views ]--------------------------------<
 
-    copy_from_repo 'app/views/contacts/new.html.erb', :repo => repo
+    if Rails::VERSION::MAJOR == 5 && Rails::VERSION::MINOR >= 1
+      copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
+      copy_from_repo 'app/views/contacts/new.html.erb', :repo => repo
+    else
+      # Rails 5.0 version uses SimpleForm
+      copy_from_repo 'app/views/visitors/new.html.erb', :repo => 'https://raw.githubusercontent.com/RailsApps/learn-rails/rails50/'
+      copy_from_repo 'app/views/contacts/new.html.erb', :repo => 'https://raw.githubusercontent.com/RailsApps/learn-rails/rails50/'
+    end
+
     copy_from_repo 'app/views/pages/about.html.erb', :repo => repo
     copy_from_repo 'app/views/user_mailer/contact_email.html.erb', :repo => repo
     copy_from_repo 'app/views/user_mailer/contact_email.text.erb', :repo => repo
-    copy_from_repo 'app/views/visitors/new.html.erb', :repo => repo
+
     # create navigation links using the rails_layout gem
     generate 'layout:navigation -f'
 
@@ -1218,7 +1233,7 @@ prefs[:templates] = multiple_choice "Template engine?", [["ERB", "erb"], ["Haml"
 ## Testing Framework
 if recipes.include? 'tests'
   prefs[:tests] = multiple_choice "Test framework?", [["None", "none"],
-    ["RSpec with Capybara", "rspec"]] unless prefs.has_key? :tests
+    ["RSpec", "rspec"]] unless prefs.has_key? :tests
   case prefs[:tests]
     when 'rspec'
       say_wizard "Adding DatabaseCleaner, FactoryGirl, Faker, Launchy, Selenium"
@@ -1638,10 +1653,12 @@ if prefer :tests, 'rspec'
   add_gem 'spring-commands-rspec', :group => :development
   add_gem 'factory_girl_rails', :group => [:development, :test]
   add_gem 'faker', :group => [:development, :test]
-  add_gem 'capybara', :group => :test
+  unless Rails::VERSION::MAJOR == 5 && Rails::VERSION::MINOR >= 1
+    add_gem 'capybara', :group => :test
+    add_gem 'selenium-webdriver', :group => :test
+  end
   add_gem 'database_cleaner', :group => :test
   add_gem 'launchy', :group => :test
-  add_gem 'selenium-webdriver', :group => :test
   if prefer :continuous_testing, 'guard'
     add_gem 'guard-bundler', :group => :development
     add_gem 'guard-rails', :group => :development
@@ -1660,7 +1677,7 @@ case prefs[:frontend]
   when 'bootstrap3'
     add_gem 'bootstrap-sass'
   when 'bootstrap4'
-    add_gem 'bootstrap', '~> 4.0.0.alpha3.1'
+    add_gem 'bootstrap', '~> 4.0.0.alpha6'
   when 'foundation4'
     add_gem 'zurb-foundation', '~> 4.3.2'
     add_gem 'compass-rails', '~> 1.1.2'
