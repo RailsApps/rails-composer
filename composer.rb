@@ -1294,7 +1294,7 @@ end
 ## Form Builder
 ## (no simple_form for Bootstrap 4 yet)
 unless prefs[:frontend] == 'bootstrap4'
-  prefs[:form_builder] = multiple_choice "Use a form builder gem?", [["None", "none"], ["SimpleForm (incompatible with Rails 5.1)", "simple_form"]] unless prefs.has_key? :form_builder
+  prefs[:form_builder] = multiple_choice "Use a form builder gem?", [["None", "none"], ["SimpleForm", "simple_form"]] unless prefs.has_key? :form_builder
 end
 
 ## Pages
@@ -1683,7 +1683,7 @@ case prefs[:frontend]
   when 'bootstrap3'
     add_gem 'bootstrap-sass'
   when 'bootstrap4'
-    add_gem 'bootstrap', '~> 4.0.0.alpha6'
+    add_gem 'bootstrap', '~> 4.0.0'
   when 'foundation4'
     add_gem 'zurb-foundation', '~> 4.3.2'
     add_gem 'compass-rails', '~> 1.1.2'
