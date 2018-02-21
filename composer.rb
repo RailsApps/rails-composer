@@ -373,8 +373,7 @@ when "5"
         ["rails-devise-pundit", "rails-devise-pundit"],
         ["rails-signup-download", "rails-signup-download"],
         ["rails-stripe-checkout", "rails-stripe-checkout"],
-        ["rails-stripe-coupons", "rails-stripe-coupons"],
-        ["rails-stripe-membership-saas", "rails-stripe-membership-saas"]]
+        ["rails-stripe-coupons", "rails-stripe-coupons"]
     when 'contributed_app'
       prefs[:apps4] = multiple_choice "No contributed applications are available.",
         [["create custom application", "railsapps"]]
