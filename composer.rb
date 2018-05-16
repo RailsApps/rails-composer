@@ -818,29 +818,20 @@ if prefer :apps4, 'rails-signup-thankyou'
   prefs[:local_env_file] = false
   prefs[:prod_webserver] = 'same'
   prefs[:pry] = false
-  prefs[:secrets] = ['mailchimp_list_id', 'mailchimp_api_key']
   prefs[:pages] = 'about+users'
   prefs[:templates] = 'erb'
   prefs[:tests] = 'none'
   prefs[:locale] = 'none'
   prefs[:analytics] = 'none'
   prefs[:rubocop] = false
-  prefs[:disable_turbolinks] = false
+  prefs[:disable_turbolinks] = true
   prefs[:rvmrc] = true
   prefs[:form_builder] = false
   prefs[:jquery] = 'gem'
 
-  # gems
-  add_gem 'gibbon'
-  add_gem 'sucker_punch'
-
   stage_three do
     say_wizard "recipe stage three"
     repo = 'https://raw.github.com/RailsApps/rails-signup-thankyou/master/'
-
-    # >-------------------------------[ Config ]---------------------------------<
-
-    copy_from_repo 'config/initializers/active_job.rb', :repo => repo
 
     # >-------------------------------[ Models ]--------------------------------<
 
@@ -852,10 +843,6 @@ if prefer :apps4, 'rails-signup-thankyou'
     copy_from_repo 'app/controllers/visitors_controller.rb', :repo => repo
     copy_from_repo 'app/controllers/products_controller.rb', :repo => repo
     copy_from_repo 'app/controllers/thank_you_controller.rb', :repo => repo
-
-    # >-------------------------------[ Jobs ]---------------------------------<
-
-    copy_from_repo 'app/jobs/mailing_list_signup_job.rb', :repo => repo
 
     # >-------------------------------[ Views ]--------------------------------<
 
@@ -2698,14 +2685,18 @@ if prefs[:disable_turbolinks]
   stage_two do
     say_wizard "recipe stage two"
     gsub_file 'Gemfile', /gem 'turbolinks'\n/, ''
+    gsub_file 'Gemfile', /gem 'turbolinks', '~> 5'\n/, ''
     gsub_file 'app/assets/javascripts/application.js', "//= require turbolinks\n", ''
     case prefs[:templates]
       when 'erb'
         gsub_file 'app/views/layouts/application.html.erb', /, 'data-turbolinks-track' => true/, ''
+        gsub_file 'app/views/layouts/application.html.erb', /, 'data-turbolinks-track' => 'reload'/, ''
       when 'haml'
         gsub_file 'app/views/layouts/application.html.haml', /, 'data-turbolinks-track' => true/, ''
+        gsub_file 'app/views/layouts/application.html.haml', /, 'data-turbolinks-track' => 'reload'/, ''
       when 'slim'
         gsub_file 'app/views/layouts/application.html.slim', /, 'data-turbolinks-track' => true/, ''
+        gsub_file 'app/views/layouts/application.html.slim', /, 'data-turbolinks-track' => 'reload'/, ''
     end
   end
 end
