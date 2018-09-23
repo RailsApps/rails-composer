@@ -93,7 +93,7 @@ module Gemfile
 end
 def add_gem(*all) Gemfile.add(*all); end
 
-@recipes = ["core", "git", "railsapps", "learn_rails", "rails_bootstrap", "rails_foundation", "rails_omniauth", "rails_devise", "rails_devise_roles", "rails_devise_pundit", "rails_signup_download", "rails_signup_thankyou", "rails_mailinglist_activejob", "rails_stripe_checkout", "rails_stripe_coupons", "rails_stripe_membership_saas", "setup", "locale", "readme", "gems", "tests", "email", "devise", "omniauth", "roles", "frontend", "pages", "init", "analytics", "deployment", "extras"]
+@recipes = ["core", "git", "railsapps", "learn_rails", "rails_bootstrap", "rails_foundation", "rails_omniauth", "rails_devise", "rails_devise_roles", "rails_devise_pundit", "rails_shortcut_app", "rails_signup_download", "rails_signup_thankyou", "rails_mailinglist_activejob", "rails_stripe_checkout", "rails_stripe_coupons", "rails_stripe_membership_saas", "setup", "locale", "readme", "gems", "tests", "email", "devise", "omniauth", "roles", "frontend", "pages", "init", "analytics", "deployment", "extras"]
 @prefs = {}
 @gems = []
 @diagnostics_recipes = [["example"], ["setup"], ["railsapps"], ["gems", "setup"], ["gems", "readme", "setup"], ["extras", "gems", "readme", "setup"], ["example", "git"], ["git", "setup"], ["git", "railsapps"], ["gems", "git", "setup"], ["gems", "git", "readme", "setup"], ["extras", "gems", "git", "readme", "setup"], ["email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["email", "example", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "tests"], ["apps4", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "testing"], ["apps4", "core", "deployment", "email", "extras", "frontend", "gems", "git", "init", "railsapps", "readme", "setup", "tests"], ["apps4", "core", "deployment", "devise", "email", "extras", "frontend", "gems", "git", "init", "omniauth", "pundit", "railsapps", "readme", "setup", "tests"]]
@@ -376,7 +376,8 @@ when "5"
         ["rails-stripe-coupons", "rails-stripe-coupons"]]
     when 'contributed_app'
       prefs[:apps4] = multiple_choice "Choose a starter application.",
-        [["rails-signup-thankyou", "rails-signup-thankyou"]]
+        [["rails-shortcut-app", "rails-shortcut-app"],
+        ["rails-signup-thankyou", "rails-signup-thankyou"]]
   end
 when "3"
   say_wizard "Please upgrade to Rails 4.1 or newer."
@@ -716,6 +717,50 @@ if prefer :apps4, 'rails-devise-pundit'
   prefs[:rvmrc] = true
 end
 # >--------------------- recipes/rails_devise_pundit.rb ----------------------end<
+# >-------------------------- templates/recipe.erb ---------------------------end<
+
+# >-------------------------- templates/recipe.erb ---------------------------start<
+# >--------------------------[ rails_shortcut_app ]---------------------------<
+@current_recipe = "rails_shortcut_app"
+@before_configs["rails_shortcut_app"].call if @before_configs["rails_shortcut_app"]
+say_recipe 'rails_shortcut_app'
+@configs[@current_recipe] = config
+# >---------------------- recipes/rails_shortcut_app.rb ----------------------start<
+
+# Application template recipe for the rails_apps_composer. Change the recipe here:
+# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/rails_shortcut_app.rb
+
+if prefer :apps4, 'rails-shortcut-app'
+  prefs[:authentication] = 'devise'
+  prefs[:authorization] = 'roles'
+  prefs[:dashboard] = 'none'
+  prefs[:ban_spiders] = false
+  prefs[:better_errors] = true
+  prefs[:database] = 'sqlite'
+  prefs[:deployment] = 'none'
+  prefs[:devise_modules] = false
+  prefs[:dev_webserver] = 'puma'
+  prefs[:email] = 'none'
+  prefs[:frontend] = 'bootstrap3'
+  prefs[:layouts] = 'none'
+  prefs[:pages] = 'none'
+  prefs[:github] = false
+  prefs[:git] = true
+  prefs[:local_env_file] = false
+  prefs[:prod_webserver] = 'same'
+  prefs[:pry] = false
+  prefs[:pages] = 'about+users'
+  prefs[:templates] = 'erb'
+  prefs[:tests] = 'none'
+  prefs[:locale] = 'none'
+  prefs[:analytics] = 'none'
+  prefs[:rubocop] = false
+  prefs[:disable_turbolinks] = true
+  prefs[:rvmrc] = true
+  prefs[:form_builder] = false
+  prefs[:jquery] = 'gem'
+end
+# >---------------------- recipes/rails_shortcut_app.rb ----------------------end<
 # >-------------------------- templates/recipe.erb ---------------------------end<
 
 # >-------------------------- templates/recipe.erb ---------------------------start<
